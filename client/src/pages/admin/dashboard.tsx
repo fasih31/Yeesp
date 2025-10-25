@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Users, BookOpen, Briefcase, AlertCircle, DollarSign, MessageSquare, TrendingUp, Settings } from "lucide-react";
-import LoadingSpinner from "@/components/LoadingSpinner";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 
@@ -50,7 +50,7 @@ export default function AdminDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold mb-2">{stat.value}</div>
-                <Button variant="link" className="h-auto p-0" asChild>
+                <Button variant="ghost" className="h-auto p-0" asChild>
                   <Link href={stat.link}>View details →</Link>
                 </Button>
               </CardContent>

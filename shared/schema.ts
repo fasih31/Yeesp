@@ -63,10 +63,26 @@ export const sessions = pgTable("sessions", {
   title: text("title").notNull(),
   scheduledAt: timestamp("scheduled_at").notNull(),
   duration: integer("duration").notNull(), // in minutes
-  status: text("status").notNull().default('scheduled'), // 'scheduled', 'completed', 'cancelled'
+  status: text("status").notNull().default('scheduled'), // 'scheduled', 'in_progress', 'completed', 'cancelled'
   meetingUrl: text("meeting_url"),
+  videoRoomId: text("video_room_id"),
+  recordingUrl: text("recording_url"),
   price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  startedAt: timestamp("started_at"),
+  endedAt: timestamp("ended_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Session attendance tracking
+export const attendance = pgTable("attendance", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  sessionId: varchar("session_id").notNull().references(() => sessions.id),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  joinedAt: timestamp("joined_at").notNull().defaultNow(),
+  leftAt: timestamp("left_at"),
+  duration: integer("duration"),
+  status: text("status").notNull().default('present'),
+  notes: text("notes"),
 });
 
 // Freelance projects
@@ -306,30 +322,6 @@ export const insertSessionSchema = createInsertSchema(sessions).omit({
 export const insertProjectSchema = createInsertSchema(projects).omit({
   id: true,
   createdAt: true,
-
-
-// Role Requests - for users requesting additional roles
-export const roleRequests = pgTable("role_requests", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  userId: varchar("user_id").notNull().references(() => users.id),
-  requestedRole: text("requested_role").notNull(), // 'student', 'tutor', 'freelancer', 'recruiter'
-  reason: text("reason").notNull(),
-  status: text("status").notNull().default('pending'), // 'pending', 'approved', 'rejected'
-  reviewedBy: varchar("reviewed_by").references(() => users.id),
-  reviewNotes: text("review_notes"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  reviewedAt: timestamp("reviewed_at"),
-});
-
-// User Approved Roles - tracks additional roles a user has been granted
-export const userApprovedRoles = pgTable("user_approved_roles", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  userId: varchar("user_id").notNull().references(() => users.id),
-  approvedRole: text("approved_role").notNull(),
-  approvedBy: varchar("approved_by").notNull().references(() => users.id),
-  approvedAt: timestamp("approved_at").defaultNow().notNull(),
-});
-
 });
 
 export const insertBidSchema = createInsertSchema(bids).omit({
