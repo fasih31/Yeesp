@@ -7,18 +7,15 @@ import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Search, Mail, MessageSquare, Users } from "lucide-react";
-import { useUser } from "@/hooks/use-user";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import EmptyState from "@/components/EmptyState";
 
 export default function TutorStudents() {
-  const { user } = useUser();
   const [searchQuery, setSearchQuery] = useState("");
 
   // Get all enrollments for tutor's courses
   const { data: enrollments, isLoading } = useQuery({
-    queryKey: ['/api/enrollments', 'tutor', user?.id],
-    enabled: !!user?.id,
+    queryKey: ['/api/enrollments'],
   });
 
   // Group students by unique student IDs

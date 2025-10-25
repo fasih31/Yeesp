@@ -40,9 +40,40 @@ export const lessons = pgTable("lessons", {
   courseId: varchar("course_id").notNull().references(() => courses.id),
   title: text("title").notNull(),
   content: text("content").notNull(),
+  type: text("type").notNull().default('video'), // 'video', 'live_session', 'assignment', 'quiz', 'reading'
   videoUrl: text("video_url"),
   order: integer("order").notNull(),
   duration: integer("duration"), // in minutes
+  attachments: text("attachments").array(), // File URLs for readings/assignments
+  dueDate: timestamp("due_date"), // For assignments
+  maxScore: integer("max_score"), // For assignments and quizzes
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Quiz questions (for quiz-type lessons)
+export const quizQuestions = pgTable("quiz_questions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  lessonId: varchar("lesson_id").notNull().references(() => lessons.id),
+  question: text("question").notNull(),
+  type: text("type").notNull(), // 'multiple_choice', 'true_false', 'short_answer'
+  options: text("options").array(), // For multiple choice
+  correctAnswer: text("correct_answer").notNull(),
+  points: integer("points").notNull().default(1),
+  order: integer("order").notNull(),
+  explanation: text("explanation"), // Optional explanation for the answer
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Student quiz attempts
+export const quizAttempts = pgTable("quiz_attempts", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  lessonId: varchar("lesson_id").notNull().references(() => lessons.id),
+  studentId: varchar("student_id").notNull().references(() => users.id),
+  answers: jsonb("answers").notNull(), // {questionId: answer}
+  score: integer("score").notNull(),
+  maxScore: integer("max_score").notNull(),
+  passed: boolean("passed").notNull().default(false),
+  attemptedAt: timestamp("attempted_at").defaultNow().notNull(),
 });
 
 // Course enrollments
