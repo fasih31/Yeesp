@@ -11,7 +11,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Link } from "wouter";
 import { Loader2 } from "lucide-react";
-import { useUser } from "@/hooks/use-user";
+import { apiRequest } from "@/lib/api";
 
 const signupSchema = z.object({
   fullName: z.string().min(2, "Full name must be at least 2 characters"),
@@ -29,7 +29,6 @@ type SignupForm = z.infer<typeof signupSchema>;
 export default function Signup() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
-  const { register: registerUser } = useUser();
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -45,16 +44,11 @@ export default function Signup() {
     try {
       setIsLoading(true);
       const { confirmPassword, ...registerData } = data;
-      const result = await registerUser(registerData);
       
-      if (!result.ok) {
-        toast({
-          variant: "destructive",
-          title: "Registration Failed",
-          description: result.message || "Failed to create account",
-        });
-        return;
-      }
+      await apiRequest('/auth/register', {
+        method: 'POST',
+        body: JSON.stringify(registerData),
+      });
 
       toast({
         title: "Account Created!",
@@ -65,8 +59,8 @@ export default function Signup() {
     } catch (error: any) {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: error.message || "Something went wrong",
+        title: "Registration Failed",
+        description: error.message || "Failed to create account",
       });
     } finally {
       setIsLoading(false);

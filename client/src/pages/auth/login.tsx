@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "wouter";
 import { Loader2 } from "lucide-react";
-import { useUser } from "@/hooks/use-user";
+import { useAuth } from "@/lib/auth";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -22,7 +22,7 @@ type LoginForm = z.infer<typeof loginSchema>;
 export default function Login() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
-  const { login } = useUser();
+  const { login } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -36,39 +36,19 @@ export default function Login() {
   const onSubmit = async (data: LoginForm) => {
     try {
       setIsLoading(true);
-      const result = await login(data);
-      
-      if (!result.ok) {
-        toast({
-          variant: "destructive",
-          title: "Login Failed",
-          description: result.message || "Invalid email or password",
-        });
-        return;
-      }
+      await login(data.email, data.password);
 
       toast({
         title: "Welcome back!",
         description: "You have successfully logged in",
       });
 
-      const user = result.user;
-      if (user?.role === "admin") {
-        setLocation("/admin/dashboard");
-      } else if (user?.role === "tutor") {
-        setLocation("/tutor/dashboard");
-      } else if (user?.role === "freelancer") {
-        setLocation("/freelancer/dashboard");
-      } else if (user?.role === "recruiter") {
-        setLocation("/recruiter/dashboard");
-      } else {
-        setLocation("/student/dashboard");
-      }
+      setLocation("/");
     } catch (error: any) {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: error.message || "Something went wrong",
+        title: "Login Failed",
+        description: error.message || "Invalid email or password",
       });
     } finally {
       setIsLoading(false);
