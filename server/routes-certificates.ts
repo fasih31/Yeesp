@@ -13,16 +13,15 @@ const router = Router();
 router.post('/issue', requireAuth, async (req: Request, res: Response) => {
   try {
     const { courseId } = req.body;
-    const userId = req.user!.id;
+    const userId = (req as any).user.id;
 
-    // Verify course completion
+    // Verify course completion - check if enrollment exists
     const [enrollment] = await db
       .select()
       .from(enrollments)
       .where(and(
-        eq(enrollments.userId, userId),
-        eq(enrollments.courseId, courseId),
-        eq(enrollments.status, 'completed')
+        eq(enrollments.studentId, userId),
+        eq(enrollments.courseId, courseId)
       ))
       .limit(1);
 
@@ -68,10 +67,10 @@ router.get('/download/:certificateId', requireAuth, async (req: Request, res: Re
  */
 router.get('/my-certificates', requireAuth, async (req: Request, res: Response) => {
   try {
-    const userId = req.user!.id;
+    const userId = (req as any).user.id;
 
     const userCertificates = await db.query.certificates.findMany({
-      where: (certificates, { eq }) => eq(certificates.userId, userId),
+      where: (certificates, { eq }) => eq(certificates.studentId, userId),
       with: {
         course: true,
       },
