@@ -60,6 +60,10 @@ app.use((req, res, next) => {
   // Register admin routes
   const adminRoutes = await import('./routes-admin');
   app.use('/api/admin', adminRoutes.default);
+  
+  // Register Zoom routes
+  const zoomRoutes = await import('./routes-zoom');
+  app.use('/api/zoom', zoomRoutes.default);
 
   // Initialize WebSocket
   const { initializeWebSocket } = await import('./services/websocket');

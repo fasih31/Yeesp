@@ -64,8 +64,11 @@ export const sessions = pgTable("sessions", {
   scheduledAt: timestamp("scheduled_at").notNull(),
   duration: integer("duration").notNull(), // in minutes
   status: text("status").notNull().default('scheduled'), // 'scheduled', 'in_progress', 'completed', 'cancelled'
+  videoProvider: text("video_provider").notNull().default('dyte'), // 'dyte', 'zoom'
   meetingUrl: text("meeting_url"),
   videoRoomId: text("video_room_id"),
+  zoomMeetingId: text("zoom_meeting_id"),
+  zoomPassword: text("zoom_password"),
   recordingUrl: text("recording_url"),
   price: decimal("price", { precision: 10, scale: 2 }).notNull(),
   startedAt: timestamp("started_at"),
