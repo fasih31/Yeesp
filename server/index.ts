@@ -56,6 +56,10 @@ app.use((req, res, next) => {
   registerExtendedRoutes(app);
   registerUploadRoutes(app);
   registerVideoRoutes(app);
+  
+  // Register admin routes
+  const adminRoutes = await import('./routes-admin');
+  app.use('/api/admin', adminRoutes.default);
 
   // Initialize WebSocket
   const { initializeWebSocket } = await import('./services/websocket');

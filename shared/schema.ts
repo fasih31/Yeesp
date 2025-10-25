@@ -454,24 +454,3 @@ export type InsertKycDocument = z.infer<typeof insertKycDocumentSchema>;
 export type InsertDispute = z.infer<typeof insertDisputeSchema>;
 export type InsertWallet = z.infer<typeof insertWalletSchema>;
 export type InsertWalletTransaction = z.infer<typeof insertWalletTransactionSchema>;
-
-
-export const insertRoleRequestSchema = createInsertSchema(roleRequests).omit({
-  id: true,
-  createdAt: true,
-});
-
-export const insertUserApprovedRoleSchema = createInsertSchema(userApprovedRoles).omit({
-  id: true,
-  approvedAt: true,
-});
-
-
-
-export type RoleRequest = typeof roleRequests.$inferSelect;
-export type UserApprovedRole = typeof userApprovedRoles.$inferSelect;
-
-
-
-export type InsertRoleRequest = z.infer<typeof insertRoleRequestSchema>;
-export type InsertUserApprovedRole = z.infer<typeof insertUserApprovedRoleSchema>;
