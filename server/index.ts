@@ -72,6 +72,14 @@ app.use((req, res, next) => {
   // Register Community routes
   const communityRoutes = await import('./routes-community');
   app.use('/api/community', communityRoutes.default);
+  
+  // Register Certificate routes
+  const certificateRoutes = await import('./routes-certificates');
+  app.use('/api/certificates', certificateRoutes.default);
+  
+  // Register Reviews routes
+  const reviewRoutes = await import('./routes-reviews');
+  app.use('/api/reviews', reviewRoutes.default);
 
   // Initialize WebSocket
   const { initializeWebSocket } = await import('./services/websocket');
