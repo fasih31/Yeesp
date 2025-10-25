@@ -270,16 +270,7 @@ function Router() {
         )}
       </Route>
       <Route path="/blog" component={Blog} />
-      <Route path="/blog/:slug">
-        {(params) => {
-          const BlogDetail = lazy(() => import("@/pages/blog-detail"));
-          return (
-            <Suspense fallback={<div>Loading...</div>}>
-              <BlogDetail />
-            </Suspense>
-          );
-        }}
-      </Route>
+      <Route path="/blog/:slug" component={lazy(() => import("@/pages/blog-detail"))} />
       <Route path="/terms" component={Terms} />
       <Route path="/privacy" component={Privacy} />
       <Route component={NotFound} />
