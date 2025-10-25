@@ -139,6 +139,143 @@ export const notifications = pgTable("notifications", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+// Assignments
+export const assignments = pgTable("assignments", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  courseId: varchar("course_id").notNull().references(() => courses.id),
+  tutorId: varchar("tutor_id").notNull().references(() => users.id),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  dueDate: timestamp("due_date").notNull(),
+  totalPoints: integer("total_points").notNull(),
+  attachments: text("attachments").array(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Assignment Submissions
+export const submissions = pgTable("submissions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  assignmentId: varchar("assignment_id").notNull().references(() => assignments.id),
+  studentId: varchar("student_id").notNull().references(() => users.id),
+  content: text("content").notNull(),
+  attachments: text("attachments").array(),
+  grade: integer("grade"),
+  feedback: text("feedback"),
+  status: text("status").notNull().default('pending'), // 'pending', 'graded', 'late'
+  submittedAt: timestamp("submitted_at").defaultNow().notNull(),
+  gradedAt: timestamp("graded_at"),
+});
+
+// Messages/Chat
+export const messages = pgTable("messages", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  senderId: varchar("sender_id").notNull().references(() => users.id),
+  receiverId: varchar("receiver_id").notNull().references(() => users.id),
+  content: text("content").notNull(),
+  attachments: text("attachments").array(),
+  read: boolean("read").default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Support Tickets
+export const supportTickets = pgTable("support_tickets", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  subject: text("subject").notNull(),
+  description: text("description").notNull(),
+  category: text("category").notNull(), // 'technical', 'billing', 'general'
+  priority: text("priority").notNull().default('medium'), // 'low', 'medium', 'high', 'urgent'
+  status: text("status").notNull().default('open'), // 'open', 'in_progress', 'resolved', 'closed'
+  assignedTo: varchar("assigned_to").references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// Ticket Replies
+export const ticketReplies = pgTable("ticket_replies", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  ticketId: varchar("ticket_id").notNull().references(() => supportTickets.id),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  message: text("message").notNull(),
+  attachments: text("attachments").array(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Contracts & Milestones
+export const contracts = pgTable("contracts", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  projectId: varchar("project_id").notNull().references(() => projects.id),
+  freelancerId: varchar("freelancer_id").notNull().references(() => users.id),
+  recruiterId: varchar("recruiter_id").notNull().references(() => users.id),
+  totalAmount: decimal("total_amount", { precision: 10, scale: 2 }).notNull(),
+  status: text("status").notNull().default('active'), // 'active', 'completed', 'cancelled', 'disputed'
+  startDate: timestamp("start_date").notNull(),
+  endDate: timestamp("end_date"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const milestones = pgTable("milestones", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  contractId: varchar("contract_id").notNull().references(() => contracts.id),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
+  dueDate: timestamp("due_date").notNull(),
+  status: text("status").notNull().default('pending'), // 'pending', 'submitted', 'approved', 'rejected', 'paid'
+  completedAt: timestamp("completed_at"),
+  approvedAt: timestamp("approved_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// KYC Documents
+export const kycDocuments = pgTable("kyc_documents", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  documentType: text("document_type").notNull(), // 'id_card', 'passport', 'selfie', 'address_proof'
+  documentUrl: text("document_url").notNull(),
+  status: text("status").notNull().default('pending'), // 'pending', 'approved', 'rejected'
+  rejectionReason: text("rejection_reason"),
+  verifiedBy: varchar("verified_by").references(() => users.id),
+  submittedAt: timestamp("submitted_at").defaultNow().notNull(),
+  verifiedAt: timestamp("verified_at"),
+});
+
+// Disputes
+export const disputes = pgTable("disputes", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  raisedBy: varchar("raised_by").notNull().references(() => users.id),
+  entityType: text("entity_type").notNull(), // 'project', 'session', 'payment'
+  entityId: varchar("entity_id").notNull(),
+  subject: text("subject").notNull(),
+  description: text("description").notNull(),
+  status: text("status").notNull().default('open'), // 'open', 'investigating', 'resolved', 'closed'
+  resolution: text("resolution"),
+  resolvedBy: varchar("resolved_by").references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  resolvedAt: timestamp("resolved_at"),
+});
+
+// Wallets/Escrow
+export const wallets = pgTable("wallets", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  balance: decimal("balance", { precision: 10, scale: 2 }).notNull().default('0'),
+  escrowBalance: decimal("escrow_balance", { precision: 10, scale: 2 }).notNull().default('0'),
+  currency: text("currency").notNull().default('USD'),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const walletTransactions = pgTable("wallet_transactions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  walletId: varchar("wallet_id").notNull().references(() => wallets.id),
+  type: text("type").notNull(), // 'deposit', 'withdrawal', 'escrow_hold', 'escrow_release', 'earning', 'payout'
+  amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
+  description: text("description").notNull(),
+  referenceId: varchar("reference_id"), // Reference to payment, project, etc.
+  status: text("status").notNull().default('completed'), // 'pending', 'completed', 'failed'
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 // ===== INSERT SCHEMAS AND TYPES =====
 
 export const insertUserSchema = createInsertSchema(users).omit({
@@ -195,6 +332,62 @@ export const insertNotificationSchema = createInsertSchema(notifications).omit({
   createdAt: true,
 });
 
+export const insertAssignmentSchema = createInsertSchema(assignments).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertSubmissionSchema = createInsertSchema(submissions).omit({
+  id: true,
+  submittedAt: true,
+});
+
+export const insertMessageSchema = createInsertSchema(messages).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertSupportTicketSchema = createInsertSchema(supportTickets).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertTicketReplySchema = createInsertSchema(ticketReplies).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertContractSchema = createInsertSchema(contracts).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertMilestoneSchema = createInsertSchema(milestones).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertKycDocumentSchema = createInsertSchema(kycDocuments).omit({
+  id: true,
+  submittedAt: true,
+});
+
+export const insertDisputeSchema = createInsertSchema(disputes).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertWalletSchema = createInsertSchema(wallets).omit({
+  id: true,
+  updatedAt: true,
+});
+
+export const insertWalletTransactionSchema = createInsertSchema(walletTransactions).omit({
+  id: true,
+  createdAt: true,
+});
+
 // ===== SELECT TYPES =====
 
 export type User = typeof users.$inferSelect;
@@ -208,6 +401,17 @@ export type Review = typeof reviews.$inferSelect;
 export type Payment = typeof payments.$inferSelect;
 export type Certificate = typeof certificates.$inferSelect;
 export type Notification = typeof notifications.$inferSelect;
+export type Assignment = typeof assignments.$inferSelect;
+export type Submission = typeof submissions.$inferSelect;
+export type Message = typeof messages.$inferSelect;
+export type SupportTicket = typeof supportTickets.$inferSelect;
+export type TicketReply = typeof ticketReplies.$inferSelect;
+export type Contract = typeof contracts.$inferSelect;
+export type Milestone = typeof milestones.$inferSelect;
+export type KycDocument = typeof kycDocuments.$inferSelect;
+export type Dispute = typeof disputes.$inferSelect;
+export type Wallet = typeof wallets.$inferSelect;
+export type WalletTransaction = typeof walletTransactions.$inferSelect;
 
 // ===== INSERT TYPES =====
 
@@ -222,3 +426,14 @@ export type InsertReview = z.infer<typeof insertReviewSchema>;
 export type InsertPayment = z.infer<typeof insertPaymentSchema>;
 export type InsertCertificate = z.infer<typeof insertCertificateSchema>;
 export type InsertNotification = z.infer<typeof insertNotificationSchema>;
+export type InsertAssignment = z.infer<typeof insertAssignmentSchema>;
+export type InsertSubmission = z.infer<typeof insertSubmissionSchema>;
+export type InsertMessage = z.infer<typeof insertMessageSchema>;
+export type InsertSupportTicket = z.infer<typeof insertSupportTicketSchema>;
+export type InsertTicketReply = z.infer<typeof insertTicketReplySchema>;
+export type InsertContract = z.infer<typeof insertContractSchema>;
+export type InsertMilestone = z.infer<typeof insertMilestoneSchema>;
+export type InsertKycDocument = z.infer<typeof insertKycDocumentSchema>;
+export type InsertDispute = z.infer<typeof insertDisputeSchema>;
+export type InsertWallet = z.infer<typeof insertWalletSchema>;
+export type InsertWalletTransaction = z.infer<typeof insertWalletTransactionSchema>;
