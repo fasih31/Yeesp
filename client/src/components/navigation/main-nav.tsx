@@ -29,13 +29,13 @@ export function MainNav() {
   ];
 
   return (
-    <header className="border-b bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+    <header className="border-b border-gray-800 bg-gray-900/95 backdrop-blur-lg sticky top-0 z-50 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 flex-shrink-0 group">
             <img src="/icon.png" alt="YEESP" className="h-8 w-8 transition-transform group-hover:scale-110" />
-            <h1 className="text-xl font-bold brand-gradient-text">YEESP</h1>
+            <h1 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400">YEESP</h1>
           </Link>
 
           {/* Desktop Navigation */}
@@ -45,7 +45,7 @@ export function MainNav() {
                 key={link.href}
                 variant={location === link.href ? "secondary" : "ghost"}
                 size="sm"
-                className={`text-sm font-medium transition-all ${location === link.href ? "text-cyan-600" : "hover:text-cyan-600"}`}
+                className={`text-sm font-medium transition-all ${location === link.href ? "text-cyan-400 bg-cyan-500/10" : "text-gray-300 hover:text-cyan-400 hover:bg-white/5"}`}
                 asChild
               >
                 <Link href={link.href}>{link.label}</Link>
@@ -124,10 +124,10 @@ export function MainNav() {
               </DropdownMenu>
             ) : (
               <>
-                <Button variant="ghost" size="sm" asChild className="hidden sm:flex hover:text-cyan-600">
+                <Button variant="ghost" size="sm" asChild className="hidden sm:flex text-gray-300 hover:text-cyan-400 hover:bg-white/5">
                   <Link href="/auth/login">Login</Link>
                 </Button>
-                <Button size="sm" asChild>
+                <Button size="sm" asChild className="bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600">
                   <Link href="/auth/signup">Sign Up</Link>
                 </Button>
               </>

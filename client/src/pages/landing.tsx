@@ -2,72 +2,83 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { GraduationCap, Users, Briefcase, Award, ArrowRight, Check, Star, BookOpen, Video, Shield, Zap } from "lucide-react";
+import { GraduationCap, Users, Briefcase, Award, ArrowRight, Check, Star, BookOpen, Video, Shield, Zap, TrendingUp, Globe } from "lucide-react";
 
 export default function Landing() {
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Section - Logo-Matched Cyan/Turquoise */}
-      <section className="relative min-h-[85vh] flex items-center justify-center bg-gradient-to-br from-cyan-500 via-cyan-600 to-teal-700 overflow-hidden">
-        {/* Subtle Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff12_1px,transparent_1px),linear-gradient(to_bottom,#ffffff12_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+      {/* Dark Hero Section */}
+      <section className="relative min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden">
+        {/* Animated Background Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#06b6d4_1px,transparent_1px),linear-gradient(to_bottom,#06b6d4_1px,transparent_1px)] bg-[size:60px_60px]"></div>
         </div>
         
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-          <Badge className="mb-6 bg-white/10 backdrop-blur-md border-white/20 text-white px-6 py-2">
+        {/* Gradient Orbs */}
+        <div className="absolute top-20 left-10 w-72 h-72 bg-cyan-500/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-teal-500/20 rounded-full blur-3xl"></div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center z-10">
+          <Badge className="mb-8 bg-cyan-500/10 backdrop-blur-sm border border-cyan-500/20 text-cyan-400 px-6 py-2.5 text-sm font-medium">
+            <Zap className="w-4 h-4 mr-2 inline" />
             Next-Generation Learning Platform
           </Badge>
 
-          <h1 className="text-responsive-xl font-bold text-white mb-6 leading-tight">
-            Learn Skills. Earn Income.<br />
-            <span className="text-cyan-100">Transform Your Future.</span>
+          <h1 className="text-5xl md:text-7xl font-bold text-white mb-8 leading-tight">
+            Learn Skills.<br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400">
+              Earn Income.
+            </span><br />
+            Transform Your Future.
           </h1>
 
-          <p className="text-xl text-white/90 max-w-2xl mx-auto mb-10">
-            Join 10,000+ students, tutors, and freelancers building successful careers through education and opportunity
+          <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-12 leading-relaxed">
+            Join <span className="text-cyan-400 font-semibold">10,000+</span> students, tutors, and freelancers building successful careers through education and opportunity
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <Button size="lg" className="bg-white text-cyan-600 hover:bg-gray-50 text-lg px-8 h-14 rounded-full font-semibold shadow-xl" asChild>
+          <div className="flex flex-col sm:flex-row gap-5 justify-center mb-20">
+            <Button size="lg" className="bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white text-lg px-10 h-16 rounded-full font-semibold shadow-2xl shadow-cyan-500/30 border-0" asChild>
               <Link href="/register">
-                Get Started Free <ArrowRight className="ml-2 h-5 w-5" />
+                Get Started Free <ArrowRight className="ml-2 h-6 w-6" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" className="border-2 border-white/50 text-white hover:bg-white/10 text-lg px-8 h-14 rounded-full font-semibold" asChild>
+            <Button size="lg" variant="outline" className="border-2 border-gray-600 bg-transparent text-white hover:bg-white/10 text-lg px-10 h-16 rounded-full font-semibold" asChild>
               <Link href="/courses">
                 Explore Courses
               </Link>
             </Button>
           </div>
 
-          {/* Simple Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+          {/* Stats Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
             {[
               { icon: Users, value: "10K+", label: "Active Users" },
               { icon: BookOpen, value: "500+", label: "Courses" },
               { icon: Briefcase, value: "1,200+", label: "Projects" },
               { icon: Star, value: "4.9/5", label: "Rating" }
             ].map((stat, i) => (
-              <div key={i} className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
-                <stat.icon className="w-8 h-8 text-white mx-auto mb-2 opacity-90" />
-                <div className="text-3xl font-bold text-white">{stat.value}</div>
-                <div className="text-sm text-white/80">{stat.label}</div>
+              <div key={i} className="bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10 hover:bg-white/10 transition-all duration-300 group">
+                <stat.icon className="w-10 h-10 text-cyan-400 mx-auto mb-3 group-hover:scale-110 transition-transform" />
+                <div className="text-4xl font-bold text-white mb-1">{stat.value}</div>
+                <div className="text-sm text-gray-400">{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 px-6 bg-gray-50">
+      {/* Features Section - Light Background */}
+      <section className="py-24 px-6 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Everything You Need to Succeed
+            <Badge className="mb-4 bg-cyan-100 text-cyan-700 border-0">
+              Platform Features
+            </Badge>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              Everything You Need to <span className="text-cyan-600">Succeed</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              A complete platform for learning, teaching, and earning
+              A complete ecosystem for learning, teaching, and earning
             </p>
           </div>
 
@@ -76,120 +87,125 @@ export default function Landing() {
               { 
                 icon: GraduationCap, 
                 title: "Premium Courses", 
-                desc: "Access 500+ expert-led courses across all skill levels"
+                desc: "Access 500+ expert-led courses across all skill levels with lifetime access",
+                gradient: "from-cyan-500 to-blue-500"
               },
               { 
                 icon: Video, 
                 title: "Live Tutoring", 
-                desc: "1-on-1 sessions with verified tutors via video conferencing"
+                desc: "1-on-1 sessions with verified tutors via Zoom and Dyte video conferencing",
+                gradient: "from-blue-500 to-purple-500"
               },
               { 
                 icon: Briefcase, 
-                title: "Freelance Projects", 
-                desc: "Find opportunities and build your professional career"
+                title: "Freelance Hub", 
+                desc: "Find opportunities, submit bids, and build your professional career",
+                gradient: "from-purple-500 to-pink-500"
               },
               { 
                 icon: Award, 
                 title: "Certifications", 
-                desc: "Earn verified certificates to showcase your achievements"
+                desc: "Earn verified certificates with QR codes to showcase your achievements",
+                gradient: "from-pink-500 to-red-500"
               },
             ].map((feature, i) => (
-              <Card key={i} className="p-8 hover:shadow-xl transition-all duration-300 border-cyan-100 hover:border-cyan-300">
-                <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-cyan-100 to-teal-100 flex items-center justify-center mb-6">
-                  <feature.icon className="h-7 w-7 text-cyan-600" />
+              <Card key={i} className="group hover:shadow-2xl transition-all duration-500 border-0 bg-white overflow-hidden">
+                <div className="p-8 space-y-4">
+                  <div className={`h-16 w-16 rounded-2xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg`}>
+                    <feature.icon className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 group-hover:text-cyan-600 transition-colors">{feature.title}</h3>
+                  <p className="text-gray-600 leading-relaxed">{feature.desc}</p>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
-                <p className="text-gray-600">{feature.desc}</p>
+                <div className={`h-1 bg-gradient-to-r ${feature.gradient} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500`}></div>
               </Card>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Benefits Section */}
-      <section className="py-20 px-6 bg-white">
+      {/* Benefits Section - Dark Card on Light Background */}
+      <section className="py-24 px-6 bg-white">
         <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">
+              <Badge className="mb-6 bg-cyan-100 text-cyan-700 border-0">
                 Why Choose YEESP?
+              </Badge>
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+                The Most Trusted Platform for <span className="text-cyan-600">Youth Empowerment</span>
               </h2>
-              <p className="text-xl text-gray-600 mb-8">
-                The most trusted platform for youth education and employment
+              <p className="text-xl text-gray-600 mb-10">
+                Join thousands who are transforming their careers through our comprehensive platform
               </p>
               
-              <div className="space-y-4">
+              <div className="space-y-5">
                 {[
-                  "Secure escrow-based payment system",
-                  "Live video conferencing (Zoom & Dyte)",
-                  "AI-powered course recommendations",
-                  "Verifiable certificates with QR codes",
-                  "Real-time notifications & messaging",
-                  "24/7 priority support",
-                  "Project bidding & contract management",
-                  "Comprehensive admin controls"
-                ].map((feature, i) => (
-                  <div key={i} className="flex items-start gap-3">
-                    <div className="h-6 w-6 rounded-full bg-gradient-to-br from-cyan-100 to-teal-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <Check className="h-4 w-4 text-cyan-600" />
+                  { icon: Shield, title: "Secure Payments", desc: "Escrow-based wallet with Stripe integration" },
+                  { icon: Video, title: "Live Sessions", desc: "Dual video support with Zoom & Dyte SDK" },
+                  { icon: TrendingUp, title: "Career Growth", desc: "Track progress with detailed analytics" },
+                  { icon: Globe, title: "Global Community", desc: "Connect with learners worldwide" },
+                  { icon: Zap, title: "Fast & Reliable", desc: "99.9% uptime with instant notifications" },
+                  { icon: Award, title: "Quality Assured", desc: "All tutors and courses are verified" }
+                ].map((item, i) => (
+                  <div key={i} className="flex items-start gap-4 group">
+                    <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-cyan-500 to-teal-500 flex items-center justify-center flex-shrink-0 shadow-md group-hover:shadow-xl group-hover:scale-110 transition-all duration-300">
+                      <item.icon className="h-6 w-6 text-white" />
                     </div>
-                    <span className="text-gray-700">{feature}</span>
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-900 mb-1">{item.title}</h3>
+                      <p className="text-gray-600">{item.desc}</p>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-cyan-50 to-teal-50 rounded-2xl p-12">
-              <div className="space-y-6">
-                <div className="flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-cyan-500 to-teal-600 flex items-center justify-center">
-                    <Shield className="h-6 w-6 text-white" />
+            <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-12 text-white shadow-2xl">
+              <h3 className="text-3xl font-bold mb-8">All Features Included</h3>
+              <div className="space-y-4">
+                {[
+                  "Unlimited course access",
+                  "Live video conferencing (Zoom & Dyte)",
+                  "Project bidding & contracts",
+                  "AI-powered recommendations",
+                  "Certificate generation with QR codes",
+                  "24/7 priority support",
+                  "Real-time notifications",
+                  "Escrow payment protection"
+                ].map((feature, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <div className="h-6 w-6 rounded-full bg-gradient-to-br from-cyan-400 to-teal-400 flex items-center justify-center flex-shrink-0">
+                      <Check className="h-4 w-4 text-gray-900 font-bold" />
+                    </div>
+                    <span className="text-lg text-gray-100">{feature}</span>
                   </div>
-                  <div>
-                    <div className="font-bold text-gray-900">Secure Platform</div>
-                    <div className="text-sm text-gray-600">Bank-level encryption</div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-cyan-500 to-teal-600 flex items-center justify-center">
-                    <Zap className="h-6 w-6 text-white" />
-                  </div>
-                  <div>
-                    <div className="font-bold text-gray-900">Fast Payments</div>
-                    <div className="text-sm text-gray-600">Instant withdrawals</div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-cyan-500 to-teal-600 flex items-center justify-center">
-                    <Users className="h-6 w-6 text-white" />
-                  </div>
-                  <div>
-                    <div className="font-bold text-gray-900">Global Community</div>
-                    <div className="text-sm text-gray-600">Connect worldwide</div>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 px-6 bg-gradient-to-r from-cyan-500 via-cyan-600 to-teal-600">
-        <div className="max-w-4xl mx-auto text-center space-y-8">
-          <h2 className="text-4xl md:text-5xl font-bold text-white">
-            Ready to Start Your Journey?
+      {/* CTA Section - Dark */}
+      <section className="py-24 px-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl"></div>
+        
+        <div className="relative max-w-4xl mx-auto text-center space-y-10 z-10">
+          <h2 className="text-4xl md:text-6xl font-bold text-white leading-tight">
+            Ready to Transform<br />Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400">Future</span>?
           </h2>
-          <p className="text-xl text-white/90">
-            Join thousands of successful students, tutors, and freelancers today
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+            Join thousands of successful students, tutors, and freelancers who are already building their dream careers
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-            <Button size="lg" className="bg-white text-cyan-600 hover:bg-gray-50 text-lg px-10 h-14 rounded-full font-bold shadow-xl" asChild>
+          <div className="flex flex-col sm:flex-row gap-5 justify-center pt-6">
+            <Button size="lg" className="bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white text-lg px-12 h-16 rounded-full font-bold shadow-2xl shadow-cyan-500/30" asChild>
               <Link href="/register">
                 Get Started Free <ArrowRight className="ml-2 h-6 w-6" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white/10 text-lg px-10 h-14 rounded-full font-bold" asChild>
+            <Button size="lg" variant="outline" className="border-2 border-gray-600 bg-transparent text-white hover:bg-white/10 text-lg px-12 h-16 rounded-full font-bold" asChild>
               <Link href="/about">
                 Learn More
               </Link>
@@ -198,41 +214,43 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12 px-6">
+      {/* Footer - Dark */}
+      <footer className="bg-gray-950 text-white py-16 px-6 border-t border-gray-800">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
+          <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div>
-              <h3 className="text-xl font-bold mb-4 brand-gradient-text">YEESP</h3>
-              <p className="text-gray-400 text-sm">Youth Education and Employment Support Platform</p>
+              <h3 className="text-2xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400">YEESP</h3>
+              <p className="text-gray-400 text-sm leading-relaxed">Youth Education and Employment Support Platform - Empowering the next generation</p>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Platform</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link href="/courses" className="hover:text-cyan-400 transition">Courses</Link></li>
-                <li><Link href="/tutors" className="hover:text-cyan-400 transition">Tutors</Link></li>
-                <li><Link href="/projects" className="hover:text-cyan-400 transition">Projects</Link></li>
+              <h4 className="font-bold mb-6 text-white">Platform</h4>
+              <ul className="space-y-3 text-sm">
+                <li><Link href="/courses" className="text-gray-400 hover:text-cyan-400 transition-colors">Courses</Link></li>
+                <li><Link href="/tutors" className="text-gray-400 hover:text-cyan-400 transition-colors">Tutors</Link></li>
+                <li><Link href="/projects" className="text-gray-400 hover:text-cyan-400 transition-colors">Projects</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Company</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link href="/about" className="hover:text-cyan-400 transition">About</Link></li>
-                <li><Link href="/blog" className="hover:text-cyan-400 transition">Blog</Link></li>
-                <li><Link href="/contact" className="hover:text-cyan-400 transition">Contact</Link></li>
+              <h4 className="font-bold mb-6 text-white">Company</h4>
+              <ul className="space-y-3 text-sm">
+                <li><Link href="/about" className="text-gray-400 hover:text-cyan-400 transition-colors">About</Link></li>
+                <li><Link href="/blog" className="text-gray-400 hover:text-cyan-400 transition-colors">Blog</Link></li>
+                <li><Link href="/contact" className="text-gray-400 hover:text-cyan-400 transition-colors">Contact</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Support</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link href="/help" className="hover:text-cyan-400 transition">Help Center</Link></li>
-                <li><Link href="/pricing" className="hover:text-cyan-400 transition">Pricing</Link></li>
-                <li><Link href="/terms" className="hover:text-cyan-400 transition">Terms</Link></li>
+              <h4 className="font-bold mb-6 text-white">Support</h4>
+              <ul className="space-y-3 text-sm">
+                <li><Link href="/help" className="text-gray-400 hover:text-cyan-400 transition-colors">Help Center</Link></li>
+                <li><Link href="/pricing" className="text-gray-400 hover:text-cyan-400 transition-colors">Pricing</Link></li>
+                <li><Link href="/terms" className="text-gray-400 hover:text-cyan-400 transition-colors">Terms</Link></li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
-            <p>© 2024 YEESP. All rights reserved. | Developed by <span className="text-cyan-400 font-semibold">Fasih ur Rehman</span></p>
+          <div className="border-t border-gray-800 pt-8 text-center">
+            <p className="text-gray-500 text-sm">
+              © 2024 YEESP. All rights reserved. | Developed with ❤️ by <span className="text-cyan-400 font-semibold">Fasih ur Rehman</span>
+            </p>
           </div>
         </div>
       </footer>
