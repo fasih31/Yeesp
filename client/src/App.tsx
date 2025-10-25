@@ -10,7 +10,6 @@ import { MainNav } from "@/components/navigation/main-nav";
 // Pages
 import Landing from "@/pages/landing";
 import Register from "@/pages/register";
-import Login from "@/pages/login";
 import About from "@/pages/about";
 import Contact from "@/pages/contact";
 import Pricing from "@/pages/pricing";
@@ -106,7 +105,7 @@ function Router() {
         {() => <AuthRedirect />}
       </Route>
       <Route path="/register" component={Register} />
-      <Route path="/login" component={Login} />
+      <Route path="/login" component={AuthLogin} />
       <Route path="/auth/login" component={AuthLogin} />
       <Route path="/auth/signup" component={AuthSignup} />
       <Route path="/about" component={About} />
