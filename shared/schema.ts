@@ -63,10 +63,26 @@ export const sessions = pgTable("sessions", {
   title: text("title").notNull(),
   scheduledAt: timestamp("scheduled_at").notNull(),
   duration: integer("duration").notNull(), // in minutes
-  status: text("status").notNull().default('scheduled'), // 'scheduled', 'completed', 'cancelled'
+  status: text("status").notNull().default('scheduled'), // 'scheduled', 'in_progress', 'completed', 'cancelled'
   meetingUrl: text("meeting_url"),
+  videoRoomId: text("video_room_id"), // Dyte room ID for video conferencing
+  recordingUrl: text("recording_url"), // Video recording URL
   price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  startedAt: timestamp("started_at"), // Actual start time
+  endedAt: timestamp("ended_at"), // Actual end time
   createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Session attendance tracking
+export const attendance = pgTable("attendance", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  sessionId: varchar("session_id").notNull().references(() => sessions.id),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  joinedAt: timestamp("joined_at").notNull().defaultNow(),
+  leftAt: timestamp("left_at"),
+  duration: integer("duration"), // Total time in session (minutes)
+  status: text("status").notNull().default('present'), // 'present', 'absent', 'late'
+  notes: text("notes"), // Optional notes from tutor
 });
 
 // Freelance projects

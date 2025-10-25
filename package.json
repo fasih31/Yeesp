@@ -11,6 +11,9 @@
     "db:push": "drizzle-kit push"
   },
   "dependencies": {
+    "@dytesdk/react-ui-kit": "^3.0.8",
+    "@dytesdk/react-web-core": "^3.1.10",
+    "@dytesdk/web-core": "^3.1.10",
     "@hookform/resolvers": "^3.10.0",
     "@jridgewell/trace-mapping": "^0.3.25",
     "@neondatabase/serverless": "^0.10.4",
