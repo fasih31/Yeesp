@@ -514,12 +514,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // ===== REVIEW ROUTES =====
   
-  app.post("/api/reviews", async (req, res) => {
+  app.post("/api/reviews", requireAuth, async (req, res) => {
 
 
   // ===== ROLE REQUEST ROUTES =====
   
-  app.post("/api/role-requests", async (req, res) => {
+  app.post("/api/role-requests", requireAuth, async (req, res) => {
     try {
       const userId = (req as any).user?.id;
       if (!userId) {
@@ -592,7 +592,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/role-requests/:id/approve", async (req, res) => {
+  app.post("/api/role-requests/:id/approve", requireAuth, requireRole('admin'), async (req, res) => {
     try {
       const adminId = (req as any).user?.id;
       const userRole = (req as any).user?.role;
@@ -615,7 +615,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/role-requests/:id/reject", async (req, res) => {
+  app.post("/api/role-requests/:id/reject", requireAuth, requireRole('admin'), async (req, res) => {
     try {
       const adminId = (req as any).user?.id;
       const userRole = (req as any).user?.role;
@@ -680,7 +680,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  app.post("/api/payments/create-payment-intent", async (req, res) => {
+  app.post("/api/payments/create-payment-intent", requireAuth, async (req, res) => {
     try {
       if (!stripe) {
         return res.status(503).json({ error: "Payment processing is not configured. Please add STRIPE_SECRET_KEY to environment variables." });
@@ -724,7 +724,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/payments/confirm", async (req, res) => {
+  app.post("/api/payments/confirm", requireAuth, async (req, res) => {
     try {
       const { paymentIntentId } = req.body;
 
@@ -795,7 +795,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/notifications", async (req, res) => {
+  app.post("/api/notifications", requireAuth, async (req, res) => {
     try {
       const notification = await storage.createNotification(req.body);
       
@@ -811,7 +811,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/notifications/:id/read", async (req, res) => {
+  app.post("/api/notifications/:id/read", requireAuth, async (req, res) => {
     try {
       const { id } = req.params;
       await storage.markNotificationRead(parseInt(id));
@@ -821,7 +821,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/notifications/mark-read", async (req, res) => {
+  app.post("/api/notifications/mark-read", requireAuth, async (req, res) => {
     try {
       const { userId } = req.body;
       await storage.markNotificationsAsRead(userId);
