@@ -1,6 +1,7 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { registerExtendedRoutes } from "./routes-extended";
+import { registerUploadRoutes } from "./routes-upload";
 import { setupVite, serveStatic, log } from "./vite";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
 
@@ -17,6 +18,7 @@ app.use(express.json({
   }
 }));
 app.use(express.urlencoded({ extended: false }));
+app.use('/uploads', express.static('public/uploads'));
 
 app.use((req, res, next) => {
   const start = Date.now();
@@ -51,6 +53,11 @@ app.use((req, res, next) => {
 (async () => {
   const server = await registerRoutes(app);
   registerExtendedRoutes(app);
+  registerUploadRoutes(app);
+
+  // Initialize WebSocket
+  const { initializeWebSocket } = await import('./services/websocket');
+  initializeWebSocket(server);
 
   // importantly only setup vite in development and after
   // setting up all the other routes so the catch-all route
