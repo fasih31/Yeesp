@@ -32,7 +32,7 @@ export default function TutorCreateCourse() {
     category: "",
     level: "beginner" as "beginner" | "intermediate" | "advanced",
     price: "",
-    duration: 0,
+    duration: "",
   });
 
   const [lessons, setLessons] = useState<LessonData[]>([
@@ -45,7 +45,7 @@ export default function TutorCreateCourse() {
     try {
       courseSchema.parse({
         ...courseData,
-        duration: Number(courseData.duration),
+        duration: courseData.duration ? Number(courseData.duration) : 0,
       });
       setErrors({});
       return true;

@@ -27,7 +27,7 @@ export default function TutorSessions() {
 
   const updateSessionMutation = useMutation({
     mutationFn: async ({ sessionId, status }: { sessionId: string; status: string }) => {
-      return apiRequest(`/sessions/${sessionId}`, {
+      return apiRequest(`/api/sessions/${sessionId}`, {
         method: "PATCH",
         body: JSON.stringify({ status }),
       });

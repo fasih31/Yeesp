@@ -168,7 +168,7 @@ export default function RecruiterPostProject() {
         <TabsContent value="requirements" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Required Skills</CardTitle>
+              <CardTitle>Required Skills <span className="text-destructive">*</span></CardTitle>
               <CardDescription>Add skills that freelancers should have</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -178,11 +178,18 @@ export default function RecruiterPostProject() {
                   value={skillInput}
                   onChange={(e) => setSkillInput(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addSkill())}
+                  className={errors.skills ? "border-destructive" : ""}
                 />
                 <Button onClick={addSkill} variant="outline" type="button">
                   <Plus className="h-4 w-4" />
                 </Button>
               </div>
+              {errors.skills && (
+                <p className="text-sm text-destructive flex items-center gap-1">
+                  <AlertCircle className="h-3 w-3" />
+                  {errors.skills}
+                </p>
+              )}
               <div className="flex flex-wrap gap-2">
                 {skills.map((skill) => (
                   <Badge key={skill} variant="secondary" className="pl-3 pr-1">
