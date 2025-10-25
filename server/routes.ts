@@ -854,11 +854,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // ===== NOTIFICATION ROUTES =====
   
-  app.get("/api/notifications/my", async (req, res) => {
+  app.get("/api/notifications/my", requireAuth, async (req, res) => {
     try {
-      const userId = req.query.userId as string;
+      // SECURITY: Derive userId from authenticated session
+      const userId = (req.user as any)?.id;
       if (!userId) {
-        return res.status(400).json({ error: "User ID required" });
+        return res.status(401).json({ error: "Not authenticated" });
       }
 
       const notifications = await storage.getNotificationsByUser(userId);
@@ -869,8 +870,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Notification endpoints
-  app.get("/api/notifications/:userId", async (req, res) => {
+  app.get("/api/notifications/:userId", requireAuth, requireRole('admin'), async (req, res) => {
     try {
+      // Only admins can view other users' notifications
       const { userId } = req.params;
       const { limit } = req.query;
       const notifications = await storage.getNotifications(
@@ -883,9 +885,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/notifications/:userId/unread-count", async (req, res) => {
+  app.get("/api/notifications/:userId/unread-count", requireAuth, async (req, res) => {
     try {
+      // SECURITY: Only allow users to check their own unread count (or admins)
+      const authUserId = (req.user as any)?.id;
+      const userRole = (req.user as any)?.role;
       const { userId } = req.params;
+      
+      if (userRole !== 'admin' && authUserId !== userId) {
+        return res.status(403).json({ error: "You can only check your own notifications" });
+      }
+
       const count = await storage.getUnreadCount(userId);
       res.json({ count });
     } catch (error: any) {

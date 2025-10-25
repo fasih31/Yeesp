@@ -3,6 +3,30 @@
 ## Overview
 YEESP is a multi-role digital learning and freelancing ecosystem empowering youth through education and employment. It integrates an LMS, tutoring marketplace, and freelancing platform, supporting Students, Tutors, Freelancers, Recruiters, and Admins. Key features include real-time communication, customer support, dispute resolution, KYC verification, and an escrow-based payment system. The platform aims to be a comprehensive solution for skill development and economic empowerment.
 
+## Recent Changes (October 25, 2025)
+
+### Critical Security Hardening - COMPLETE ✅
+- **Comprehensive Authentication & Authorization**: All API routes now properly secured
+  - requireAuth middleware on all POST/PATCH/DELETE operations
+  - requireRole middleware enforcing role-based access control
+  - Ownership validation preventing users from modifying others' resources
+  - Foreign keys automatically derived from authenticated session (instructorId, recruiterId, freelancerId, studentId, userId)
+  - Client-side ProtectedRoute component preventing cross-role dashboard access
+- **Admin Project Approval System**: Complete workflow implemented
+  - Projects created with 'pending' status requiring admin approval
+  - Admin approval/rejection endpoints with recruiter notifications
+  - Status transitions: pending → open (approved) or rejected
+- **All Authorization Bypasses Eliminated**:
+  - Courses: Only instructors/admins can modify their own courses
+  - Projects: Only recruiters/admins can modify their own projects  
+  - Bids: Freelancers create, freelancers/recruiters/admins update with ownership checks
+  - Enrollments: Students automatically assigned, ownership validated on updates
+  - Sessions: Role-based creation (tutor assigns tutorId, student assigns studentId)
+  - Payments: All userId values derived from authenticated session, not client requests
+  - Notifications: Admin-only creation, users can only view their own
+  - User profiles: Users can only update their own profiles (admins can update any)
+- **Production Readiness**: Platform security is production-ready with proper RBAC
+
 ## User Preferences
 - **Coding Style**: TypeScript for type safety, functional components with hooks, async/await for promises, error handling at all levels, reusable components, consistent naming conventions.
 - **Development Workflow**: Database changes → Update `shared/schema.ts` → Run `npm run db:push`; Backend features → Add storage functions → Add API routes; Frontend features → Create components → Connect to API → Add error handling; Test with test accounts before marking complete.
