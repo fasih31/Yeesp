@@ -69,12 +69,41 @@ export default function Courses() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-12">
+        {/* Promotional Banner */}
+        <div className="mb-12 relative overflow-hidden rounded-3xl bg-gradient-to-r from-primary via-accent to-primary animate-gradient p-[2px]">
+          <div className="bg-background rounded-3xl p-8 md:p-12 relative overflow-hidden">
+            <div className="absolute inset-0 bg-dot-pattern opacity-10" />
+            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="flex-1">
+                <Badge className="mb-4 animate-fade-in">Limited Time Offer</Badge>
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 animate-slide-up">
+                  Get 50% Off All Courses!
+                </h2>
+                <p className="text-lg text-muted-foreground mb-6 animate-fade-in">
+                  Start learning today with our biggest sale of the year. Offer ends soon!
+                </p>
+                <div className="flex gap-4 animate-bounce-in">
+                  <Button size="lg" className="shadow-xl">
+                    Browse Deals
+                  </Button>
+                  <Button size="lg" variant="outline">
+                    Learn More
+                  </Button>
+                </div>
+              </div>
+              <div className="hidden md:block">
+                <div className="text-8xl animate-float">🎓</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="mb-8">
-          <h2 className="text-4xl font-bold mb-4" data-testid="text-courses-heading">
+          <h1 className="text-4xl font-bold mb-2 gradient-text" data-testid="text-courses-title">
             Explore Courses
-          </h2>
-          <p className="text-xl text-muted-foreground">
-            Discover courses from expert instructors
+          </h1>
+          <p className="text-lg text-muted-foreground">
+            Discover thousands of courses across various categories
           </p>
         </div>
 
@@ -116,7 +145,7 @@ export default function Courses() {
                 <div className="aspect-video bg-gradient-to-br from-primary/20 to-accent/20 rounded-t-lg flex items-center justify-center">
                   <span className="text-6xl opacity-20">{course.category.charAt(0).toUpperCase()}</span>
                 </div>
-                
+
                 <CardHeader className="flex-1">
                   <div className="flex items-start justify-between gap-2 mb-2">
                     <Badge variant="secondary" className="text-xs" data-testid={`badge-category-${course.id}`}>
@@ -126,11 +155,11 @@ export default function Courses() {
                       {course.level}
                     </Badge>
                   </div>
-                  
+
                   <CardTitle className="line-clamp-2" data-testid={`text-course-title-${course.id}`}>
                     {course.title}
                   </CardTitle>
-                  
+
                   <CardDescription className="line-clamp-2" data-testid={`text-course-description-${course.id}`}>
                     {course.description}
                   </CardDescription>

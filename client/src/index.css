@@ -452,6 +452,33 @@
     }
   }
   
+  /* Grid pattern background */
+  .bg-grid-pattern {
+    background-image: 
+      linear-gradient(to right, hsl(var(--border)) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--border)) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  
+  /* Dot pattern background */
+  .bg-dot-pattern {
+    background-image: radial-gradient(circle, hsl(var(--border)) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+  
+  /* Animated gradient background */
+  .animate-gradient {
+    background: linear-gradient(270deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary)));
+    background-size: 200% 200%;
+    animation: gradientShift 8s ease infinite;
+  }
+  
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
   /* Pulse effect */
   .pulse-glow {
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;

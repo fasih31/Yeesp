@@ -11,10 +11,27 @@ export default function Landing() {
       <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-accent/10 overflow-hidden">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnoiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utb3BhY2l0eT0iLjA1Ii8+PC9nPjwvc3ZnPg==')] opacity-40" />
 
-        {/* Floating orbs for visual interest */}
+        {/* Animated floating orbs */}
         <div className="absolute top-20 left-10 w-72 h-72 bg-primary/20 rounded-full blur-3xl animate-float" />
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }} />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary/10 rounded-full blur-3xl animate-pulse" />
+        
+        {/* Animated icons floating around */}
+        <div className="absolute top-1/4 right-1/4 animate-float" style={{ animationDelay: '0.5s' }}>
+          <div className="bg-primary/10 backdrop-blur-sm p-4 rounded-2xl shadow-xl">
+            <GraduationCap className="h-8 w-8 text-primary" />
+          </div>
+        </div>
+        <div className="absolute bottom-1/3 left-1/4 animate-float" style={{ animationDelay: '1.5s' }}>
+          <div className="bg-accent/10 backdrop-blur-sm p-4 rounded-2xl shadow-xl">
+            <Briefcase className="h-8 w-8 text-accent" />
+          </div>
+        </div>
+        <div className="absolute top-1/3 left-1/5 animate-float" style={{ animationDelay: '2s' }}>
+          <div className="bg-primary/10 backdrop-blur-sm p-4 rounded-2xl shadow-xl">
+            <Award className="h-8 w-8 text-primary" />
+          </div>
+        </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-12 sm:py-20">
           <Badge className="mb-6 text-sm animate-fade-in hover-elevate" data-testid="badge-platform-tagline">
@@ -40,6 +57,88 @@ export default function Landing() {
                 Browse Courses
               </Link>
             </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Animated Platform Demo Section */}
+      <section className="py-24 px-6 bg-gradient-to-br from-primary/5 via-background to-accent/5 relative overflow-hidden">
+        <div className="absolute inset-0 bg-grid-pattern opacity-5" />
+        <div className="max-w-7xl mx-auto relative">
+          <div className="text-center mb-16">
+            <Badge className="mb-4 animate-fade-in">Platform Overview</Badge>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 animate-slide-up">
+              Experience YEESP in Action
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto animate-fade-in">
+              Watch how our platform transforms learning and earning for thousands of users
+            </p>
+          </div>
+
+          {/* Video/Animation Placeholder */}
+          <div className="relative max-w-5xl mx-auto animate-scale-in">
+            <div className="aspect-video bg-gradient-to-br from-primary/20 to-accent/20 rounded-3xl shadow-2xl overflow-hidden border-4 border-primary/10">
+              {/* Simulated video player interface */}
+              <div className="relative h-full flex items-center justify-center bg-gradient-to-br from-background/50 to-background/30 backdrop-blur-sm">
+                <div className="text-center space-y-6 p-8">
+                  <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-primary/20 backdrop-blur-lg hover:bg-primary/30 transition-all cursor-pointer group shadow-xl">
+                    <div className="w-0 h-0 border-t-[16px] border-t-transparent border-l-[28px] border-l-primary border-b-[16px] border-b-transparent ml-2 group-hover:scale-110 transition-transform" />
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-2xl font-semibold">See YEESP in Action</p>
+                    <p className="text-muted-foreground">2 minute platform overview</p>
+                  </div>
+                </div>
+                
+                {/* Floating feature badges */}
+                <div className="absolute top-8 left-8 glass-effect px-4 py-2 rounded-full animate-slide-right">
+                  <div className="flex items-center gap-2">
+                    <GraduationCap className="h-5 w-5 text-primary" />
+                    <span className="text-sm font-medium">500+ Courses</span>
+                  </div>
+                </div>
+                <div className="absolute top-8 right-8 glass-effect px-4 py-2 rounded-full animate-slide-left">
+                  <div className="flex items-center gap-2">
+                    <Users className="h-5 w-5 text-accent" />
+                    <span className="text-sm font-medium">10K+ Students</span>
+                  </div>
+                </div>
+                <div className="absolute bottom-8 left-8 glass-effect px-4 py-2 rounded-full animate-slide-up">
+                  <div className="flex items-center gap-2">
+                    <Briefcase className="h-5 w-5 text-primary" />
+                    <span className="text-sm font-medium">1,200+ Projects</span>
+                  </div>
+                </div>
+                <div className="absolute bottom-8 right-8 glass-effect px-4 py-2 rounded-full animate-slide-up" style={{ animationDelay: '0.2s' }}>
+                  <div className="flex items-center gap-2">
+                    <Star className="h-5 w-5 text-accent" />
+                    <span className="text-sm font-medium">4.9★ Rating</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Decorative elements */}
+            <div className="absolute -top-4 -right-4 w-32 h-32 bg-primary/20 rounded-full blur-2xl animate-pulse" />
+            <div className="absolute -bottom-4 -left-4 w-40 h-40 bg-accent/20 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '1s' }} />
+          </div>
+
+          {/* Quick stats below video */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 max-w-4xl mx-auto">
+            {[
+              { label: "Active Users", value: "10,000+", icon: Users },
+              { label: "Course Hours", value: "50,000+", icon: GraduationCap },
+              { label: "Success Rate", value: "95%", icon: Award },
+              { label: "Avg Rating", value: "4.9/5", icon: Star }
+            ].map((stat, i) => (
+              <div key={i} className="text-center animate-fade-in" style={{ animationDelay: `${i * 0.1}s` }}>
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 mb-3">
+                  <stat.icon className="h-6 w-6 text-primary" />
+                </div>
+                <div className="text-2xl font-bold gradient-text">{stat.value}</div>
+                <div className="text-sm text-muted-foreground">{stat.label}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -175,6 +274,64 @@ export default function Landing() {
               <div className="text-6xl font-bold mb-3 shimmer">95%</div>
               <div className="text-xl opacity-95">Success Rate</div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-24 px-6 bg-gradient-to-br from-primary/5 to-accent/5">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4">What Our Community Says</h2>
+            <p className="text-xl text-muted-foreground">
+              Join thousands of satisfied learners and earners
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                name: "Sarah Johnson",
+                role: "Student → Freelancer",
+                image: "👩‍💻",
+                text: "YEESP transformed my career! I learned web development and landed my first freelance project within 3 months.",
+                rating: 5
+              },
+              {
+                name: "Michael Chen",
+                role: "Professional Tutor",
+                image: "👨‍🏫",
+                text: "The platform makes it incredibly easy to connect with students and manage sessions. My income has tripled!",
+                rating: 5
+              },
+              {
+                name: "Emma Davis",
+                role: "Course Completer",
+                image: "👩‍🎓",
+                text: "The quality of courses is outstanding. I got certified and immediately got a job offer. Best investment ever!",
+                rating: 5
+              }
+            ].map((testimonial, i) => (
+              <Card key={i} className="card-hover border-2 animate-slide-up" style={{ animationDelay: `${i * 0.1}s` }}>
+                <CardHeader>
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="text-5xl">{testimonial.image}</div>
+                    <div>
+                      <CardTitle className="text-lg">{testimonial.name}</CardTitle>
+                      <CardDescription>{testimonial.role}</CardDescription>
+                    </div>
+                  </div>
+                  <div className="flex gap-1 mb-2">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star key={i} className="h-5 w-5 fill-primary text-primary" />
+                    ))}
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground italic">"{testimonial.text}"</p>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
