@@ -10,9 +10,9 @@ export default function About() {
       {/* Hero Section */}
       <div className="max-w-7xl mx-auto px-6 py-12 mt-4">
         <div className="text-center mb-16 relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 blur-3xl -z-10" />
-          <Badge className="mb-4 animate-fade-in">Our Story</Badge>
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 gradient-text animate-slide-up" data-testid="text-about-title">
+          <div className="absolute inset-0 bg-violet-100 blur-3xl -z-10 opacity-50" />
+          <Badge className="mb-4 animate-fade-in bg-violet-100 text-violet-700 border-violet-200">Our Story</Badge>
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 brand-gradient-text animate-slide-up" data-testid="text-about-title">
             Building the Future of Learning & Earning
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto animate-fade-in leading-relaxed">
@@ -28,8 +28,8 @@ export default function About() {
             { value: "10K+", label: "Active Users" },
             { value: "$2M+", label: "Earned by Freelancers" }
           ].map((stat, i) => (
-            <div key={i} className="text-center p-6 rounded-2xl bg-gradient-to-br from-primary/5 to-accent/5 border border-primary/10 animate-scale-in" style={{ animationDelay: `${i * 0.1}s` }}>
-              <div className="text-4xl font-bold gradient-text mb-2">{stat.value}</div>
+            <div key={i} className="text-center p-6 rounded-2xl bg-violet-50 border border-violet-200 animate-scale-in" style={{ animationDelay: `${i * 0.1}s` }}>
+              <div className="text-4xl font-bold text-violet-600 mb-2">{stat.value}</div>
               <div className="text-sm text-muted-foreground">{stat.label}</div>
             </div>
           ))}
@@ -38,8 +38,8 @@ export default function About() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
           <Card className="hover-elevate">
             <CardHeader>
-              <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-                <Eye className="h-6 w-6 text-primary" />
+              <div className="h-12 w-12 rounded-lg bg-violet-100 flex items-center justify-center mb-4">
+                <Eye className="h-6 w-6 text-violet-600" />
               </div>
               <CardTitle>Our Vision</CardTitle>
             </CardHeader>
@@ -54,8 +54,8 @@ export default function About() {
 
           <Card className="hover-elevate">
             <CardHeader>
-              <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-                <Target className="h-6 w-6 text-primary" />
+              <div className="h-12 w-12 rounded-lg bg-violet-100 flex items-center justify-center mb-4">
+                <Target className="h-6 w-6 text-violet-600" />
               </div>
               <CardTitle>Our Mission</CardTitle>
             </CardHeader>
@@ -69,12 +69,12 @@ export default function About() {
           </Card>
         </div>
 
-        <div className="bg-accent/5 rounded-lg p-12 mb-16">
+        <div className="bg-violet-50 rounded-lg p-12 mb-16">
           <h2 className="text-3xl font-bold text-center mb-8">Our Core Values</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                <Heart className="h-8 w-8 text-primary" />
+              <div className="h-16 w-16 rounded-full bg-violet-100 flex items-center justify-center mx-auto mb-4">
+                <Heart className="h-8 w-8 text-violet-600" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Quality First</h3>
               <p className="text-muted-foreground">
@@ -82,8 +82,8 @@ export default function About() {
               </p>
             </div>
             <div className="text-center">
-              <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                <Users className="h-8 w-8 text-primary" />
+              <div className="h-16 w-16 rounded-full bg-violet-100 flex items-center justify-center mx-auto mb-4">
+                <Users className="h-8 w-8 text-violet-600" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Community Driven</h3>
               <p className="text-muted-foreground">
@@ -91,8 +91,8 @@ export default function About() {
               </p>
             </div>
             <div className="text-center">
-              <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                <Target className="h-8 w-8 text-primary" />
+              <div className="h-16 w-16 rounded-full bg-violet-100 flex items-center justify-center mx-auto mb-4">
+                <Target className="h-8 w-8 text-violet-600" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Growth Focused</h3>
               <p className="text-muted-foreground">
