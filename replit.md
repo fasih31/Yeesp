@@ -31,9 +31,11 @@ The platform is built with a React 18 + TypeScript frontend using Vite, Wouter f
 - **Video Conferencing**: Dyte SDK integration for live video sessions with automatic attendance tracking.
 - **Payment System**: Escrow-based wallet system with transaction history.
 - **Security**: Passwords hashed, SQL injection prevention (Drizzle ORM), XSS prevention (React), CSRF tokens, input validation.
+- **Admin API**: Dedicated admin API routes for platform statistics, user management, content moderation, and KYC verification.
 
 ### Feature Specifications
-- **LMS**: Courses, lessons, assignments, submissions, certificates.
+- **LMS**: Courses with multiple lesson types (video, live_session, assignment, quiz, reading), submissions, certificates, quizzes with attempts tracking.
+- **Enhanced Course Creation**: LessonBuilder component supporting video lessons, live sessions, assignments with due dates, quizzes with questions, and reading materials.
 - **Tutoring Marketplace**: Session scheduling, 1-on-1 video calls, reviews.
 - **Freelancing Platform**: Project bidding, contracts, milestones, escrow payments.
 - **KYC Verification**: Document upload, admin review, and verification status.
@@ -43,6 +45,7 @@ The platform is built with a React 18 + TypeScript frontend using Vite, Wouter f
 - **Wallet & Payments**: User wallets, transaction history, escrow management.
 - **Notifications**: Real-time alerts and in-app notification center.
 - **Attendance Tracking**: Automatic recording of video session attendance and statistics.
+- **Admin Controls**: Comprehensive admin dashboard with real-time statistics, user management, content moderation, KYC verification queue, and dispute resolution tools.
 
 ## External Dependencies
 - **Stripe**: Payment processing (blueprint integrated, ready for API keys).
