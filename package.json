@@ -11,7 +11,8 @@
     "db:push": "DRIZZLE_KIT_NO_PROMPT=1 drizzle-kit push --force",
     "create-admin": "tsx scripts/create-admin.js",
     "setup-test-users": "tsx scripts/setup-test-users.js",
-    "test": "node scripts/comprehensive-test.js"
+    "test": "node scripts/comprehensive-test.js",
+    "test-supabase": "tsx scripts/test-supabase.js"
   },
   "dependencies": {
     "@dytesdk/react-ui-kit": "^3.0.8",
