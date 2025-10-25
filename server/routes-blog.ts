@@ -1,6 +1,5 @@
 
 import type { Express } from "express";
-import { storage } from "./storage";
 import { requireAuth, requireRole } from "./middleware/auth";
 
 export function registerBlogRoutes(app: Express) {
