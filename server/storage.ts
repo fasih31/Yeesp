@@ -210,7 +210,7 @@ export class DatabaseStorage implements IStorage {
     return await db.select().from(schema.courses).orderBy(desc(schema.courses.createdAt));
   }
 
-  async getCoursesByInstructor(instructorId: string): Promise<Course[]> {
+  async getCoursesByInstructor(instructorId: string): Promise<Course[] > {
     return await db.select().from(schema.courses).where(eq(schema.courses.instructorId, instructorId));
   }
 
@@ -427,7 +427,10 @@ export class DatabaseStorage implements IStorage {
   }
 
   async markNotificationsAsRead(userId: string): Promise<boolean> {
-    await db.update(schema.notifications).set({ read: true }).where(eq(schema.notifications.userId, userId));
+    await db
+      .update(schema.notifications)
+      .set({ read: true })
+      .where(eq(schema.notifications.userId, userId));
     return true;
   }
 

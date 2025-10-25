@@ -269,6 +269,7 @@ function Router() {
         )}
       </Route>
       <Route path="/blog" component={Blog} />
+          <Route path="/blog/:slug" component={lazy(() => import("@/pages/blog-detail"))} />
       <Route path="/terms" component={Terms} />
       <Route path="/privacy" component={Privacy} />
       <Route component={NotFound} />

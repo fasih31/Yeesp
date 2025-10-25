@@ -14,7 +14,14 @@ const stripe = process.env.STRIPE_SECRET_KEY
     })
   : null;
 
+import { registerStudyGroupRoutes } from "./routes-study-groups";
+import { registerBlogRoutes } from "./routes-blog";
+
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Register modular routes
+  registerStudyGroupRoutes(app);
+  registerBlogRoutes(app);
+
   // ===== AUTH ROUTES =====
   
   app.post("/api/auth/logout", (req, res) => {
@@ -72,7 +79,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         if (err) {
           return res.status(500).json({ error: err.message });
         }
-        return res.json({ user });
+        // Exclude password from response
+        const { password, ...userWithoutPassword } = user;
+        return res.json({ user: userWithoutPassword });
       });
     })(req, res, next);
   });

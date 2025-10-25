@@ -445,6 +445,45 @@ export const insertWalletTransactionSchema = createInsertSchema(walletTransactio
   createdAt: true,
 });
 
+// Study Groups table
+export const studyGroups = pgTable("study_groups", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  description: text("description"),
+  courseId: varchar("course_id").references(() => courses.id),
+  creatorId: varchar("creator_id").notNull().references(() => users.id),
+  maxMembers: integer("max_members").default(10),
+  meetingSchedule: text("meeting_schedule"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// Study Group Members table
+export const studyGroupMembers = pgTable("study_group_members", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  groupId: varchar("group_id").notNull().references(() => studyGroups.id, { onDelete: 'cascade' }),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  joinedAt: timestamp("joined_at").defaultNow().notNull(),
+  role: text("role").default("member"), // member, moderator
+});
+
+// Blog Posts table
+export const blogPosts = pgTable("blog_posts", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: text("title").notNull(),
+  slug: text("slug").notNull().unique(),
+  content: text("content").notNull(),
+  excerpt: text("excerpt"),
+  authorId: varchar("author_id").notNull().references(() => users.id),
+  category: text("category").notNull(),
+  tags: text("tags").array(),
+  featuredImage: text("featured_image"),
+  published: boolean("published").default(false),
+  publishedAt: timestamp("published_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
 // ===== SELECT TYPES =====
 
 export type User = typeof users.$inferSelect;
@@ -469,6 +508,9 @@ export type KycDocument = typeof kycDocuments.$inferSelect;
 export type Dispute = typeof disputes.$inferSelect;
 export type Wallet = typeof wallets.$inferSelect;
 export type WalletTransaction = typeof walletTransactions.$inferSelect;
+export type StudyGroup = typeof studyGroups.$inferSelect;
+export type StudyGroupMember = typeof studyGroupMembers.$inferSelect;
+export type BlogPost = typeof blogPosts.$inferSelect;
 
 // ===== INSERT TYPES =====
 
@@ -494,6 +536,9 @@ export type InsertKycDocument = z.infer<typeof insertKycDocumentSchema>;
 export type InsertDispute = z.infer<typeof insertDisputeSchema>;
 export type InsertWallet = z.infer<typeof insertWalletSchema>;
 export type InsertWalletTransaction = z.infer<typeof insertWalletTransactionSchema>;
+export type InsertStudyGroup = z.infer<typeof createInsertSchema(studyGroups).omit({ id: true, createdAt: true, updatedAt: true })>;
+export type InsertStudyGroupMember = z.infer<typeof createInsertSchema(studyGroupMembers).omit({ id: true, joinedAt: true })>;
+export type InsertBlogPost = z.infer<typeof createInsertSchema(blogPosts).omit({ id: true, createdAt: true, updatedAt: true })>;
 
 
 export const insertRoleRequestSchema = createInsertSchema(roleRequests).omit({

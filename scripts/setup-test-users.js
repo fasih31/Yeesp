@@ -1,41 +1,95 @@
-import { db } from "../server/db";
-import { users } from "../shared/schema";
+
+import { db } from "../server/db.js";
+import { users } from "../shared/schema.js";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 
 async function setupTestUsers() {
-  console.log("Setting up test users...\n");
+  console.log("Setting up comprehensive test users...\n");
 
   const testUsers = [
     {
       email: "student@test.com",
       password: "password123",
       name: "Test Student",
-      role: "student"
+      role: "student",
+      bio: "Passionate learner exploring web development",
+      skills: ["JavaScript", "React", "Python"]
+    },
+    {
+      email: "student2@test.com",
+      password: "password123",
+      name: "Jane Learner",
+      role: "student",
+      bio: "Computer Science student seeking practical skills",
+      skills: ["Java", "SQL"]
     },
     {
       email: "tutor@test.com",
       password: "password123",
       name: "Test Tutor",
-      role: "tutor"
+      role: "tutor",
+      bio: "Experienced educator with 10+ years teaching web development",
+      headline: "Senior Full-Stack Developer & Educator",
+      skills: ["JavaScript", "React", "Node.js", "Python", "Teaching"],
+      hourlyRate: "75.00",
+      verified: true
+    },
+    {
+      email: "tutor2@test.com",
+      password: "password123",
+      name: "Dr. Sarah Chen",
+      role: "tutor",
+      bio: "PhD in Computer Science, specializing in AI and Machine Learning",
+      headline: "AI/ML Expert & University Professor",
+      skills: ["Python", "TensorFlow", "Machine Learning", "Data Science"],
+      hourlyRate: "100.00",
+      verified: true
     },
     {
       email: "freelancer@test.com",
       password: "password123",
       name: "Test Freelancer",
-      role: "freelancer"
+      role: "freelancer",
+      bio: "Full-stack developer available for projects",
+      headline: "Full-Stack Web Developer",
+      skills: ["React", "Node.js", "PostgreSQL", "AWS"],
+      hourlyRate: "60.00"
+    },
+    {
+      email: "freelancer2@test.com",
+      password: "password123",
+      name: "Alex Designer",
+      role: "freelancer",
+      bio: "Creative UI/UX designer with a passion for beautiful interfaces",
+      headline: "UI/UX Designer & Front-end Developer",
+      skills: ["Figma", "Adobe XD", "React", "Tailwind CSS"],
+      hourlyRate: "55.00"
     },
     {
       email: "recruiter@test.com",
       password: "password123",
       name: "Test Recruiter",
-      role: "recruiter"
+      role: "recruiter",
+      bio: "Tech company seeking talented developers",
+      headline: "Tech Solutions Inc - Hiring Manager"
+    },
+    {
+      email: "recruiter2@test.com",
+      password: "password123",
+      name: "StartupCo Hiring",
+      role: "recruiter",
+      bio: "Fast-growing startup looking for innovative talent",
+      headline: "StartupCo - Head of Talent Acquisition"
     },
     {
       email: "admin@test.com",
       password: "admin123",
-      name: "Test Admin",
-      role: "admin"
+      name: "Platform Admin",
+      role: "admin",
+      bio: "YEESP Platform Administrator",
+      headline: "Platform Administrator",
+      verified: true
     }
   ];
 
@@ -43,7 +97,6 @@ async function setupTestUsers() {
     try {
       const hashedPassword = await bcrypt.hash(testUser.password, 10);
 
-      // Check if user exists
       const existing = await db
         .select()
         .from(users)
@@ -51,22 +104,27 @@ async function setupTestUsers() {
         .limit(1);
 
       if (existing.length > 0) {
-        // Update password
         await db
           .update(users)
-          .set({ password: hashedPassword })
+          .set({ 
+            password: hashedPassword,
+            ...testUser,
+            password: hashedPassword
+          })
           .where(eq(users.email, testUser.email));
         
         console.log(`✅ Updated: ${testUser.email} (${testUser.role})`);
       } else {
-        // Create new user
         await db.insert(users).values({
           email: testUser.email,
           password: hashedPassword,
           name: testUser.name,
           role: testUser.role,
-          bio: `Test ${testUser.role} account`,
-          verified: true,
+          bio: testUser.bio,
+          headline: testUser.headline,
+          skills: testUser.skills,
+          hourlyRate: testUser.hourlyRate,
+          verified: testUser.verified || false,
           kycStatus: "approved"
         });
         
@@ -80,12 +138,23 @@ async function setupTestUsers() {
   }
 
   console.log("\n✨ Test users setup complete!");
-  console.log("\nYou can now log in with:");
+  console.log("\n📝 Available Test Accounts:");
+  console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+  console.log("Students:");
   console.log("  • student@test.com / password123");
+  console.log("  • student2@test.com / password123");
+  console.log("\nTutors:");
   console.log("  • tutor@test.com / password123");
+  console.log("  • tutor2@test.com / password123");
+  console.log("\nFreelancers:");
   console.log("  • freelancer@test.com / password123");
+  console.log("  • freelancer2@test.com / password123");
+  console.log("\nRecruiters:");
   console.log("  • recruiter@test.com / password123");
+  console.log("  • recruiter2@test.com / password123");
+  console.log("\nAdmin:");
   console.log("  • admin@test.com / admin123");
+  console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 
   process.exit(0);
 }
