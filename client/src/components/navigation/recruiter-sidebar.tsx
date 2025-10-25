@@ -1,7 +1,7 @@
-
 import { Link, useLocation } from "wouter";
 import { Home, Plus, Briefcase, Users, FileText, DollarSign, Settings, MessageSquare } from "lucide-react";
-import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
+import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarHeader } from "@/components/ui/sidebar";
+import { NotificationDropdown } from "@/components/NotificationDropdown";
 
 const recruiterMenuItems = [
   { href: "/dashboard/recruiter", icon: Home, label: "Dashboard" },
@@ -20,6 +20,26 @@ export function RecruiterSidebar() {
 
   return (
     <Sidebar>
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton size="lg" asChild>
+              <a href="/">
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                  <Briefcase className="size-4" />
+                </div>
+                <div className="flex flex-col gap-0.5 leading-none">
+                  <span className="font-semibold">YEESP</span>
+                  <span className="text-xs">Recruiter</span>
+                </div>
+              </a>
+            </SidebarMenuButton>
+            <div className="ml-auto">
+              <NotificationDropdown userId="recruiter-id" />
+            </div>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>

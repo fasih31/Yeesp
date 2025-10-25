@@ -565,6 +565,57 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Notification endpoints
+  app.get("/api/notifications/:userId", async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const { limit } = req.query;
+      const notifications = await storage.getNotifications(
+        userId, 
+        limit ? parseInt(limit as string) : 20
+      );
+      res.json(notifications);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.get("/api/notifications/:userId/unread-count", async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const count = await storage.getUnreadCount(userId);
+      res.json({ count });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/notifications", async (req, res) => {
+    try {
+      const notification = await storage.createNotification(req.body);
+      
+      // Send real-time notification via WebSocket
+      const wsService = getWebSocketService();
+      if (wsService) {
+        wsService.sendNotification(req.body.userId, notification);
+      }
+      
+      res.json(notification);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/notifications/:id/read", async (req, res) => {
+    try {
+      const { id } = req.params;
+      await storage.markNotificationRead(parseInt(id));
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   app.post("/api/notifications/mark-read", async (req, res) => {
     try {
       const { userId } = req.body;

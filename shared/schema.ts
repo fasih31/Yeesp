@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, integer, boolean, timestamp, decimal, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, integer, boolean, timestamp, decimal, jsonb, serial } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -130,12 +130,13 @@ export const certificates = pgTable("certificates", {
 
 // Notifications
 export const notifications = pgTable("notifications", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  userId: varchar("user_id").notNull().references(() => users.id),
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  type: text("type").notNull(), // 'course', 'assignment', 'message', 'payment', 'system'
   title: text("title").notNull(),
   message: text("message").notNull(),
-  type: text("type").notNull(), // 'info', 'success', 'warning', 'error'
-  read: boolean("read").default(false),
+  link: text("link"),
+  read: boolean("read").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

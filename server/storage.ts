@@ -89,6 +89,16 @@ export interface IStorage {
   createNotification(notification: InsertNotification): Promise<Notification>;
   updateNotification(id: string, notification: Partial<InsertNotification>): Promise<Notification | undefined>;
   markNotificationsAsRead(userId: string): Promise<boolean>;
+  getNotifications(userId: string, limit?: number): Promise<Notification[]>;
+  createNotification(data: {
+    userId: string;
+    type: string;
+    title: string;
+    message: string;
+    link?: string;
+  }): Promise<Notification>;
+  markNotificationRead(notificationId: number): Promise<void>;
+  getUnreadCount(userId: string): Promise<number>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -346,6 +356,46 @@ export class DatabaseStorage implements IStorage {
   async markNotificationsAsRead(userId: string): Promise<boolean> {
     await db.update(schema.notifications).set({ read: true }).where(eq(schema.notifications.userId, userId));
     return true;
+  }
+
+  async getNotifications(userId: string, limit: number = 20) {
+    const notifications = await db.query.notifications.findMany({
+      where: eq(schema.notifications.userId, userId),
+      orderBy: [desc(schema.notifications.createdAt)],
+      limit,
+    });
+    return notifications;
+  }
+
+  async createNotification(data: {
+    userId: string;
+    type: string;
+    title: string;
+    message: string;
+    link?: string;
+  }) {
+    const [notification] = await db.insert(schema.notifications).values({
+      ...data,
+      read: false,
+      createdAt: new Date(),
+    }).returning();
+    return notification;
+  }
+
+  async markNotificationRead(notificationId: number) {
+    await db.update(schema.notifications)
+      .set({ read: true })
+      .where(eq(schema.notifications.id, notificationId));
+  }
+
+  async getUnreadCount(userId: string) {
+    const result = await db.select({ count: sql<number>`count(*)` })
+      .from(schema.notifications)
+      .where(and(
+        eq(schema.notifications.userId, userId),
+        eq(schema.notifications.read, false)
+      ));
+    return result[0]?.count || 0;
   }
 }
 
