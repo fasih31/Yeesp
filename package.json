@@ -12,7 +12,8 @@
     "create-admin": "tsx scripts/create-admin.js",
     "setup-test-users": "tsx scripts/setup-test-users.js",
     "test": "node scripts/comprehensive-test.js",
-    "test-supabase": "tsx scripts/test-supabase.js"
+    "test-supabase": "tsx scripts/test-supabase.js",
+    "check-env": "node scripts/check-env.js"
   },
   "dependencies": {
     "@dytesdk/react-ui-kit": "^3.0.8",
