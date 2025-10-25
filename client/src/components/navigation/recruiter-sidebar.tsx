@@ -25,8 +25,8 @@ export function RecruiterSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <a href="/">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                  <Briefcase className="size-4" />
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
+                  <img src="/icon.png" alt="YEESP" className="size-8" />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
                   <span className="font-semibold">YEESP</span>
