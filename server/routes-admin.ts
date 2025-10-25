@@ -184,4 +184,146 @@ router.delete("/admins/:id", requireAuth, requireRole('admin'), async (req, res)
   }
 });
 
+// Admin Project Management
+router.get("/projects/:id/details", requireAuth, requireRole('admin'), async (req, res) => {
+  try {
+    const { db } = await import("./db");
+    const { projects, users, bids } = await import("@shared/schema");
+    const { eq } = await import("drizzle-orm");
+
+    const [project] = await db
+      .select()
+      .from(projects)
+      .where(eq(projects.id, req.params.id))
+      .limit(1);
+
+    if (!project) {
+      return res.status(404).json({ error: "Project not found" });
+    }
+
+    // Get recruiter details
+    const [recruiter] = await db
+      .select()
+      .from(users)
+      .where(eq(users.id, project.recruiterId))
+      .limit(1);
+
+    // Get all bids for this project
+    const projectBids = await db
+      .select()
+      .from(bids)
+      .where(eq(bids.projectId, project.id));
+
+    // Get freelancer details for each bid
+    const bidsWithFreelancers = await Promise.all(
+      projectBids.map(async (bid) => {
+        const [freelancer] = await db
+          .select()
+          .from(users)
+          .where(eq(users.id, bid.freelancerId))
+          .limit(1);
+        return { ...bid, freelancer };
+      })
+    );
+
+    res.json({
+      ...project,
+      recruiter,
+      bids: bidsWithFreelancers,
+    });
+  } catch (error: any) {
+    console.error("Error fetching project details:", error);
+    res.status(500).json({ error: "Failed to fetch project details" });
+  }
+});
+
+router.post("/projects/:id/approve", requireAuth, requireRole('admin'), async (req, res) => {
+  try {
+    const { db } = await import("./db");
+    const { projects, users, notifications } = await import("@shared/schema");
+    const { eq } = await import("drizzle-orm");
+
+    const projectId = req.params.id;
+
+    // Get project details
+    const [project] = await db
+      .select()
+      .from(projects)
+      .where(eq(projects.id, projectId))
+      .limit(1);
+
+    if (!project) {
+      return res.status(404).json({ error: "Project not found" });
+    }
+
+    // Update project status to approved
+    const [updatedProject] = await db
+      .update(projects)
+      .set({ status: 'open' })
+      .where(eq(projects.id, projectId))
+      .returning();
+
+    // Create notification for recruiter
+    await db.insert(notifications).values({
+      userId: project.recruiterId,
+      type: 'system',
+      title: 'Project Approved',
+      message: `Your project "${project.title}" has been approved and is now visible to freelancers.`,
+      link: `/project/${project.id}`,
+    });
+
+    res.json({ success: true, project: updatedProject });
+  } catch (error: any) {
+    console.error("Error approving project:", error);
+    res.status(500).json({ error: "Failed to approve project" });
+  }
+});
+
+router.post("/projects/:id/reject", requireAuth, requireRole('admin'), async (req, res) => {
+  try {
+    const { reason } = req.body;
+    const { db } = await import("./db");
+    const { projects, notifications } = await import("@shared/schema");
+    const { eq } = await import("drizzle-orm");
+
+    const projectId = req.params.id;
+
+    if (!reason || reason.trim().length === 0) {
+      return res.status(400).json({ error: "Rejection reason is required" });
+    }
+
+    // Get project details
+    const [project] = await db
+      .select()
+      .from(projects)
+      .where(eq(projects.id, projectId))
+      .limit(1);
+
+    if (!project) {
+      return res.status(404).json({ error: "Project not found" });
+    }
+
+    // Update project status to rejected
+    const [updatedProject] = await db
+      .update(projects)
+      .set({ status: 'rejected' })
+      .where(eq(projects.id, projectId))
+      .returning();
+
+    // Create notification for recruiter
+    await db.insert(notifications).values({
+      userId: project.recruiterId,
+      type: 'system',
+      title: 'Project Rejected',
+      message: `Your project "${project.title}" was rejected. Reason: ${reason}`,
+      link: `/project/${project.id}`,
+    });
+
+    res.json({ success: true, project: updatedProject });
+  } catch (error: any) {
+    console.error("Error rejecting project:", error);
+    res.status(500).json({ error: "Failed to reject project" });
+  }
+});
+
 export default router;

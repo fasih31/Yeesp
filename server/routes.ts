@@ -5,6 +5,7 @@ import { insertUserSchema, insertCourseSchema, insertEnrollmentSchema, insertSes
 import Stripe from "stripe";
 import bcrypt from "bcryptjs";
 import passport from "passport";
+import { requireAuth, requireRole } from "./middleware/auth";
 
 const stripe = process.env.STRIPE_SECRET_KEY 
   ? new Stripe(process.env.STRIPE_SECRET_KEY, {
@@ -89,8 +90,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.patch("/api/users/:id", async (req, res) => {
+  app.patch("/api/users/:id", requireAuth, async (req, res) => {
     try {
+      const userId = (req.user as any)?.id;
+      const userRole = (req.user as any)?.role;
+
+      // Only allow users to update their own profile, unless admin
+      if (userRole !== 'admin' && req.params.id !== userId) {
+        return res.status(403).json({ error: "You can only update your own profile" });
+      }
+
       const user = await storage.updateUser(req.params.id, req.body);
       if (!user) {
         return res.status(404).json({ error: "User not found" });
@@ -137,9 +146,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/courses", async (req, res) => {
+  app.post("/api/courses", requireAuth, requireRole('tutor', 'admin'), async (req, res) => {
     try {
-      const data = insertCourseSchema.parse(req.body);
+      // Derive instructorId from authenticated user - prevent FK violations
+      const userId = (req.user as any)?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      const data = insertCourseSchema.parse({
+        ...req.body,
+        instructorId: userId // Override with authenticated user's ID
+      });
+      
       const course = await storage.createCourse(data);
       res.json(course);
     } catch (error: any) {
@@ -147,19 +166,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.patch("/api/courses/:id", async (req, res) => {
+  app.patch("/api/courses/:id", requireAuth, requireRole('tutor', 'admin'), async (req, res) => {
     try {
-      const course = await storage.updateCourse(req.params.id, req.body);
-      if (!course) {
+      const userId = (req.user as any)?.id;
+      const userRole = (req.user as any)?.role;
+
+      // Get the course to check ownership
+      const existingCourse = await storage.getCourse(req.params.id);
+      if (!existingCourse) {
         return res.status(404).json({ error: "Course not found" });
       }
+
+      // Only course instructor or admin can update
+      if (userRole !== 'admin' && existingCourse.instructorId !== userId) {
+        return res.status(403).json({ error: "You can only update your own courses" });
+      }
+
+      const course = await storage.updateCourse(req.params.id, req.body);
       res.json(course);
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }
   });
 
-  app.delete("/api/courses/:id", async (req, res) => {
+  app.delete("/api/courses/:id", requireAuth, requireRole('tutor', 'admin'), async (req, res) => {
     try {
       await storage.deleteCourse(req.params.id);
       res.json({ success: true });
@@ -194,9 +224,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/enrollments", async (req, res) => {
+  app.post("/api/enrollments", requireAuth, async (req, res) => {
     try {
-      const data = insertEnrollmentSchema.parse(req.body);
+      const userId = (req.user as any)?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      const data = insertEnrollmentSchema.parse({
+        ...req.body,
+        studentId: userId // Override with authenticated user's ID
+      });
       
       // Check if already enrolled
       const existing = await storage.getEnrollment(data.studentId, data.courseId);
@@ -211,12 +249,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.patch("/api/enrollments/:id", async (req, res) => {
+  app.patch("/api/enrollments/:id", requireAuth, async (req, res) => {
     try {
-      const enrollment = await storage.updateEnrollment(req.params.id, req.body);
-      if (!enrollment) {
+      const userId = (req.user as any)?.id;
+      const userRole = (req.user as any)?.role;
+
+      // Get the enrollment to check ownership
+      const existingEnrollment = await storage.getEnrollment(req.params.id);
+      if (!existingEnrollment) {
         return res.status(404).json({ error: "Enrollment not found" });
       }
+
+      // Only the student themselves or admin/tutor can update
+      if (userRole !== 'admin' && userRole !== 'tutor' && existingEnrollment.studentId !== userId) {
+        return res.status(403).json({ error: "You can only update your own enrollments" });
+      }
+
+      const enrollment = await storage.updateEnrollment(req.params.id, req.body);
 
       // If course completed (100%), generate certificate
       if (enrollment.completed && !req.body.certificateGenerated) {
@@ -282,7 +331,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/sessions", async (req, res) => {
+  app.post("/api/sessions", requireAuth, async (req, res) => {
     try {
       const data = insertSessionSchema.parse(req.body);
       const session = await storage.createSession(data);
@@ -292,7 +341,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.patch("/api/sessions/:id", async (req, res) => {
+  app.patch("/api/sessions/:id", requireAuth, async (req, res) => {
     try {
       const session = await storage.updateSession(req.params.id, req.body);
       if (!session) {
@@ -370,9 +419,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/projects", async (req, res) => {
+  app.post("/api/projects", requireAuth, requireRole('recruiter', 'admin'), async (req, res) => {
     try {
-      const data = insertProjectSchema.parse(req.body);
+      // Derive recruiterId from authenticated user - prevent FK violations
+      const userId = (req.user as any)?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      const data = insertProjectSchema.parse({
+        ...req.body,
+        recruiterId: userId, // Override with authenticated user's ID
+        status: 'pending' // New projects start as pending for admin approval
+      });
+      
       const project = await storage.createProject(data);
       res.json(project);
     } catch (error: any) {
@@ -380,7 +440,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.patch("/api/projects/:id", async (req, res) => {
+  app.patch("/api/projects/:id", requireAuth, async (req, res) => {
     try {
       const project = await storage.updateProject(req.params.id, req.body);
       if (!project) {
@@ -421,9 +481,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/bids", async (req, res) => {
+  app.post("/api/bids", requireAuth, requireRole('freelancer', 'admin'), async (req, res) => {
     try {
-      const data = insertBidSchema.parse(req.body);
+      const userId = (req.user as any)?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      const data = insertBidSchema.parse({
+        ...req.body,
+        freelancerId: userId // Override with authenticated user's ID
+      });
+      
       const bid = await storage.createBid(data);
       res.json(bid);
     } catch (error: any) {
@@ -431,7 +500,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.patch("/api/bids/:id", async (req, res) => {
+  app.patch("/api/bids/:id", requireAuth, async (req, res) => {
     try {
       const bid = await storage.updateBid(req.params.id, req.body);
       if (!bid) {
