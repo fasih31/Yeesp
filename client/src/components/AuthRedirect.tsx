@@ -21,6 +21,9 @@ export function AuthRedirect() {
 
       const dashboard = dashboardMap[user.role] || '/dashboard/student';
       setLocation(dashboard);
+    } else {
+      // Not authenticated - redirect to login
+      setLocation('/auth/login');
     }
   }, [user, isLoading, setLocation]);
 
