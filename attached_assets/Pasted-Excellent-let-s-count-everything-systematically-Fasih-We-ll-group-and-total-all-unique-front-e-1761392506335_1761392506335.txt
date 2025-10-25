@@ -1,0 +1,132 @@
+Excellent — let’s count everything systematically, Fasih ✅
+
+We’ll group and total all unique front-end pages, dashboards, and modal-type pages (not counting popups like alerts or notifications separately).
+
+⸻
+
+1️⃣ Global / Common Pages (Pre-Login) → 14 pages
+	1.	Landing / Home
+	2.	About / Vision / Mission
+	3.	Courses Catalog
+	4.	Tutors Directory
+	5.	Freelancing Marketplace
+	6.	Login
+	7.	Signup
+	8.	Forgot Password
+	9.	Reset Password
+	10.	Contact / Support / FAQs
+	11.	Terms & Privacy Policy
+	12.	Pricing / Plans
+	13.	Blog / News
+	14.	404 / Maintenance
+
+⸻
+
+2️⃣ Student Portal Pages → 14 pages
+	1.	Dashboard (Home)
+	2.	My Courses
+	3.	Course Player
+	4.	Assignments & Quizzes
+	5.	Book a Tutor
+	6.	Bookings (Calendar)
+	7.	Certificates
+	8.	Freelance Onboarding
+	9.	My Freelance Projects
+	10.	Payments
+	11.	Notifications Feed
+	12.	Messages / Chat
+	13.	Profile Settings
+	14.	Support / Tickets
+
+⸻
+
+3️⃣ Tutor Portal Pages → 12 pages
+	1.	Dashboard
+	2.	My Courses
+	3.	Create / Edit Course
+	4.	Session Management (Calendar)
+	5.	Students (List & Progress)
+	6.	Assignments Review
+	7.	Earnings / Payouts
+	8.	Messages / Q&A
+	9.	Profile Settings
+	10.	Reviews / Feedback
+	11.	Notifications Feed
+	12.	Help / Tutorials
+
+⸻
+
+4️⃣ Recruiter / Company Pages → 10 pages
+	1.	Dashboard
+	2.	Post a Project
+	3.	Manage Projects
+	4.	Applicants
+	5.	Contracts / Milestones
+	6.	Payments / Escrow
+	7.	Talent Pool / Saved Freelancers
+	8.	On-Demand Training
+	9.	Company Profile / Settings
+	10.	Notifications Feed
+
+⸻
+
+5️⃣ Freelancer Pages → 9 pages
+	1.	Dashboard
+	2.	Profile
+	3.	Browse Projects
+	4.	My Bids
+	5.	Active Contracts
+	6.	Earnings
+	7.	Reviews
+	8.	Messages
+	9.	Notifications Feed
+
+⸻
+
+6️⃣ Admin Panel Pages → 13 pages
+	1.	Dashboard (Analytics Overview)
+	2.	User Management
+	3.	KYC Verification
+	4.	Course Management
+	5.	Content Updates / Broadcasts
+	6.	Payments / Finance
+	7.	Freelance Projects
+	8.	Analytics & Reports
+	9.	Certificates Manager
+	10.	Notifications Manager
+	11.	System Settings
+	12.	Support / Tickets
+	13.	Audit Logs
+
+⸻
+
+7️⃣ Popups / Modals (multi-role shared) → 20 core modals
+
+(Login, Signup, Email Verification, Forgot Password, Change Password, KYC Upload, Add/Edit Course, Publish Course, Book Session, Reschedule, Upload Assignment, Grade Assignment, Payment Checkout, Send Message, Leave Review, Withdraw Earnings, Report Issue, Certificate Preview, Delete/Archive Confirmation, Admin Broadcast)
+
+⸻
+
+✅ Total Count
+
+Category	Pages
+Global / Common	14
+Student Portal	14
+Tutor Portal	12
+Recruiter / Company	10
+Freelancer	9
+Admin	13
+Subtotal (main pages)	72
+Popups / Modals	20
+🎯 GRAND TOTAL (Pages + Modals)	≈ 92 unique UI views
+
+
+⸻
+
+👉 So, in total: about 90–95 unique screens/views across the full YEESP ecosystem.
+
+If you want, I can now:
+	•	🗺️ Create a site map diagram (visual flow of all 92 screens),
+or
+	•	🧾 Create a UI/UX breakdown table (page → purpose → user role → priority) for your developers and designers.
+
+Which one should I prepare next?
