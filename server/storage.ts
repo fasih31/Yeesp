@@ -452,21 +452,6 @@ export class DatabaseStorage implements IStorage {
     return notifications;
   }
 
-  async createNotification(data: {
-    userId: string;
-    type: string;
-    title: string;
-    message: string;
-    link?: string;
-  }) {
-    const [notification] = await db.insert(schema.notifications).values({
-      ...data,
-      read: false,
-      createdAt: new Date(),
-    }).returning();
-    return notification;
-  }
-
   async markNotificationRead(notificationId: number) {
     await db.update(schema.notifications)
       .set({ read: true })
