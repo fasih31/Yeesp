@@ -5,6 +5,9 @@ import { Users, BookOpen, Briefcase, AlertCircle, DollarSign, MessageSquare, Tre
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { StatsCard } from "@/components/analytics/StatsCard";
+import { RevenueChart } from "@/components/analytics/RevenueChart";
+import { UserActivityChart } from "@/components/analytics/UserActivityChart";
 
 export default function AdminDashboard() {
   // Fetch all statistics
@@ -40,22 +43,45 @@ export default function AdminDashboard() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {statCards.map((stat) => (
-            <Card key={stat.title} className="hover:shadow-lg transition-shadow cursor-pointer">
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">
-                  {stat.title}
-                </CardTitle>
-                <stat.icon className={`h-4 w-4 ${stat.color}`} />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold mb-2">{stat.value}</div>
-                <Button variant="ghost" className="h-auto p-0" asChild>
-                  <Link href={stat.link}>View details →</Link>
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
+          <StatsCard
+            title="Total Users"
+            value={stats?.totalUsers || 0}
+            icon={Users}
+            description="Registered users on the platform"
+            trend={{ value: 12, isPositive: true }}
+          />
+          <StatsCard
+            title="Active Courses"
+            value={stats?.totalCourses || 0}
+            icon={BookOpen}
+            description="Published courses"
+            trend={{ value: 8, isPositive: true }}
+          />
+          <StatsCard
+            title="Active Projects"
+            value={stats?.totalProjects || 0}
+            icon={Briefcase}
+            description="Open freelance projects"
+          />
+          <StatsCard
+            title="Platform Revenue"
+            value={`$${(stats?.revenue || 0).toLocaleString()}`}
+            icon={DollarSign}
+            description="Total revenue this month"
+            trend={{ value: 23, isPositive: true }}
+          />
+          <StatsCard
+            title="Pending Reviews"
+            value={stats?.pendingKYC || 0}
+            icon={AlertCircle}
+            description="KYC & content moderation"
+          />
+          <StatsCard
+            title="Support Tickets"
+            value={stats?.openDisputes || 0}
+            icon={MessageSquare}
+            description="Open support tickets"
+          />
         </div>
 
         <Tabs defaultValue="overview" className="space-y-6">
@@ -68,12 +94,33 @@ export default function AdminDashboard() {
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
+            {/* Analytics Charts */}
+            <div className="grid grid-cols-1 lg:grid-cols-7 gap-6">
+              <RevenueChart data={[
+                { month: 'Jan', revenue: 12000, expenses: 8000 },
+                { month: 'Feb', revenue: 15000, expenses: 9000 },
+                { month: 'Mar', revenue: 18000, expenses: 10000 },
+                { month: 'Apr', revenue: 22000, expenses: 11000 },
+                { month: 'May', revenue: 25000, expenses: 12000 },
+                { month: 'Jun', revenue: 28000, expenses: 13000 },
+              ]} />
+              <UserActivityChart data={[
+                { day: 'Mon', students: 120, tutors: 45, freelancers: 30 },
+                { day: 'Tue', students: 135, tutors: 50, freelancers: 35 },
+                { day: 'Wed', students: 150, tutors: 55, freelancers: 40 },
+                { day: 'Thu', students: 140, tutors: 52, freelancers: 38 },
+                { day: 'Fri', students: 160, tutors: 60, freelancers: 45 },
+                { day: 'Sat', students: 100, tutors: 40, freelancers: 28 },
+                { day: 'Sun', students: 90, tutors: 35, freelancers: 25 },
+              ]} />
+            </div>
+            
             <Card>
               <CardHeader>
                 <CardTitle>Quick Actions</CardTitle>
                 <CardDescription>Common administrative tasks and platform management</CardDescription>
               </CardHeader>
-              <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <Button variant="outline" className="h-auto py-4 flex-col gap-2" asChild>
                   <Link href="/admin/users">
                     <Users className="h-6 w-6" />
@@ -90,6 +137,12 @@ export default function AdminDashboard() {
                   <Link href="/admin/projects">
                     <Briefcase className="h-6 w-6" />
                     <span>Manage Projects</span>
+                  </Link>
+                </Button>
+                <Button variant="outline" className="h-auto py-4 flex-col gap-2" asChild>
+                  <Link href="/admin/platform-settings">
+                    <Settings className="h-6 w-6" />
+                    <span>Platform Settings</span>
                   </Link>
                 </Button>
                 <Button variant="outline" className="h-auto py-4 flex-col gap-2" asChild>
