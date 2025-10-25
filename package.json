@@ -10,7 +10,8 @@
     "check": "tsc",
     "db:push": "DRIZZLE_KIT_NO_PROMPT=1 drizzle-kit push --force",
     "create-admin": "node scripts/create-admin.js",
-    "setup-test-users": "node scripts/setup-test-users.js"
+    "setup-test-users": "node scripts/setup-test-users.js",
+    "test": "node scripts/comprehensive-test.js"
   },
   "dependencies": {
     "@dytesdk/react-ui-kit": "^3.0.8",
