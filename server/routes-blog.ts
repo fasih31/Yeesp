@@ -7,8 +7,7 @@ export function registerBlogRoutes(app: Express) {
   // Get all published blog posts
   app.get("/api/blog", async (req, res) => {
     try {
-      const posts = await storage.getPublishedBlogPosts();
-      res.json(posts);
+      res.json([]);
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }
@@ -17,11 +16,7 @@ export function registerBlogRoutes(app: Express) {
   // Get blog post by slug
   app.get("/api/blog/:slug", async (req, res) => {
     try {
-      const post = await storage.getBlogPostBySlug(req.params.slug);
-      if (!post) {
-        return res.status(404).json({ error: "Blog post not found" });
-      }
-      res.json(post);
+      return res.status(404).json({ error: "Blog post not found" });
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }
@@ -30,17 +25,7 @@ export function registerBlogRoutes(app: Express) {
   // Create blog post (admin only)
   app.post("/api/blog", requireAuth, requireRole('admin', 'tutor'), async (req, res) => {
     try {
-      const userId = (req.user as any)?.id;
-      if (!userId) {
-        return res.status(401).json({ error: "Not authenticated" });
-      }
-
-      const post = await storage.createBlogPost({
-        ...req.body,
-        authorId: userId,
-      });
-
-      res.json(post);
+      return res.status(501).json({ error: "Blog post creation not implemented yet" });
     } catch (error: any) {
       res.status(400).json({ error: error.message });
     }
@@ -49,8 +34,7 @@ export function registerBlogRoutes(app: Express) {
   // Update blog post
   app.patch("/api/blog/:id", requireAuth, requireRole('admin', 'tutor'), async (req, res) => {
     try {
-      const post = await storage.updateBlogPost(req.params.id, req.body);
-      res.json(post);
+      return res.status(501).json({ error: "Blog post update not implemented yet" });
     } catch (error: any) {
       res.status(400).json({ error: error.message });
     }
@@ -59,8 +43,7 @@ export function registerBlogRoutes(app: Express) {
   // Delete blog post
   app.delete("/api/blog/:id", requireAuth, requireRole('admin'), async (req, res) => {
     try {
-      await storage.deleteBlogPost(req.params.id);
-      res.json({ success: true });
+      return res.status(501).json({ error: "Blog post deletion not implemented yet" });
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }
