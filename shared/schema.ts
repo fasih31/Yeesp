@@ -542,6 +542,7 @@ export type InsertKycDocument = z.infer<typeof insertKycDocumentSchema>;
 export type InsertDispute = z.infer<typeof insertDisputeSchema>;
 export type InsertWallet = z.infer<typeof insertWalletSchema>;
 export type InsertWalletTransaction = z.infer<typeof insertWalletTransactionSchema>;
+
 export const insertStudyGroupSchema = createInsertSchema(studyGroups).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertStudyGroupMemberSchema = createInsertSchema(studyGroupMembers).omit({ id: true, joinedAt: true });
 export const insertBlogPostSchema = createInsertSchema(blogPosts).omit({ id: true, createdAt: true, updatedAt: true });
@@ -549,7 +550,6 @@ export const insertBlogPostSchema = createInsertSchema(blogPosts).omit({ id: tru
 export type InsertStudyGroup = z.infer<typeof insertStudyGroupSchema>;
 export type InsertStudyGroupMember = z.infer<typeof insertStudyGroupMemberSchema>;
 export type InsertBlogPost = z.infer<typeof insertBlogPostSchema>;
-
 
 export const insertRoleRequestSchema = createInsertSchema(roleRequests).omit({
   id: true,
