@@ -24,7 +24,7 @@ export default function Courses() {
   const coursesPerPage = 9;
 
   const { data: courses, isLoading } = useQuery<CourseWithInstructor[]>({
-    queryKey: ["/api/courses", category, searchQuery],
+    queryKey: ["/api/courses"],
   });
 
   const filteredCourses = courses?.filter((course) => {

@@ -15,6 +15,7 @@ import type {
   Notification, InsertNotification,
   RoleRequest, InsertRoleRequest,
   UserApprovedRole, InsertUserApprovedRole,
+  BlogPost, InsertBlogPost,
 } from "@shared/schema";
 
 export interface IStorage {
@@ -107,6 +108,14 @@ export interface IStorage {
   }): Promise<Notification>;
   markNotificationRead(notificationId: number): Promise<void>;
   getUnreadCount(userId: string): Promise<number>;
+
+  // Blog Posts
+  getBlogPost(id: string): Promise<BlogPost | undefined>;
+  getBlogPostBySlug(slug: string): Promise<BlogPost | undefined>;
+  getPublishedBlogPosts(): Promise<BlogPost[]>;
+  createBlogPost(post: InsertBlogPost): Promise<BlogPost>;
+  updateBlogPost(id: string, post: Partial<InsertBlogPost>): Promise<BlogPost | undefined>;
+  deleteBlogPost(id: string): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -472,6 +481,39 @@ export class DatabaseStorage implements IStorage {
         eq(schema.notifications.read, false)
       ));
     return result[0]?.count || 0;
+  }
+
+  // Blog Posts
+  async getBlogPost(id: string): Promise<BlogPost | undefined> {
+    const [post] = await db.select().from(schema.blogPosts).where(eq(schema.blogPosts.id, id));
+    return post;
+  }
+
+  async getBlogPostBySlug(slug: string): Promise<BlogPost | undefined> {
+    const [post] = await db.select().from(schema.blogPosts).where(eq(schema.blogPosts.slug, slug));
+    return post;
+  }
+
+  async getPublishedBlogPosts(): Promise<BlogPost[]> {
+    return await db.select()
+      .from(schema.blogPosts)
+      .where(eq(schema.blogPosts.published, true))
+      .orderBy(desc(schema.blogPosts.publishedAt));
+  }
+
+  async createBlogPost(post: InsertBlogPost): Promise<BlogPost> {
+    const [newPost] = await db.insert(schema.blogPosts).values(post).returning();
+    return newPost;
+  }
+
+  async updateBlogPost(id: string, post: Partial<InsertBlogPost>): Promise<BlogPost | undefined> {
+    const [updated] = await db.update(schema.blogPosts).set(post).where(eq(schema.blogPosts.id, id)).returning();
+    return updated;
+  }
+
+  async deleteBlogPost(id: string): Promise<boolean> {
+    const result = await db.delete(schema.blogPosts).where(eq(schema.blogPosts.id, id));
+    return (result.rowCount ?? 0) > 0;
   }
 }
 
