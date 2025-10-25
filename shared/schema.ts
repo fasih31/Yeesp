@@ -40,40 +40,9 @@ export const lessons = pgTable("lessons", {
   courseId: varchar("course_id").notNull().references(() => courses.id),
   title: text("title").notNull(),
   content: text("content").notNull(),
-  type: text("type").notNull().default('reading'), // 'video', 'live_session', 'assignment', 'quiz', 'reading'
   videoUrl: text("video_url"),
-  attachments: text("attachments").array(),
-  dueDate: timestamp("due_date"),
-  maxScore: integer("max_score"),
   order: integer("order").notNull(),
   duration: integer("duration"), // in minutes
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
-
-// Quiz questions for lesson quizzes
-export const quizQuestions = pgTable("quiz_questions", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  lessonId: varchar("lesson_id").notNull().references(() => lessons.id),
-  question: text("question").notNull(),
-  type: text("type").notNull().default('multiple_choice'), // 'multiple_choice', 'true_false', 'short_answer'
-  options: text("options").array(),
-  correctAnswer: text("correct_answer").notNull(),
-  points: integer("points").notNull().default(1),
-  explanation: text("explanation"),
-  order: integer("order").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
-
-// Quiz attempts tracking
-export const quizAttempts = pgTable("quiz_attempts", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  studentId: varchar("student_id").notNull().references(() => users.id),
-  lessonId: varchar("lesson_id").notNull().references(() => lessons.id),
-  score: integer("score").notNull(),
-  maxScore: integer("max_score").notNull(),
-  answers: text("answers").notNull(), // JSON string
-  passed: boolean("passed").default(false),
-  attemptedAt: timestamp("attempted_at").defaultNow().notNull(),
 });
 
 // Course enrollments
@@ -324,6 +293,28 @@ export const walletTransactions = pgTable("wallet_transactions", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+// Role Requests - Multi-role access system
+export const roleRequests = pgTable("role_requests", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  requestedRole: text("requested_role").notNull(), // 'student', 'tutor', 'freelancer', 'recruiter'
+  reason: text("reason").notNull(),
+  status: text("status").notNull().default('pending'), // 'pending', 'approved', 'rejected'
+  reviewedBy: varchar("reviewed_by").references(() => users.id),
+  reviewedAt: timestamp("reviewed_at"),
+  reviewNotes: text("review_notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// User Approved Roles - Tracks additional roles users have access to
+export const userApprovedRoles = pgTable("user_approved_roles", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  approvedRole: text("approved_role").notNull(), // 'student', 'tutor', 'freelancer', 'recruiter'
+  approvedBy: varchar("approved_by").notNull().references(() => users.id),
+  approvedAt: timestamp("approved_at").defaultNow().notNull(),
+});
+
 // ===== INSERT SCHEMAS AND TYPES =====
 
 export const insertUserSchema = createInsertSchema(users).omit({
@@ -338,17 +329,6 @@ export const insertCourseSchema = createInsertSchema(courses).omit({
 
 export const insertLessonSchema = createInsertSchema(lessons).omit({
   id: true,
-  createdAt: true,
-});
-
-export const insertQuizQuestionSchema = createInsertSchema(quizQuestions).omit({
-  id: true,
-  createdAt: true,
-});
-
-export const insertQuizAttemptSchema = createInsertSchema(quizAttempts).omit({
-  id: true,
-  attemptedAt: true,
 });
 
 export const insertEnrollmentSchema = createInsertSchema(enrollments).omit({
@@ -452,8 +432,6 @@ export const insertWalletTransactionSchema = createInsertSchema(walletTransactio
 export type User = typeof users.$inferSelect;
 export type Course = typeof courses.$inferSelect;
 export type Lesson = typeof lessons.$inferSelect;
-export type QuizQuestion = typeof quizQuestions.$inferSelect;
-export type QuizAttempt = typeof quizAttempts.$inferSelect;
 export type Enrollment = typeof enrollments.$inferSelect;
 export type Session = typeof sessions.$inferSelect;
 export type Project = typeof projects.$inferSelect;
@@ -479,8 +457,6 @@ export type WalletTransaction = typeof walletTransactions.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type InsertCourse = z.infer<typeof insertCourseSchema>;
 export type InsertLesson = z.infer<typeof insertLessonSchema>;
-export type InsertQuizQuestion = z.infer<typeof insertQuizQuestionSchema>;
-export type InsertQuizAttempt = z.infer<typeof insertQuizAttemptSchema>;
 export type InsertEnrollment = z.infer<typeof insertEnrollmentSchema>;
 export type InsertSession = z.infer<typeof insertSessionSchema>;
 export type InsertProject = z.infer<typeof insertProjectSchema>;
@@ -500,3 +476,24 @@ export type InsertKycDocument = z.infer<typeof insertKycDocumentSchema>;
 export type InsertDispute = z.infer<typeof insertDisputeSchema>;
 export type InsertWallet = z.infer<typeof insertWalletSchema>;
 export type InsertWalletTransaction = z.infer<typeof insertWalletTransactionSchema>;
+
+
+export const insertRoleRequestSchema = createInsertSchema(roleRequests).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertUserApprovedRoleSchema = createInsertSchema(userApprovedRoles).omit({
+  id: true,
+  approvedAt: true,
+});
+
+
+
+export type RoleRequest = typeof roleRequests.$inferSelect;
+export type UserApprovedRole = typeof userApprovedRoles.$inferSelect;
+
+
+
+export type InsertRoleRequest = z.infer<typeof insertRoleRequestSchema>;
+export type InsertUserApprovedRole = z.infer<typeof insertUserApprovedRoleSchema>;

@@ -10,25 +10,25 @@ export default function Landing() {
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-accent/10 overflow-hidden">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnoiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utb3BhY2l0eT0iLjA1Ii8+PC9nPjwvc3ZnPg==')] opacity-40" />
-        
+
         {/* Floating orbs for visual interest */}
         <div className="absolute top-20 left-10 w-72 h-72 bg-primary/20 rounded-full blur-3xl animate-float" />
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }} />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary/10 rounded-full blur-3xl animate-pulse" />
-        
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-12 sm:py-20">
           <Badge className="mb-6 text-sm animate-fade-in hover-elevate" data-testid="badge-platform-tagline">
             Your All-in-One Platform for Growth
           </Badge>
-          
+
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 animate-slide-up" data-testid="text-hero-title">
             Learn. Earn. <span className="gradient-text">Evolve.</span>
           </h1>
-          
+
           <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-12 animate-fade-in leading-relaxed" data-testid="text-hero-subtitle">
             Join thousands of students, tutors, and freelancers building their future on YEESP
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-bounce-in">
             <Button size="lg" className="w-full sm:w-auto hover-elevate-2 transition-all group shadow-lg hover:shadow-xl" asChild data-testid="button-get-started">
               <Link href="/register">
@@ -51,7 +51,7 @@ export default function Landing() {
             <h2 className="text-4xl font-bold mb-4" data-testid="text-features-heading">
               Everything You Need in One Platform
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-xl text-muted-foreground">
               Whether you're learning, teaching, or freelancing, YEESP has you covered
             </p>
           </div>
@@ -204,6 +204,55 @@ export default function Landing() {
           </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="bg-background/50 py-16 px-6 border-t">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+          <div className="space-y-4">
+            <h3 className="font-bold text-xl gradient-text">YEESP</h3>
+            <p className="text-muted-foreground">
+              Building the future of learning and earning, one skill at a time.
+            </p>
+          </div>
+          <div>
+            <h3 className="font-semibold mb-4">Explore</h3>
+            <ul className="space-y-2">
+              <li><a href="/courses" className="text-muted-foreground hover:text-foreground transition-colors">Courses</a></li>
+              <li><a href="/tutors" className="text-muted-foreground hover:text-foreground transition-colors">Tutors</a></li>
+              <li><a href="/projects" className="text-muted-foreground hover:text-foreground transition-colors">Projects</a></li>
+              <li><a href="/login" className="text-muted-foreground hover:text-foreground transition-colors">Sign In</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="font-semibold mb-4">Company</h3>
+            <ul className="space-y-2">
+              <li><a href="/about" className="text-muted-foreground hover:text-foreground transition-colors">About</a></li>
+              <li><a href="/blog" className="text-muted-foreground hover:text-foreground transition-colors">Blog</a></li>
+              <li><a href="/careers" className="text-muted-foreground hover:text-foreground transition-colors">Careers</a></li>
+              <li><a href="/contact" className="text-muted-foreground hover:text-foreground transition-colors">Contact</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="font-semibold mb-4">Support</h3>
+            <ul className="space-y-2">
+              <li><a href="/help" className="text-muted-foreground hover:text-foreground transition-colors">Help Center</a></li>
+              <li><a href="/faq" className="text-muted-foreground hover:text-foreground transition-colors">FAQ</a></li>
+              <li><a href="/contact" className="text-muted-foreground hover:text-foreground transition-colors">Contact</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="font-semibold mb-4">Legal</h3>
+            <ul className="space-y-2">
+              <li><a href="/terms" className="text-muted-foreground hover:text-foreground transition-colors">Terms</a></li>
+              <li><a href="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">Privacy</a></li>
+              <li><a href="/affiliate" className="text-muted-foreground hover:text-foreground transition-colors">Affiliate Program</a></li>
+            </ul>
+          </div>
+        </div>
+        <div className="text-center text-muted-foreground mt-16">
+          © {new Date().getFullYear()} YEESP. All rights reserved.
+        </div>
+      </footer>
     </div>
   );
 }

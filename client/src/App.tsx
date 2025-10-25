@@ -84,6 +84,9 @@ import Referrals from "@/pages/student/referrals";
 import StudyGroups from "@/pages/student/study-groups";
 import Leaderboard from "@/pages/student/leaderboard";
 import CourseReviews from "@/pages/student/course-reviews";
+import Careers from "@/pages/careers";
+import HelpCenter from "@/pages/help-center";
+import Affiliate from "@/pages/affiliate";
 
 
 function Router() {
@@ -146,6 +149,9 @@ function Router() {
       <Route path="/faq" component={FAQ} />
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/maintenance" component={Maintenance} />
+      <Route path="/careers" element={<Careers />} />
+      <Route path="/help" element={<HelpCenter />} />
+      <Route path="/affiliate" element={<Affiliate />} />
       <Route path="/recruiter/my-projects" component={RecruiterMyProjects} />
       <Route path="/recruiter/proposals" component={RecruiterProposals} />
       <Route path="/recruiter/hire-talent" component={RecruiterHireTalent} />
@@ -163,8 +169,8 @@ function Router() {
       <Route path="/admin/settings" component={AdminSettings} />
       <Route path="/admin/role-requests" component={AdminRoleRequests} />
       <Route path="/blog" component={Blog} />
-      <Route path="/terms" component={Terms} />
-      <Route path="/privacy" component={Privacy} />
+      <Route path="/terms" element={<Terms />} />
+      <Route path="/privacy" element={<Privacy />} />
       <Route component={NotFound} />
     </Switch>
   );
