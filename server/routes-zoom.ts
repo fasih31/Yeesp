@@ -105,8 +105,8 @@ router.post('/session/:sessionId/zoom-meeting', async (req, res) => {
       return res.status(404).json({ error: 'Session not found' });
     }
 
-    // Convert snake_case DB fields to camelCase for Zoom API
-    const scheduledAt = new Date(session.scheduled_at);
+    // Drizzle returns camelCase fields
+    const scheduledAt = new Date(session.scheduledAt);
     const duration = session.duration;
 
     const meeting = await zoomMeetings.createMeeting({
