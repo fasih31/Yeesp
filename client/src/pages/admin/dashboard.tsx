@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Users, BookOpen, Briefcase, AlertCircle, DollarSign, MessageSquare, TrendingUp, Settings } from "lucide-react";
+import { Users, BookOpen, Briefcase, AlertCircle, DollarSign, MessageSquare, TrendingUp, Settings, Shield } from "lucide-react";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -167,6 +167,12 @@ export default function AdminDashboard() {
                   <Link href="/admin/reports">
                     <TrendingUp className="h-6 w-6" />
                     <span>Reports & Analytics</span>
+                  </Link>
+                </Button>
+                <Button variant="outline" className="h-auto py-4 flex-col gap-2" asChild>
+                  <Link href="/admin/manage-admins">
+                    <Shield className="h-6 w-6" />
+                    <span>Manage Admins</span>
                   </Link>
                 </Button>
               </CardContent>
