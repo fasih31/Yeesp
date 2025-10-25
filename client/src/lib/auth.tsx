@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { apiRequest } from './api';
 
@@ -56,8 +55,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await fetchUser();
   };
 
+  const value = { user, isLoading, login, logout, refetch };
+
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, logout, refetch }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );
