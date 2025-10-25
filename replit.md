@@ -58,9 +58,11 @@ The platform is built with a React 18 + TypeScript frontend using Vite, Wouter f
 
 ## Recent Changes (October 25, 2025)
 ### Zoom Integration
-- Added Zoom Server-to-Server OAuth authentication service
+- Added Zoom Server-to-Server OAuth authentication service with automatic token refresh
 - Created Zoom meetings API for programmatic meeting creation, retrieval, updates, and deletion
 - Updated sessions schema to support multiple video providers (Dyte/Zoom)
 - Added Zoom-specific fields: zoomMeetingId, zoomPassword, videoProvider
-- Implemented API endpoints: `/api/zoom/create-meeting`, `/api/zoom/meeting/:id`, `/api/zoom/session/:id/zoom-meeting`
-- Sessions can now use either Dyte or Zoom as the video provider
+- Implemented authenticated API endpoints: `/api/zoom/create-meeting`, `/api/zoom/meeting/:id`, `/api/zoom/session/:id/zoom-meeting`
+- Backend supports dual provider configuration (Dyte or Zoom) for sessions
+- All Zoom endpoints protected with authentication middleware
+- Note: Frontend UI for provider selection to be implemented in future update

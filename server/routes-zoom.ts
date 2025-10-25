@@ -1,10 +1,21 @@
-import { Router } from 'express';
+import { Router, type Request } from 'express';
 import { zoomMeetings } from './services/zoom-meetings';
 import { db } from './db';
 import { sessions } from '@shared/schema';
 import { eq } from 'drizzle-orm';
 
 const router = Router();
+
+// Middleware to ensure user is authenticated
+function requireAuth(req: Request, res: any, next: any) {
+  if (!req.isAuthenticated || !req.isAuthenticated()) {
+    return res.status(401).json({ error: 'Authentication required' });
+  }
+  next();
+}
+
+// Apply auth middleware to all Zoom routes
+router.use(requireAuth);
 
 router.post('/create-meeting', async (req, res) => {
   try {
@@ -24,11 +35,11 @@ router.post('/create-meeting', async (req, res) => {
       agenda,
     });
 
+    // Only return safe data, not start URL
     res.json({
       meetingId: meeting.id.toString(),
       joinUrl: meeting.join_url,
       password: meeting.password,
-      startUrl: meeting.start_url,
     });
   } catch (error: any) {
     console.error('Error creating Zoom meeting:', error);
@@ -94,11 +105,15 @@ router.post('/session/:sessionId/zoom-meeting', async (req, res) => {
       return res.status(404).json({ error: 'Session not found' });
     }
 
+    // Convert snake_case DB fields to camelCase for Zoom API
+    const scheduledAt = new Date(session.scheduled_at);
+    const duration = session.duration;
+
     const meeting = await zoomMeetings.createMeeting({
       topic: session.title,
       type: 2,
-      start_time: session.scheduledAt.toISOString(),
-      duration: session.duration,
+      start_time: scheduledAt.toISOString(),
+      duration: duration,
       timezone: 'UTC',
     });
 

@@ -43,31 +43,32 @@ export class ZoomMeetingService {
   private readonly apiBaseUrl = 'https://api.zoom.us/v2';
 
   async createMeeting(params: CreateZoomMeetingParams): Promise<ZoomMeetingResponse> {
+    // Prepare meeting data outside try block so it's available for retry
+    const meetingData = {
+      topic: params.topic,
+      type: params.type || 2,
+      start_time: params.start_time,
+      duration: params.duration,
+      timezone: params.timezone || 'UTC',
+      password: params.password,
+      agenda: params.agenda,
+      settings: {
+        host_video: true,
+        participant_video: true,
+        join_before_host: true,
+        mute_upon_entry: false,
+        watermark: false,
+        use_pmi: false,
+        approval_type: 0,
+        audio: 'both',
+        auto_recording: 'none',
+        ...params.settings,
+      },
+    };
+
     try {
       const accessToken = await zoomOAuth.getAccessToken();
       
-      const meetingData = {
-        topic: params.topic,
-        type: params.type || 2,
-        start_time: params.start_time,
-        duration: params.duration,
-        timezone: params.timezone || 'UTC',
-        password: params.password,
-        agenda: params.agenda,
-        settings: {
-          host_video: true,
-          participant_video: true,
-          join_before_host: true,
-          mute_upon_entry: false,
-          watermark: false,
-          use_pmi: false,
-          approval_type: 0,
-          audio: 'both',
-          auto_recording: 'none',
-          ...params.settings,
-        },
-      };
-
       const response = await axios.post<ZoomMeetingResponse>(
         `${this.apiBaseUrl}/users/me/meetings`,
         meetingData,
@@ -81,6 +82,29 @@ export class ZoomMeetingService {
 
       return response.data;
     } catch (error: any) {
+      // Handle 401 by clearing token and retrying once
+      if (error.response?.status === 401) {
+        zoomOAuth.clearToken();
+        console.log('Zoom token expired, retrying with fresh token...');
+        // Retry once with fresh token
+        try {
+          const newAccessToken = await zoomOAuth.getAccessToken();
+          const retryResponse = await axios.post<ZoomMeetingResponse>(
+            `${this.apiBaseUrl}/users/me/meetings`,
+            meetingData,
+            {
+              headers: {
+                'Authorization': `Bearer ${newAccessToken}`,
+                'Content-Type': 'application/json',
+              },
+            }
+          );
+          return retryResponse.data;
+        } catch (retryError: any) {
+          console.error('Retry failed:', retryError.response?.data || retryError.message);
+          throw new Error('Failed to create Zoom meeting after token refresh');
+        }
+      }
       console.error('Failed to create Zoom meeting:', error.response?.data || error.message);
       throw new Error('Failed to create Zoom meeting');
     }
