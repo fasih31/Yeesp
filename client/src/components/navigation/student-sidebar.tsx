@@ -90,6 +90,30 @@ export function StudentSidebar() {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/student/discussion-forum">
+                    <MessageSquare className="mr-2 h-4 w-4" />
+                    Discussion Forum
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/student/study-groups">
+                    <Award className="mr-2 h-4 w-4" />
+                    Study Groups
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/student/analytics-reports">
+                    <Award className="mr-2 h-4 w-4" />
+                    Analytics & Reports
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

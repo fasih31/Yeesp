@@ -69,9 +69,9 @@ app.use((req, res, next) => {
   const stripeRoutes = await import('./routes-stripe');
   app.use('/api/stripe', stripeRoutes.default);
   
-  // Register Certificate routes
-  const certificateRoutes = await import('./routes-certificates');
-  app.use('/api/certificates', certificateRoutes.default);
+  // Register Community routes
+  const communityRoutes = await import('./routes-community');
+  app.use('/api/community', communityRoutes.default);
 
   // Initialize WebSocket
   const { initializeWebSocket } = await import('./services/websocket');
