@@ -41,7 +41,7 @@ export default function Courses() {
   const paginatedCourses = filteredCourses?.slice(startIndex, endIndex);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-[#E8F0FF] via-[#F0F7FF] to-[#E8F0FF] dark:from-[#1A2238] dark:via-[#0f1724] dark:to-[#1A2238]">
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-12 mt-4">
         {/* Promotional Banner */}

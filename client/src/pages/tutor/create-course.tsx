@@ -12,6 +12,7 @@ import { Plus, Trash2, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/api";
 import { courseSchema } from "@/lib/validation";
+import { useAuth } from "@/lib/auth";
 
 type LessonData = {
   title: string;
@@ -25,6 +26,7 @@ export default function TutorCreateCourse() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const [courseData, setCourseData] = useState({
     title: "",
@@ -75,12 +77,15 @@ export default function TutorCreateCourse() {
 
   const createCourseMutation = useMutation({
     mutationFn: async (published: boolean) => {
-      // Create course
+      if (!user?.id) {
+        throw new Error("You must be logged in to create a course");
+      }
+      
       const course = await apiRequest("/courses", {
         method: "POST",
         body: JSON.stringify({
           ...courseData,
-          instructorId: "tutor-id", // TODO: Get from auth context
+          instructorId: user.id,
           published,
         }),
       });
@@ -239,7 +244,7 @@ export default function TutorCreateCourse() {
                     id="duration"
                     type="number"
                     value={courseData.duration}
-                    onChange={(e) => setCourseData({ ...courseData, duration: parseInt(e.target.value) || 0 })}
+                    onChange={(e) => setCourseData({ ...courseData, duration: e.target.value })}
                     placeholder="e.g., 40"
                   />
                 </div>

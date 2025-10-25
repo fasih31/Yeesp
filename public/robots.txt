@@ -1,0 +1,17 @@
+# robots.txt for YEESP Platform
+# Allow all robots to access the site
+
+User-agent: *
+Allow: /
+
+# Disallow private pages
+Disallow: /dashboard/
+Disallow: /admin/
+Disallow: /student/
+Disallow: /tutor/
+Disallow: /freelancer/
+Disallow: /recruiter/
+Disallow: /video/
+
+# Sitemap location
+Sitemap: https://yeesp.com/sitemap.xml

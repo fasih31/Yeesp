@@ -14,7 +14,7 @@ import { Loader2 } from "lucide-react";
 import { apiRequest } from "@/lib/api";
 
 const signupSchema = z.object({
-  fullName: z.string().min(2, "Full name must be at least 2 characters"),
+  name: z.string().min(2, "Full name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
   confirmPassword: z.string(),
@@ -82,16 +82,17 @@ export default function Signup() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="fullName">Full Name</Label>
+              <Label htmlFor="name">Full Name</Label>
               <Input
-                id="fullName"
+                id="name"
                 type="text"
                 placeholder="John Doe"
-                {...register("fullName")}
+                {...register("name")}
                 disabled={isLoading}
+                data-testid="input-name"
               />
-              {errors.fullName && (
-                <p className="text-sm text-red-500">{errors.fullName.message}</p>
+              {errors.name && (
+                <p className="text-sm text-red-500">{errors.name.message}</p>
               )}
             </div>
             <div className="space-y-2">
@@ -102,6 +103,7 @@ export default function Signup() {
                 placeholder="john@example.com"
                 {...register("email")}
                 disabled={isLoading}
+                data-testid="input-email"
               />
               {errors.email && (
                 <p className="text-sm text-red-500">{errors.email.message}</p>
@@ -113,7 +115,7 @@ export default function Signup() {
                 onValueChange={(value) => setValue("role", value as any)}
                 disabled={isLoading}
               >
-                <SelectTrigger>
+                <SelectTrigger data-testid="select-role">
                   <SelectValue placeholder="Select your role" />
                 </SelectTrigger>
                 <SelectContent>
@@ -135,6 +137,7 @@ export default function Signup() {
                 placeholder="••••••••"
                 {...register("password")}
                 disabled={isLoading}
+                data-testid="input-password"
               />
               {errors.password && (
                 <p className="text-sm text-red-500">{errors.password.message}</p>
@@ -148,6 +151,7 @@ export default function Signup() {
                 placeholder="••••••••"
                 {...register("confirmPassword")}
                 disabled={isLoading}
+                data-testid="input-confirm-password"
               />
               {errors.confirmPassword && (
                 <p className="text-sm text-red-500">{errors.confirmPassword.message}</p>
@@ -155,7 +159,7 @@ export default function Signup() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="w-full" disabled={isLoading} data-testid="button-signup">
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Create Account
             </Button>

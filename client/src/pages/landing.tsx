@@ -187,25 +187,25 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* CTA Section - Dark */}
-      <section className="py-24 px-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl"></div>
+      {/* CTA Section - Theme Aware */}
+      <section className="py-24 px-6 bg-gradient-to-br from-[#2B3A67] via-[#00AEEF] to-[#00C896] dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 dark:bg-cyan-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/10 dark:bg-teal-500/10 rounded-full blur-3xl"></div>
         
         <div className="relative max-w-4xl mx-auto text-center space-y-10 z-10">
           <h2 className="text-4xl md:text-6xl font-bold text-white leading-tight">
-            Ready to Transform<br />Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400">Future</span>?
+            Ready to Transform<br />Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-100 dark:from-cyan-400 dark:to-teal-400">Future</span>?
           </h2>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+          <p className="text-xl text-white/90 dark:text-gray-300 max-w-2xl mx-auto">
             Join thousands of successful students, tutors, and freelancers who are already building their dream careers
           </p>
           <div className="flex flex-col sm:flex-row gap-5 justify-center pt-6">
-            <Button size="lg" className="text-lg px-12 h-16 rounded-full font-bold" asChild>
+            <Button size="lg" className="text-lg px-12 h-16 rounded-full font-bold bg-white text-[#2B3A67] hover:bg-white/90 dark:bg-primary dark:text-white dark:hover:bg-primary/90" asChild>
               <Link href="/auth/signup">
                 Get Started Free <ArrowRight className="ml-2 h-6 w-6" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" className="border-2 border-gray-600 bg-transparent text-white hover:bg-white/10 text-lg px-12 h-16 rounded-full font-bold" asChild>
+            <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white/20 dark:border-gray-600 dark:hover:bg-white/10 text-lg px-12 h-16 rounded-full font-bold" asChild>
               <Link href="/about">
                 Learn More
               </Link>
@@ -214,42 +214,42 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Footer - Dark */}
-      <footer className="bg-gray-950 dark:bg-black text-white py-16 px-6 border-t border-gray-800 dark:border-gray-900">
+      {/* Footer - Theme Aware */}
+      <footer className="bg-gray-100 dark:bg-gray-950 text-gray-800 dark:text-white py-16 px-6 border-t border-gray-300 dark:border-gray-800">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div>
-              <h3 className="text-2xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400">YEESP</h3>
-              <p className="text-gray-400 text-sm leading-relaxed">Youth Education and Employment Support Platform - Empowering the next generation</p>
+              <h3 className="text-2xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#00AEEF] to-[#00C896] dark:from-cyan-400 dark:to-teal-400">YEESP</h3>
+              <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">Youth Education and Employment Support Platform - Empowering the next generation</p>
             </div>
             <div>
-              <h4 className="font-bold mb-6 text-white">Platform</h4>
+              <h4 className="font-bold mb-6 text-gray-900 dark:text-white">Platform</h4>
               <ul className="space-y-3 text-sm">
-                <li><Link href="/courses" className="text-gray-400 hover:text-cyan-400 transition-colors">Courses</Link></li>
-                <li><Link href="/tutors" className="text-gray-400 hover:text-cyan-400 transition-colors">Tutors</Link></li>
-                <li><Link href="/projects" className="text-gray-400 hover:text-cyan-400 transition-colors">Projects</Link></li>
+                <li><Link href="/courses" className="text-gray-600 dark:text-gray-400 hover:text-[#00AEEF] dark:hover:text-cyan-400 transition-colors">Courses</Link></li>
+                <li><Link href="/tutors" className="text-gray-600 dark:text-gray-400 hover:text-[#00AEEF] dark:hover:text-cyan-400 transition-colors">Tutors</Link></li>
+                <li><Link href="/projects" className="text-gray-600 dark:text-gray-400 hover:text-[#00AEEF] dark:hover:text-cyan-400 transition-colors">Projects</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-bold mb-6 text-white">Company</h4>
+              <h4 className="font-bold mb-6 text-gray-900 dark:text-white">Company</h4>
               <ul className="space-y-3 text-sm">
-                <li><Link href="/about" className="text-gray-400 hover:text-cyan-400 transition-colors">About</Link></li>
-                <li><Link href="/blog" className="text-gray-400 hover:text-cyan-400 transition-colors">Blog</Link></li>
-                <li><Link href="/contact" className="text-gray-400 hover:text-cyan-400 transition-colors">Contact</Link></li>
+                <li><Link href="/about" className="text-gray-600 dark:text-gray-400 hover:text-[#00AEEF] dark:hover:text-cyan-400 transition-colors">About</Link></li>
+                <li><Link href="/blog" className="text-gray-600 dark:text-gray-400 hover:text-[#00AEEF] dark:hover:text-cyan-400 transition-colors">Blog</Link></li>
+                <li><Link href="/contact" className="text-gray-600 dark:text-gray-400 hover:text-[#00AEEF] dark:hover:text-cyan-400 transition-colors">Contact</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-bold mb-6 text-white">Support</h4>
+              <h4 className="font-bold mb-6 text-gray-900 dark:text-white">Support</h4>
               <ul className="space-y-3 text-sm">
-                <li><Link href="/help" className="text-gray-400 hover:text-cyan-400 transition-colors">Help Center</Link></li>
-                <li><Link href="/pricing" className="text-gray-400 hover:text-cyan-400 transition-colors">Pricing</Link></li>
-                <li><Link href="/terms" className="text-gray-400 hover:text-cyan-400 transition-colors">Terms</Link></li>
+                <li><Link href="/help" className="text-gray-600 dark:text-gray-400 hover:text-[#00AEEF] dark:hover:text-cyan-400 transition-colors">Help Center</Link></li>
+                <li><Link href="/pricing" className="text-gray-600 dark:text-gray-400 hover:text-[#00AEEF] dark:hover:text-cyan-400 transition-colors">Pricing</Link></li>
+                <li><Link href="/terms" className="text-gray-600 dark:text-gray-400 hover:text-[#00AEEF] dark:hover:text-cyan-400 transition-colors">Terms</Link></li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-800 dark:border-gray-900 pt-8 text-center">
-            <p className="text-gray-500 text-sm">
-              © 2024 YEESP. All rights reserved. | Developed with ❤️ by <span className="text-cyan-400 font-semibold">Fasih ur Rehman</span>
+          <div className="border-t border-gray-300 dark:border-gray-800 pt-8 text-center">
+            <p className="text-gray-600 dark:text-gray-500 text-sm">
+              © 2024 YEESP. All rights reserved. | Developed with ❤️ by <span className="text-[#00AEEF] dark:text-cyan-400 font-semibold">Fasih ur Rehman</span>
             </p>
           </div>
         </div>
