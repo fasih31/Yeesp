@@ -30,111 +30,138 @@ export default function Projects() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#E8F0FF] via-[#F0F7FF] to-[#E8F0FF] dark:from-[#1A2238] dark:via-[#0f1724] dark:to-[#1A2238]">
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 py-12 mt-4">
-        <div className="mb-8">
-          <h2 className="text-4xl font-bold mb-4" data-testid="text-projects-heading">
-            Freelance Projects
-          </h2>
-          <p className="text-xl text-muted-foreground">
-            Find projects that match your skills
-          </p>
+      {/* Hero Section */}
+      <section className="relative py-20 px-6 bg-gradient-to-br from-[#E8F0FF] via-[#F0F7FF] to-[#E8F0FF] dark:from-[#1A2238] dark:via-[#0f1724] dark:to-[#1A2238] overflow-hidden">
+        {/* Animated Background Pattern */}
+        <div className="absolute inset-0 opacity-5 dark:opacity-5">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#2B3A67_1px,transparent_1px),linear-gradient(to_bottom,#2B3A67_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#3A86FF_1px,transparent_1px),linear-gradient(to_bottom,#3A86FF_1px,transparent_1px)] bg-[size:60px_60px]"></div>
         </div>
 
-        {/* Projects List */}
-        {isLoading ? (
-          <div className="space-y-4">
-            {[1, 2, 3, 4].map((i) => (
-              <Card key={i}>
-                <CardHeader>
-                  <Skeleton className="h-6 w-3/4 mb-2" />
-                  <Skeleton className="h-4 w-full" />
-                </CardHeader>
-              </Card>
-            ))}
-          </div>
-        ) : filteredProjects && filteredProjects.length > 0 ? (
-          <div className="space-y-4">
-            {filteredProjects.map((project) => (
-              <Card key={project.id} className="hover-elevate" data-testid={`card-project-${project.id}`}>
-                <CardHeader>
-                  <div className="flex items-start justify-between gap-4 flex-wrap">
-                    <div className="flex-1 min-w-0">
-                      <CardTitle className="mb-2" data-testid={`text-project-title-${project.id}`}>
-                        {project.title}
-                      </CardTitle>
-                      <CardDescription data-testid={`text-project-description-${project.id}`}>
-                        {project.description}
-                      </CardDescription>
-                    </div>
-                    <Badge className="flex-shrink-0" data-testid={`badge-status-${project.id}`}>
-                      {project.status}
-                    </Badge>
-                  </div>
-                </CardHeader>
+        {/* Gradient Orbs */}
+        <div className="absolute top-20 left-10 w-72 h-72 bg-[#00AEEF]/20 dark:bg-[#3A86FF]/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#00C896]/20 dark:bg-[#5EF38C]/20 rounded-full blur-3xl"></div>
 
-                <CardContent className="space-y-4">
-                  {project.skills && project.skills.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
-                      {project.skills.map((skill, idx) => (
-                        <Badge key={idx} variant="secondary" className="text-xs" data-testid={`badge-skill-${project.id}-${idx}`}>
-                          {skill}
-                        </Badge>
-                      ))}
-                    </div>
-                  )}
-
-                  <div className="flex flex-wrap gap-6 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-2">
-                      <DollarSign className="h-4 w-4" />
-                      <span className="font-medium text-foreground" data-testid={`text-budget-${project.id}`}>
-                        ${project.budget}
-                      </span>
-                      <span>Budget</span>
-                    </div>
-                    
-                    {project.deadline && (
-                      <div className="flex items-center gap-2">
-                        <Calendar className="h-4 w-4" />
-                        <span data-testid={`text-deadline-${project.id}`}>
-                          Due {new Date(project.deadline).toLocaleDateString()}
-                        </span>
-                      </div>
-                    )}
-
-                    {project.bidCount !== undefined && (
-                      <div className="flex items-center gap-2">
-                        <Briefcase className="h-4 w-4" />
-                        <span data-testid={`text-bids-${project.id}`}>
-                          {project.bidCount} proposals
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="text-sm text-muted-foreground">
-                    Posted by <span className="font-medium text-foreground">{project.recruiter.name}</span>
-                  </div>
-                </CardContent>
-
-                <CardFooter>
-                  <Button asChild data-testid={`button-apply-${project.id}`}>
-                    <Link href={`/project/${project.id}`}>
-                      View & Apply
-                    </Link>
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-12">
-            <p className="text-xl text-muted-foreground" data-testid="text-no-projects">
-              No projects found. Try adjusting your search.
+        <div className="relative max-w-7xl mx-auto text-center z-10">
+        {/* Main Content */}
+        <div className="max-w-7xl mx-auto px-6 py-12 mt-4">
+          <div className="mb-8">
+            <h2 className="text-4xl font-bold mb-4" data-testid="text-projects-heading">
+              Freelance Projects
+            </h2>
+            <p className="text-xl text-muted-foreground">
+              Find projects that match your skills
             </p>
           </div>
-        )}
-      </div>
+
+          {/* Search Input */}
+          <div className="mb-8 max-w-xl mx-auto">
+            <Input
+              type="text"
+              placeholder="Search projects by title, description, or skills..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full h-12 px-5 text-lg focus-visible:ring-primary"
+              data-testid="input-search-projects"
+              startIcon={<Search className="h-5 w-5 text-muted-foreground" />}
+            />
+          </div>
+
+          {/* Projects List */}
+          {isLoading ? (
+            <div className="space-y-4">
+              {[1, 2, 3, 4].map((i) => (
+                <Card key={i}>
+                  <CardHeader>
+                    <Skeleton className="h-6 w-3/4 mb-2" />
+                    <Skeleton className="h-4 w-full" />
+                  </CardHeader>
+                </Card>
+              ))}
+            </div>
+          ) : filteredProjects && filteredProjects.length > 0 ? (
+            <div className="space-y-4">
+              {filteredProjects.map((project) => (
+                <Card key={project.id} className="hover-elevate" data-testid={`card-project-${project.id}`}>
+                  <CardHeader>
+                    <div className="flex items-start justify-between gap-4 flex-wrap">
+                      <div className="flex-1 min-w-0">
+                        <CardTitle className="mb-2" data-testid={`text-project-title-${project.id}`}>
+                          {project.title}
+                        </CardTitle>
+                        <CardDescription data-testid={`text-project-description-${project.id}`}>
+                          {project.description}
+                        </CardDescription>
+                      </div>
+                      <Badge className="flex-shrink-0" data-testid={`badge-status-${project.id}`}>
+                        {project.status}
+                      </Badge>
+                    </div>
+                  </CardHeader>
+
+                  <CardContent className="space-y-4">
+                    {project.skills && project.skills.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        {project.skills.map((skill, idx) => (
+                          <Badge key={idx} variant="secondary" className="text-xs" data-testid={`badge-skill-${project.id}-${idx}`}>
+                            {skill}
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
+
+                    <div className="flex flex-wrap gap-6 text-sm text-muted-foreground">
+                      <div className="flex items-center gap-2">
+                        <DollarSign className="h-4 w-4" />
+                        <span className="font-medium text-foreground" data-testid={`text-budget-${project.id}`}>
+                          ${project.budget}
+                        </span>
+                        <span>Budget</span>
+                      </div>
+
+                      {project.deadline && (
+                        <div className="flex items-center gap-2">
+                          <Calendar className="h-4 w-4" />
+                          <span data-testid={`text-deadline-${project.id}`}>
+                            Due {new Date(project.deadline).toLocaleDateString()}
+                          </span>
+                        </div>
+                      )}
+
+                      {project.bidCount !== undefined && (
+                        <div className="flex items-center gap-2">
+                          <Briefcase className="h-4 w-4" />
+                          <span data-testid={`text-bids-${project.id}`}>
+                            {project.bidCount} proposals
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="text-sm text-muted-foreground">
+                      Posted by <span className="font-medium text-foreground">{project.recruiter.name}</span>
+                    </div>
+                  </CardContent>
+
+                  <CardFooter>
+                    <Button asChild data-testid={`button-apply-${project.id}`}>
+                      <Link href={`/project/${project.id}`}>
+                        View & Apply
+                      </Link>
+                    </Button>
+                  </CardFooter>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-xl text-muted-foreground" data-testid="text-no-projects">
+                No projects found. Try adjusting your search.
+              </p>
+            </div>
+          )}
+        </div>
+        </div>
+      </section>
     </div>
   );
 }

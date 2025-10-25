@@ -8,19 +8,32 @@ export default function About() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#E8F0FF] via-[#F0F7FF] to-[#E8F0FF] dark:from-[#1A2238] dark:via-[#0f1724] dark:to-[#1A2238]">
       {/* Hero Section */}
-      <div className="max-w-7xl mx-auto px-6 py-12 mt-4">
-        <div className="text-center mb-16 relative">
-          <div className="absolute inset-0 bg-secondary/10 blur-3xl -z-10 opacity-50" />
-          <Badge className="mb-4 animate-fade-in bg-secondary/10 text-secondary border-secondary/20">Our Story</Badge>
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 brand-gradient-text animate-slide-up" data-testid="text-about-title">
-            Building the Future of Learning & Earning
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto animate-fade-in leading-relaxed">
-            YEESP is more than a platform—it's a movement to democratize education and create economic opportunities for youth worldwide.
-          </p>
+      <section className="relative py-24 px-6 bg-gradient-to-br from-[#E8F0FF] via-[#F0F7FF] to-[#E8F0FF] dark:from-[#1A2238] dark:via-[#0f1724] dark:to-[#1A2238] overflow-hidden">
+        {/* Animated Background Pattern */}
+        <div className="absolute inset-0 opacity-5 dark:opacity-5">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#2B3A67_1px,transparent_1px),linear-gradient(to_bottom,#2B3A67_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#3A86FF_1px,transparent_1px),linear-gradient(to_bottom,#3A86FF_1px,transparent_1px)] bg-[size:60px_60px]"></div>
         </div>
 
-        {/* Stats Banner */}
+        {/* Gradient Orbs */}
+        <div className="absolute top-20 left-10 w-72 h-72 bg-[#00AEEF]/20 dark:bg-[#3A86FF]/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#00C896]/20 dark:bg-[#5EF38C]/20 rounded-full blur-3xl"></div>
+
+        <div className="relative max-w-7xl mx-auto text-center z-10">
+          <div className="text-center mb-16 relative">
+            <div className="absolute inset-0 bg-secondary/10 blur-3xl -z-10 opacity-50" />
+            <Badge className="mb-4 animate-fade-in bg-secondary/10 text-secondary border-secondary/20">Our Story</Badge>
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 brand-gradient-text animate-slide-up" data-testid="text-about-title">
+              Building the Future of Learning & Earning
+            </h1>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto animate-fade-in leading-relaxed">
+              YEESP is more than a platform—it's a movement to democratize education and create economic opportunities for youth worldwide.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Banner */}
+      <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20">
           {[
             { value: "2020", label: "Founded" },
