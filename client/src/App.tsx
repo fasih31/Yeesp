@@ -169,10 +169,12 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <MainNav />
-        <Toaster />
-        <Router />
+      <TooltipProvider delayDuration={0}>
+        <div className="min-h-screen">
+          <MainNav />
+          <Router />
+          <Toaster />
+        </div>
       </TooltipProvider>
     </QueryClientProvider>
   );

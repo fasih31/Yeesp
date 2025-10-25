@@ -8,29 +8,33 @@ export default function Landing() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-accent/5">
+      <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-accent/5 overflow-hidden">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnoiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utb3BhY2l0eT0iLjA1Ii8+PC9nPjwvc3ZnPg==')] opacity-40" />
         
-        <div className="relative max-w-7xl mx-auto px-6 text-center">
-          <Badge className="mb-6 text-sm" data-testid="badge-platform-tagline">
+        {/* Floating orbs for visual interest */}
+        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/20 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-pulse delay-1000" />
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-12 sm:py-20">
+          <Badge className="mb-6 text-sm animate-fade-in hover-elevate" data-testid="badge-platform-tagline">
             Your All-in-One Platform for Growth
           </Badge>
           
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6" data-testid="text-hero-title">
-            Learn. Earn. Evolve.
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 animate-slide-up" data-testid="text-hero-title">
+            Learn. Earn. <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Evolve.</span>
           </h1>
           
-          <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-12" data-testid="text-hero-subtitle">
+          <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-12 animate-fade-in" data-testid="text-hero-subtitle">
             Join thousands of students, tutors, and freelancers building their future on YEESP
           </p>
           
-          <div className="flex flex-wrap gap-4 justify-center">
-            <Button size="lg" asChild data-testid="button-get-started">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-scale-in">
+            <Button size="lg" className="w-full sm:w-auto hover-elevate-2 transition-all" asChild data-testid="button-get-started">
               <Link href="/register">
                 Get Started Free <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" asChild data-testid="button-browse-courses">
+            <Button size="lg" variant="outline" className="w-full sm:w-auto hover-elevate" asChild data-testid="button-browse-courses">
               <Link href="/courses">
                 Browse Courses
               </Link>
