@@ -2,11 +2,12 @@ import { Router } from "express";
 import { db } from "./db";
 import { users, courses, projects, kycDocuments, disputes, payments, sessions } from "@shared/schema";
 import { eq, count, sql } from "drizzle-orm";
+import { requireAuth, requireRole } from "./middleware/auth";
 
 const router = Router();
 
 // Get admin statistics
-router.get("/stats", async (req, res) => {
+router.get("/stats", requireAuth, requireRole('admin'), async (req, res) => {
   try {
     // Count totals
     const [totalUsers] = await db.select({ count: count() }).from(users);
