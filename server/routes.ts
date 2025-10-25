@@ -191,6 +191,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete("/api/courses/:id", requireAuth, requireRole('tutor', 'admin'), async (req, res) => {
     try {
+      const userId = (req.user as any)?.id;
+      const userRole = (req.user as any)?.role;
+
+      // Get the course to check ownership
+      const existingCourse = await storage.getCourse(req.params.id);
+      if (!existingCourse) {
+        return res.status(404).json({ error: "Course not found" });
+      }
+
+      // Only course instructor or admin can delete
+      if (userRole !== 'admin' && existingCourse.instructorId !== userId) {
+        return res.status(403).json({ error: "You can only delete your own courses" });
+      }
+
       await storage.deleteCourse(req.params.id);
       res.json({ success: true });
     } catch (error: any) {
@@ -331,22 +345,63 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/sessions", requireAuth, async (req, res) => {
+  app.post("/api/sessions", requireAuth, requireRole('tutor', 'student', 'admin'), async (req, res) => {
     try {
-      const data = insertSessionSchema.parse(req.body);
-      const session = await storage.createSession(data);
+      const userId = (req.user as any)?.id;
+      const userRole = (req.user as any)?.role;
+
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      // Sessions can be created by tutors or students
+      // Tutor creates session with themselves as tutor, student as specified
+      // Student creates session with themselves as student, tutor as specified
+      let sessionData;
+      
+      if (userRole === 'tutor' || userRole === 'admin') {
+        // Tutor/Admin creating session - derive tutorId from authenticated user
+        sessionData = insertSessionSchema.parse({
+          ...req.body,
+          tutorId: userId
+        });
+      } else if (userRole === 'student') {
+        // Student creating session - derive studentId from authenticated user
+        sessionData = insertSessionSchema.parse({
+          ...req.body,
+          studentId: userId
+        });
+      } else {
+        return res.status(403).json({ error: "Only tutors and students can create sessions" });
+      }
+
+      const session = await storage.createSession(sessionData);
       res.json(session);
     } catch (error: any) {
       res.status(400).json({ error: error.message });
     }
   });
 
-  app.patch("/api/sessions/:id", requireAuth, async (req, res) => {
+  app.patch("/api/sessions/:id", requireAuth, requireRole('tutor', 'student', 'admin'), async (req, res) => {
     try {
-      const session = await storage.updateSession(req.params.id, req.body);
-      if (!session) {
+      const userId = (req.user as any)?.id;
+      const userRole = (req.user as any)?.role;
+
+      // Get the session to check ownership
+      const existingSession = await storage.getSession(req.params.id);
+      if (!existingSession) {
         return res.status(404).json({ error: "Session not found" });
       }
+
+      // Only session participants or admin can update
+      const isTutor = existingSession.tutorId === userId;
+      const isStudent = existingSession.studentId === userId;
+
+      if (userRole !== 'admin' && !isTutor && !isStudent) {
+        return res.status(403).json({ error: "You can only update your own sessions" });
+      }
+
+      const session = await storage.updateSession(req.params.id, req.body);
       res.json(session);
     } catch (error: any) {
       res.status(500).json({ error: error.message });
@@ -440,12 +495,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.patch("/api/projects/:id", requireAuth, async (req, res) => {
+  app.patch("/api/projects/:id", requireAuth, requireRole('recruiter', 'admin'), async (req, res) => {
     try {
-      const project = await storage.updateProject(req.params.id, req.body);
-      if (!project) {
+      const userId = (req.user as any)?.id;
+      const userRole = (req.user as any)?.role;
+
+      // Get the project to check ownership
+      const existingProject = await storage.getProject(req.params.id);
+      if (!existingProject) {
         return res.status(404).json({ error: "Project not found" });
       }
+
+      // Only project recruiter or admin can update
+      if (userRole !== 'admin' && existingProject.recruiterId !== userId) {
+        return res.status(403).json({ error: "You can only update your own projects" });
+      }
+
+      const project = await storage.updateProject(req.params.id, req.body);
       res.json(project);
     } catch (error: any) {
       res.status(500).json({ error: error.message });
@@ -500,12 +566,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.patch("/api/bids/:id", requireAuth, async (req, res) => {
+  app.patch("/api/bids/:id", requireAuth, requireRole('freelancer', 'recruiter', 'admin'), async (req, res) => {
     try {
-      const bid = await storage.updateBid(req.params.id, req.body);
-      if (!bid) {
+      const userId = (req.user as any)?.id;
+      const userRole = (req.user as any)?.role;
+
+      // Get the bid to check ownership
+      const existingBid = await storage.getBid(req.params.id);
+      if (!existingBid) {
         return res.status(404).json({ error: "Bid not found" });
       }
+
+      // Only bid owner (freelancer) or project owner (recruiter) or admin can update
+      const project = await storage.getProject(existingBid.projectId);
+      const isFreelancerOwner = existingBid.freelancerId === userId;
+      const isRecruiterOwner = project && project.recruiterId === userId;
+
+      if (userRole !== 'admin' && !isFreelancerOwner && !isRecruiterOwner) {
+        return res.status(403).json({ error: "You can only update your own bids or bids on your projects" });
+      }
+
+      const bid = await storage.updateBid(req.params.id, req.body);
       res.json(bid);
     } catch (error: any) {
       res.status(500).json({ error: error.message });
@@ -686,7 +767,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(503).json({ error: "Payment processing is not configured. Please add STRIPE_SECRET_KEY to environment variables." });
       }
 
-      const { amount, currency = "usd", entityType, entityId, userId } = req.body;
+      // SECURITY: Derive userId from authenticated session, ignore client-supplied value
+      const userId = (req.user as any)?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      const { amount, currency = "usd", entityType, entityId } = req.body;
 
       // Calculate platform fee (7%)
       const platformFeeAmount = Math.round(amount * 0.07);
@@ -699,13 +786,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         metadata: {
           entityType,
           entityId,
-          userId,
+          userId, // Use authenticated user ID
         },
       });
 
-      // Create payment record
+      // Create payment record with authenticated user ID
       await storage.createPayment({
-        userId,
+        userId, // Use authenticated user ID, not client-supplied
         amount: amount.toString(),
         platformFee: (platformFeeAmount / 100).toString(),
         netAmount: (netAmount / 100).toString(),
@@ -726,14 +813,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/payments/confirm", requireAuth, async (req, res) => {
     try {
+      // SECURITY: Derive userId from authenticated session, ignore client-supplied value
+      const userId = (req.user as any)?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
       const { paymentIntentId } = req.body;
 
-      // Retrieve payment from database
-      const payments = await storage.getPaymentsByUser(req.body.userId);
+      // Retrieve payment from database using authenticated user ID
+      const payments = await storage.getPaymentsByUser(userId);
       const payment = payments.find(p => p.stripePaymentId === paymentIntentId);
 
       if (!payment) {
         return res.status(404).json({ error: "Payment not found" });
+      }
+
+      // Verify payment belongs to authenticated user
+      if (payment.userId !== userId) {
+        return res.status(403).json({ error: "You can only confirm your own payments" });
       }
 
       // Update payment status
@@ -795,8 +893,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/notifications", requireAuth, async (req, res) => {
+  app.post("/api/notifications", requireAuth, requireRole('admin'), async (req, res) => {
     try {
+      // Only admins can create notifications for other users
       const notification = await storage.createNotification(req.body);
       
       // Send real-time notification via WebSocket
@@ -823,7 +922,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/notifications/mark-read", requireAuth, async (req, res) => {
     try {
-      const { userId } = req.body;
+      // SECURITY: Derive userId from authenticated session, ignore client-supplied value
+      const userId = (req.user as any)?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
       await storage.markNotificationsAsRead(userId);
       res.json({ success: true });
     } catch (error: any) {
