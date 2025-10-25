@@ -84,10 +84,10 @@ export function MainNav() {
             ) : (
               <>
                 <Button variant="ghost" asChild>
-                  <Link href="/login">Login</Link>
+                  <Link href="/auth/login">Login</Link>
                 </Button>
                 <Button asChild>
-                  <Link href="/register">Sign Up</Link>
+                  <Link href="/auth/signup">Sign Up</Link>
                 </Button>
               </>
             )}
