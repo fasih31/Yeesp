@@ -45,12 +45,12 @@ export default function Courses() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-12 mt-4">
         {/* Promotional Banner */}
-        <div className="mb-12 relative overflow-hidden rounded-3xl border-2 border-violet-200">
-          <div className="bg-violet-50 rounded-3xl p-8 md:p-12 relative overflow-hidden">
+        <div className="mb-12 relative overflow-hidden rounded-3xl border-2 border-cyan-200">
+          <div className="bg-cyan-50 rounded-3xl p-8 md:p-12 relative overflow-hidden">
             <div className="absolute inset-0 bg-dot-pattern opacity-10" />
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
               <div className="flex-1">
-                <Badge className="mb-4 animate-fade-in bg-violet-600 text-white border-0">Limited Time Offer</Badge>
+                <Badge className="mb-4 animate-fade-in bg-gradient-to-r from-cyan-500 to-cyan-600 text-white border-0">Limited Time Offer</Badge>
                 <h2 className="text-3xl md:text-4xl font-bold mb-4 animate-slide-up">
                   Get 50% Off All Courses!
                 </h2>
@@ -74,7 +74,7 @@ export default function Courses() {
         </div>
 
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2 text-violet-600" data-testid="text-courses-title">
+          <h1 className="text-4xl font-bold mb-2 text-cyan-600" data-testid="text-courses-title">
             Explore Courses
           </h1>
           <p className="text-lg text-muted-foreground">

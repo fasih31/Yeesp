@@ -11,13 +11,13 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-violet-600 hover:bg-violet-700 text-white shadow-md border-0",
+          "bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-600 hover:to-cyan-700 text-white shadow-lg shadow-cyan-500/30 border-0",
         destructive:
           "bg-destructive text-destructive-foreground border border-destructive-border",
         outline:
           " border [border-color:var(--button-outline)]  shadow-xs active:shadow-none ",
         secondary: "border bg-secondary text-secondary-foreground border border-secondary-border ",
-        ghost: "border border-transparent hover:text-violet-600 hover:bg-violet-50",
+        ghost: "border border-transparent hover:text-cyan-600 hover:bg-cyan-50",
       },
       // Heights are set as "min" heights, because sometimes Ai will place large amount of content
       // inside buttons. With a min-height they will look appropriate with small amounts of content,

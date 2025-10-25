@@ -45,7 +45,7 @@ export function MainNav() {
                 key={link.href}
                 variant={location === link.href ? "secondary" : "ghost"}
                 size="sm"
-                className={`text-sm font-medium transition-all ${location === link.href ? "text-violet-600" : "hover:text-violet-600"}`}
+                className={`text-sm font-medium transition-all ${location === link.href ? "text-cyan-600" : "hover:text-cyan-600"}`}
                 asChild
               >
                 <Link href={link.href}>{link.label}</Link>
@@ -124,7 +124,7 @@ export function MainNav() {
               </DropdownMenu>
             ) : (
               <>
-                <Button variant="ghost" size="sm" asChild className="hidden sm:flex hover:text-violet-600">
+                <Button variant="ghost" size="sm" asChild className="hidden sm:flex hover:text-cyan-600">
                   <Link href="/auth/login">Login</Link>
                 </Button>
                 <Button size="sm" asChild>

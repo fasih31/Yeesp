@@ -7,8 +7,8 @@ import { GraduationCap, Users, Briefcase, Award, ArrowRight, Check, Star, BookOp
 export default function Landing() {
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Section - Clean & Elegant */}
-      <section className="relative min-h-[85vh] flex items-center justify-center bg-gradient-to-br from-violet-600 to-violet-800 overflow-hidden">
+      {/* Hero Section - Logo-Matched Cyan/Turquoise */}
+      <section className="relative min-h-[85vh] flex items-center justify-center bg-gradient-to-br from-cyan-500 via-cyan-600 to-teal-700 overflow-hidden">
         {/* Subtle Pattern */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff12_1px,transparent_1px),linear-gradient(to_bottom,#ffffff12_1px,transparent_1px)] bg-[size:40px_40px]"></div>
@@ -21,7 +21,7 @@ export default function Landing() {
 
           <h1 className="text-responsive-xl font-bold text-white mb-6 leading-tight">
             Learn Skills. Earn Income.<br />
-            <span className="text-violet-200">Transform Your Future.</span>
+            <span className="text-cyan-100">Transform Your Future.</span>
           </h1>
 
           <p className="text-xl text-white/90 max-w-2xl mx-auto mb-10">
@@ -29,7 +29,7 @@ export default function Landing() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <Button size="lg" className="bg-white text-violet-600 hover:bg-gray-50 text-lg px-8 h-14 rounded-full font-semibold shadow-xl" asChild>
+            <Button size="lg" className="bg-white text-cyan-600 hover:bg-gray-50 text-lg px-8 h-14 rounded-full font-semibold shadow-xl" asChild>
               <Link href="/register">
                 Get Started Free <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
@@ -94,9 +94,9 @@ export default function Landing() {
                 desc: "Earn verified certificates to showcase your achievements"
               },
             ].map((feature, i) => (
-              <Card key={i} className="p-8 hover:shadow-xl transition-all duration-300 border-violet-100 hover:border-violet-300">
-                <div className="h-14 w-14 rounded-xl bg-violet-100 flex items-center justify-center mb-6">
-                  <feature.icon className="h-7 w-7 text-violet-600" />
+              <Card key={i} className="p-8 hover:shadow-xl transition-all duration-300 border-cyan-100 hover:border-cyan-300">
+                <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-cyan-100 to-teal-100 flex items-center justify-center mb-6">
+                  <feature.icon className="h-7 w-7 text-cyan-600" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
                 <p className="text-gray-600">{feature.desc}</p>
@@ -130,8 +130,8 @@ export default function Landing() {
                   "Comprehensive admin controls"
                 ].map((feature, i) => (
                   <div key={i} className="flex items-start gap-3">
-                    <div className="h-6 w-6 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <Check className="h-4 w-4 text-violet-600" />
+                    <div className="h-6 w-6 rounded-full bg-gradient-to-br from-cyan-100 to-teal-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Check className="h-4 w-4 text-cyan-600" />
                     </div>
                     <span className="text-gray-700">{feature}</span>
                   </div>
@@ -139,10 +139,10 @@ export default function Landing() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-violet-50 to-violet-100 rounded-2xl p-12">
+            <div className="bg-gradient-to-br from-cyan-50 to-teal-50 rounded-2xl p-12">
               <div className="space-y-6">
                 <div className="flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-lg bg-violet-600 flex items-center justify-center">
+                  <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-cyan-500 to-teal-600 flex items-center justify-center">
                     <Shield className="h-6 w-6 text-white" />
                   </div>
                   <div>
@@ -151,7 +151,7 @@ export default function Landing() {
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-lg bg-violet-600 flex items-center justify-center">
+                  <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-cyan-500 to-teal-600 flex items-center justify-center">
                     <Zap className="h-6 w-6 text-white" />
                   </div>
                   <div>
@@ -160,7 +160,7 @@ export default function Landing() {
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-lg bg-violet-600 flex items-center justify-center">
+                  <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-cyan-500 to-teal-600 flex items-center justify-center">
                     <Users className="h-6 w-6 text-white" />
                   </div>
                   <div>
@@ -175,7 +175,7 @@ export default function Landing() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-6 bg-gradient-to-r from-violet-600 to-violet-800">
+      <section className="py-20 px-6 bg-gradient-to-r from-cyan-500 via-cyan-600 to-teal-600">
         <div className="max-w-4xl mx-auto text-center space-y-8">
           <h2 className="text-4xl md:text-5xl font-bold text-white">
             Ready to Start Your Journey?
@@ -184,7 +184,7 @@ export default function Landing() {
             Join thousands of successful students, tutors, and freelancers today
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-            <Button size="lg" className="bg-white text-violet-600 hover:bg-gray-50 text-lg px-10 h-14 rounded-full font-bold shadow-xl" asChild>
+            <Button size="lg" className="bg-white text-cyan-600 hover:bg-gray-50 text-lg px-10 h-14 rounded-full font-bold shadow-xl" asChild>
               <Link href="/register">
                 Get Started Free <ArrowRight className="ml-2 h-6 w-6" />
               </Link>
@@ -209,30 +209,30 @@ export default function Landing() {
             <div>
               <h4 className="font-semibold mb-4">Platform</h4>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link href="/courses" className="hover:text-white transition">Courses</Link></li>
-                <li><Link href="/tutors" className="hover:text-white transition">Tutors</Link></li>
-                <li><Link href="/projects" className="hover:text-white transition">Projects</Link></li>
+                <li><Link href="/courses" className="hover:text-cyan-400 transition">Courses</Link></li>
+                <li><Link href="/tutors" className="hover:text-cyan-400 transition">Tutors</Link></li>
+                <li><Link href="/projects" className="hover:text-cyan-400 transition">Projects</Link></li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Company</h4>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link href="/about" className="hover:text-white transition">About</Link></li>
-                <li><Link href="/blog" className="hover:text-white transition">Blog</Link></li>
-                <li><Link href="/contact" className="hover:text-white transition">Contact</Link></li>
+                <li><Link href="/about" className="hover:text-cyan-400 transition">About</Link></li>
+                <li><Link href="/blog" className="hover:text-cyan-400 transition">Blog</Link></li>
+                <li><Link href="/contact" className="hover:text-cyan-400 transition">Contact</Link></li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Support</h4>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link href="/help" className="hover:text-white transition">Help Center</Link></li>
-                <li><Link href="/pricing" className="hover:text-white transition">Pricing</Link></li>
-                <li><Link href="/terms" className="hover:text-white transition">Terms</Link></li>
+                <li><Link href="/help" className="hover:text-cyan-400 transition">Help Center</Link></li>
+                <li><Link href="/pricing" className="hover:text-cyan-400 transition">Pricing</Link></li>
+                <li><Link href="/terms" className="hover:text-cyan-400 transition">Terms</Link></li>
               </ul>
             </div>
           </div>
           <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
-            <p>© 2024 YEESP. All rights reserved. | Developed by <span className="text-violet-400 font-semibold">Fasih ur Rehman</span></p>
+            <p>© 2024 YEESP. All rights reserved. | Developed by <span className="text-cyan-400 font-semibold">Fasih ur Rehman</span></p>
           </div>
         </div>
       </footer>
