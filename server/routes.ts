@@ -5,10 +5,11 @@ import { insertUserSchema, insertCourseSchema, insertEnrollmentSchema, insertSes
 import Stripe from "stripe";
 import bcrypt from "bcryptjs";
 import passport from "passport";
+import { Strategy as LocalStrategy } from "passport-local";
 import { requireAuth, requireRole } from "./middleware/auth";
 import { getWebSocketService } from "./services/websocket";
 
-const stripe = process.env.STRIPE_SECRET_KEY 
+const stripe = process.env.STRIPE_SECRET_KEY
   ? new Stripe(process.env.STRIPE_SECRET_KEY, {
       apiVersion: "2025-09-30.clover",
     })
@@ -23,7 +24,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   registerBlogRoutes(app);
 
   // ===== AUTH ROUTES =====
-  
+
   app.post("/api/auth/logout", (req, res) => {
     req.logout((err) => {
       if (err) {
@@ -43,7 +44,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/auth/register", async (req, res) => {
     try {
       const data = insertUserSchema.parse(req.body);
-      
+
       // Check if user exists
       const existing = await storage.getUserByEmail(data.email);
       if (existing) {
@@ -74,7 +75,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!user) {
         return res.status(401).json({ error: info?.message || "Invalid credentials" });
       }
-      
+
       req.logIn(user, (err) => {
         if (err) {
           return res.status(500).json({ error: err.message });
@@ -87,7 +88,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ===== USER ROUTES =====
-  
+
   app.get("/api/users/:id", async (req, res) => {
     try {
       const user = await storage.getUser(req.params.id);
@@ -121,11 +122,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ===== COURSE ROUTES =====
-  
+
   app.get("/api/courses", async (req, res) => {
     try {
       const courses = await storage.getCourses();
-      
+
       // Fetch instructors for each course
       const coursesWithInstructors = await Promise.all(
         courses.map(async (course) => {
@@ -133,7 +134,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           return { ...course, instructor };
         })
       );
-      
+
       res.json(coursesWithInstructors);
     } catch (error: any) {
       res.status(500).json({ error: error.message });
@@ -146,10 +147,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!course) {
         return res.status(404).json({ error: "Course not found" });
       }
-      
+
       const instructor = await storage.getUser(course.instructorId);
       const lessons = await storage.getLessonsByCourse(course.id);
-      
+
       res.json({ ...course, instructor, lessons });
     } catch (error: any) {
       res.status(500).json({ error: error.message });
@@ -168,7 +169,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ...req.body,
         instructorId: userId // Override with authenticated user's ID
       });
-      
+
       const course = await storage.createCourse(data);
       res.json(course);
     } catch (error: any) {
@@ -223,7 +224,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ===== ENROLLMENT ROUTES =====
-  
+
   app.get("/api/enrollments/my", async (req, res) => {
     try {
       // MUST be authenticated - no query param fallback for security
@@ -233,7 +234,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const enrollments = await storage.getEnrollmentsByStudent(userId);
-      
+
       // Fetch course details for each enrollment
       const enrollmentsWithCourses = await Promise.all(
         enrollments.map(async (enrollment) => {
@@ -241,7 +242,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           return { ...enrollment, course };
         })
       );
-      
+
       res.json(enrollmentsWithCourses);
     } catch (error: any) {
       res.status(500).json({ error: error.message });
@@ -259,7 +260,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ...req.body,
         studentId: userId // Override with authenticated user's ID
       });
-      
+
       // Check if already enrolled
       const existing = await storage.getEnrollment(data.studentId, data.courseId);
       if (existing) {
@@ -311,11 +312,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ===== TUTOR ROUTES =====
-  
+
   app.get("/api/tutors", async (req, res) => {
     try {
       const tutors = await storage.getUsersByRole("tutor");
-      
+
       // Add rating stats for each tutor
       const tutorsWithStats = await Promise.all(
         tutors.map(async (tutor) => {
@@ -323,7 +324,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const avgRating = reviews.length > 0
             ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length
             : undefined;
-          
+
           return {
             ...tutor,
             avgRating,
@@ -331,7 +332,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           };
         })
       );
-      
+
       res.json(tutorsWithStats);
     } catch (error: any) {
       res.status(500).json({ error: error.message });
@@ -339,12 +340,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ===== SESSION ROUTES =====
-  
+
   app.get("/api/sessions/my", async (req, res) => {
     try {
       const userId = (req.user as any)?.id;
       const role = (req.user as any)?.role;
-      
+
       if (!userId) {
         return res.status(401).json({ error: "Not authenticated" });
       }
@@ -352,7 +353,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const sessions = role === "tutor"
         ? await storage.getSessionsByTutor(userId)
         : await storage.getSessionsByStudent(userId);
-      
+
       res.json(sessions);
     } catch (error: any) {
       res.status(500).json({ error: error.message });
@@ -372,7 +373,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Tutor creates session with themselves as tutor, student as specified
       // Student creates session with themselves as student, tutor as specified
       let sessionData;
-      
+
       if (userRole === 'tutor' || userRole === 'admin') {
         // Tutor/Admin creating session - derive tutorId from authenticated user
         sessionData = insertSessionSchema.parse({
@@ -423,11 +424,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ===== PROJECT ROUTES =====
-  
+
   app.get("/api/projects", async (req, res) => {
     try {
       const projects = await storage.getProjects();
-      
+
       // Fetch recruiter and bid count for each project
       const projectsWithDetails = await Promise.all(
         projects.map(async (project) => {
@@ -436,7 +437,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           return { ...project, recruiter, bidCount: bids.length };
         })
       );
-      
+
       res.json(projectsWithDetails);
     } catch (error: any) {
       res.status(500).json({ error: error.message });
@@ -451,7 +452,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const projects = await storage.getProjectsByRecruiter(userId);
-      
+
       // Fetch bids for each project
       const projectsWithBids = await Promise.all(
         projects.map(async (project) => {
@@ -465,7 +466,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           return { ...project, bids: bidsWithFreelancers };
         })
       );
-      
+
       res.json(projectsWithBids);
     } catch (error: any) {
       res.status(500).json({ error: error.message });
@@ -478,10 +479,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!project) {
         return res.status(404).json({ error: "Project not found" });
       }
-      
+
       const recruiter = await storage.getUser(project.recruiterId);
       const bids = await storage.getBidsByProject(project.id);
-      
+
       res.json({ ...project, recruiter, bids });
     } catch (error: any) {
       res.status(500).json({ error: error.message });
@@ -501,7 +502,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         recruiterId: userId, // Override with authenticated user's ID
         status: 'pending' // New projects start as pending for admin approval
       });
-      
+
       const project = await storage.createProject(data);
       res.json(project);
     } catch (error: any) {
@@ -533,7 +534,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ===== BID ROUTES =====
-  
+
   app.get("/api/bids/my", async (req, res) => {
     try {
       const userId = (req.user as any)?.id;
@@ -542,7 +543,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const bids = await storage.getBidsByFreelancer(userId);
-      
+
       // Fetch project details for each bid
       const bidsWithProjects = await Promise.all(
         bids.map(async (bid) => {
@@ -554,7 +555,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           return bid;
         })
       );
-      
+
       res.json(bidsWithProjects);
     } catch (error: any) {
       res.status(500).json({ error: error.message });
@@ -572,7 +573,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ...req.body,
         freelancerId: userId // Override with authenticated user's ID
       });
-      
+
       const bid = await storage.createBid(data);
       res.json(bid);
     } catch (error: any) {
@@ -608,12 +609,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ===== REVIEW ROUTES =====
-  
+
   app.post("/api/reviews", requireAuth, async (req, res) => {
 
 
   // ===== ROLE REQUEST ROUTES =====
-  
+
   app.post("/api/role-requests", requireAuth, async (req, res) => {
     try {
       const userId = (req as any).user?.id;
@@ -699,7 +700,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { reviewNotes } = req.body;
 
       await storage.approveRoleRequest(req.params.id, adminId);
-      
+
       if (reviewNotes) {
         await storage.updateRoleRequest(req.params.id, { reviewNotes });
       }
@@ -744,7 +745,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ===== CERTIFICATE ROUTES =====
-  
+
   app.get("/api/certificates/my", async (req, res) => {
     try {
       const userId = (req.user as any)?.id;
@@ -760,7 +761,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ===== PAYMENT ROUTES (STRIPE) =====
-  
+
   app.get("/api/payments/my", async (req, res) => {
     try {
       const userId = (req.user as any)?.id;
@@ -774,7 +775,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: error.message });
     }
   });
-  
+
   app.post("/api/payments/create-payment-intent", requireAuth, async (req, res) => {
     try {
       if (!stripe) {
@@ -867,7 +868,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ===== NOTIFICATION ROUTES =====
-  
+
   app.get("/api/notifications/my", requireAuth, async (req, res) => {
     try {
       // SECURITY: Derive userId from authenticated session
@@ -890,7 +891,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { userId } = req.params;
       const { limit } = req.query;
       const notifications = await storage.getNotifications(
-        userId, 
+        userId,
         limit ? parseInt(limit as string) : 20
       );
       res.json(notifications);
@@ -905,7 +906,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const authUserId = (req.user as any)?.id;
       const userRole = (req.user as any)?.role;
       const { userId } = req.params;
-      
+
       if (userRole !== 'admin' && authUserId !== userId) {
         return res.status(403).json({ error: "You can only check your own notifications" });
       }
@@ -921,13 +922,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       // Only admins can create notifications for other users
       const notification = await storage.createNotification(req.body);
-      
+
       // Send real-time notification via WebSocket
       const wsService = getWebSocketService();
       if (wsService) {
         wsService.sendNotification(req.body.userId, notification);
       }
-      
+
       res.json(notification);
     } catch (error: any) {
       res.status(500).json({ error: error.message });
