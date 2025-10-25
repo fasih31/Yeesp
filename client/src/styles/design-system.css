@@ -1,107 +1,57 @@
-/* YEESP Design System - Consistent Brand Colors & Styles */
+/* YEESP Design System - Simple & Elegant Violet Theme */
 
 :root {
-  /* Primary Brand Colors - Purple/Violet Theme */
-  --brand-primary: #8b5cf6;        /* Violet-500 */
-  --brand-primary-dark: #7c3aed;   /* Violet-600 */
-  --brand-primary-light: #a78bfa;  /* Violet-400 */
+  /* Primary Brand Color - Violet */
+  --brand-primary: #8b5cf6;
+  --brand-primary-dark: #7c3aed;
+  --brand-primary-light: #a78bfa;
+  --brand-primary-lighter: #c4b5fd;
   
-  /* Secondary Brand Colors */
-  --brand-secondary: #ec4899;      /* Pink-500 */
-  --brand-secondary-dark: #db2777; /* Pink-600 */
-  --brand-secondary-light: #f472b6; /* Pink-400 */
+  /* Neutral Colors */
+  --brand-white: #ffffff;
+  --brand-gray-50: #f9fafb;
+  --brand-gray-100: #f3f4f6;
+  --brand-gray-200: #e5e7eb;
+  --brand-gray-600: #4b5563;
+  --brand-gray-900: #111827;
   
-  /* Accent Colors */
-  --brand-accent: #06b6d4;         /* Cyan-500 */
-  --brand-accent-dark: #0891b2;    /* Cyan-600 */
-  --brand-warning: #f59e0b;        /* Amber-500 */
-  --brand-success: #10b981;        /* Emerald-500 */
-  --brand-error: #ef4444;          /* Red-500 */
-  
-  /* Gradients */
-  --gradient-primary: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
-  --gradient-hero: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 50%, #4f46e5 100%);
-  --gradient-card: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+  /* Gradients - Violet only */
+  --gradient-primary: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  --gradient-subtle: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
   
   /* Glass Effect */
   --glass-bg: rgba(255, 255, 255, 0.1);
   --glass-border: rgba(255, 255, 255, 0.2);
-  --glass-blur: blur(16px);
 }
 
 /* Brand Gradient Text */
 .brand-gradient-text {
-  background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 50%, #06b6d4 100%);
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Glass Morphism */
+/* Glass Morphism - Subtle */
 .glass {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(139, 92, 246, 0.1);
 }
 
-.glass-dark {
-  background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Animated Gradients */
-@keyframes gradient-shift {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-.animate-gradient {
-  background-size: 200% 200%;
-  animation: gradient-shift 6s ease infinite;
-}
-
-/* Card Hover Effects */
-.card-hover {
+/* Smooth Transitions */
+.smooth-transition {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.card-hover:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
-}
-
-/* Button Styles */
-.btn-brand {
-  background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
-  color: white;
-  font-weight: 600;
+/* Card Hover Effect - Elegant */
+.card-hover {
   transition: all 0.3s ease;
 }
 
-.btn-brand:hover {
-  transform: scale(1.05);
-  box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
-}
-
-/* Smooth Animations */
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fade-in {
-  animation: fade-in 0.6s ease-out forwards;
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(139, 92, 246, 0.15);
 }
 
 /* Responsive Typography */
@@ -115,4 +65,20 @@
 
 .text-responsive-md {
   font-size: clamp(1.125rem, 2vw, 1.5rem);
+}
+
+/* Simple Fade In Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
 }

@@ -2,165 +2,104 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { GraduationCap, Users, Briefcase, Award, ArrowRight, Check, Star, Sparkles, Zap, Trophy, TrendingUp, Globe, Shield, BookOpen, Video, MessageSquare } from "lucide-react";
-import { AnimatedDemoVideo } from "@/components/ui/animated-demo-video";
+import { GraduationCap, Users, Briefcase, Award, ArrowRight, Check, Star, BookOpen, Video, Shield, Zap } from "lucide-react";
 
 export default function Landing() {
   return (
-    <div className="min-h-screen overflow-hidden bg-white">
-      {/* Hero Section - Brand Colors */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-800">
-        {/* Animated gradient orbs */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-96 h-96 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
-          <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-yellow-500 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
-          <div className="absolute top-40 left-40 w-96 h-96 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
+    <div className="min-h-screen bg-white">
+      {/* Hero Section - Clean & Elegant */}
+      <section className="relative min-h-[85vh] flex items-center justify-center bg-gradient-to-br from-violet-600 to-violet-800 overflow-hidden">
+        {/* Subtle Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff12_1px,transparent_1px),linear-gradient(to_bottom,#ffffff12_1px,transparent_1px)] bg-[size:40px_40px]"></div>
         </div>
-
-        {/* Grid Pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
         
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-          <div className="space-y-8">
-            <div className="flex justify-center">
-              <Badge className="bg-white/20 backdrop-blur-md border border-white/30 text-white px-6 py-2 text-sm font-medium shadow-2xl hover:bg-white/30 transition-all">
-                <Sparkles className="w-4 h-4 mr-2 inline" />
-                Next-Gen Learning Platform
-              </Badge>
-            </div>
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+          <Badge className="mb-6 bg-white/10 backdrop-blur-md border-white/20 text-white px-6 py-2">
+            Next-Generation Learning Platform
+          </Badge>
 
-            <h1 className="text-responsive-xl font-extrabold tracking-tight">
-              <span className="block text-white drop-shadow-2xl">Learn. Earn.</span>
-              <span className="block brand-gradient-text drop-shadow-2xl">
-                Transform.
-              </span>
-            </h1>
+          <h1 className="text-responsive-xl font-bold text-white mb-6 leading-tight">
+            Learn Skills. Earn Income.<br />
+            <span className="text-violet-200">Transform Your Future.</span>
+          </h1>
 
-            <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto leading-relaxed font-light">
-              Join <span className="font-bold text-yellow-300">10,000+</span> students, tutors, and freelancers building extraordinary careers
-            </p>
+          <p className="text-xl text-white/90 max-w-2xl mx-auto mb-10">
+            Join 10,000+ students, tutors, and freelancers building successful careers through education and opportunity
+          </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
-              <Button size="lg" className="bg-white text-violet-600 hover:bg-gray-100 shadow-2xl text-lg px-8 h-14 rounded-full font-semibold group" asChild>
-                <Link href="/register">
-                  Start Free Today
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" className="border-2 border-white/50 text-white hover:bg-white/20 backdrop-blur-md shadow-2xl text-lg px-8 h-14 rounded-full font-semibold" asChild>
-                <Link href="/courses">
-                  Explore Courses
-                </Link>
-              </Button>
-            </div>
-
-            {/* Stats with glassmorphism */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-12 max-w-4xl mx-auto">
-              {[
-                { icon: Users, value: "10K+", label: "Active Users" },
-                { icon: GraduationCap, value: "500+", label: "Courses" },
-                { icon: Trophy, value: "95%", label: "Success Rate" },
-                { icon: Star, value: "4.9", label: "Rating" }
-              ].map((stat, i) => (
-                <div key={i} className="glass rounded-2xl p-6 hover:bg-white/20 transition-all transform hover:-translate-y-2 shadow-2xl">
-                  <stat.icon className="w-8 h-8 text-yellow-300 mx-auto mb-2" />
-                  <div className="text-3xl font-bold text-white">{stat.value}</div>
-                  <div className="text-sm text-white/80">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Floating elements */}
-        <div className="absolute bottom-10 left-10 hidden lg:block">
-          <div className="glass rounded-2xl p-4 shadow-2xl transform hover:scale-110 transition-transform">
-            <Zap className="w-8 h-8 text-yellow-300" />
-          </div>
-        </div>
-        <div className="absolute top-20 right-20 hidden lg:block">
-          <div className="glass rounded-2xl p-4 shadow-2xl transform hover:scale-110 transition-transform">
-            <Globe className="w-8 h-8 text-cyan-300" />
-          </div>
-        </div>
-      </section>
-
-      {/* Platform Demo Video Section */}
-      <section className="py-24 px-6 bg-gradient-to-b from-gray-50 to-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <Badge className="mb-4 bg-violet-100 text-violet-700 border-violet-200">
-              <Sparkles className="w-3 h-3 mr-1" />
-              Platform Overview
-            </Badge>
-            <h2 className="text-responsive-lg font-bold mb-6">
-              <span className="brand-gradient-text">See YEESP in Action</span>
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Discover how our platform empowers thousands to learn, earn, and grow
-            </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+            <Button size="lg" className="bg-white text-violet-600 hover:bg-gray-50 text-lg px-8 h-14 rounded-full font-semibold shadow-xl" asChild>
+              <Link href="/register">
+                Get Started Free <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </Button>
+            <Button size="lg" variant="outline" className="border-2 border-white/50 text-white hover:bg-white/10 text-lg px-8 h-14 rounded-full font-semibold" asChild>
+              <Link href="/courses">
+                Explore Courses
+              </Link>
+            </Button>
           </div>
 
-          <AnimatedDemoVideo />
+          {/* Simple Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+            {[
+              { icon: Users, value: "10K+", label: "Active Users" },
+              { icon: BookOpen, value: "500+", label: "Courses" },
+              { icon: Briefcase, value: "1,200+", label: "Projects" },
+              { icon: Star, value: "4.9/5", label: "Rating" }
+            ].map((stat, i) => (
+              <div key={i} className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+                <stat.icon className="w-8 h-8 text-white mx-auto mb-2 opacity-90" />
+                <div className="text-3xl font-bold text-white">{stat.value}</div>
+                <div className="text-sm text-white/80">{stat.label}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-24 px-6 bg-white">
+      <section className="py-20 px-6 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <Badge className="mb-4 bg-violet-100 text-violet-700 border-violet-200">
-              <Sparkles className="w-3 h-3 mr-1" />
-              Platform Features
-            </Badge>
-            <h2 className="text-responsive-lg font-bold mb-6">
-              <span className="brand-gradient-text">Everything You Need</span>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Everything You Need to Succeed
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              A complete ecosystem for learning, teaching, and earning
+              A complete platform for learning, teaching, and earning
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               { 
                 icon: GraduationCap, 
                 title: "Premium Courses", 
-                desc: "Access 500+ expert-led courses across all skill levels",
-                gradient: "from-violet-500 to-purple-500",
-                color: "text-violet-600"
+                desc: "Access 500+ expert-led courses across all skill levels"
               },
               { 
-                icon: Users, 
+                icon: Video, 
                 title: "Live Tutoring", 
-                desc: "1-on-1 sessions with verified tutors via Zoom & Dyte",
-                gradient: "from-blue-500 to-cyan-500",
-                color: "text-blue-600"
+                desc: "1-on-1 sessions with verified tutors via video conferencing"
               },
               { 
                 icon: Briefcase, 
-                title: "Freelance Hub", 
-                desc: "Find projects, submit bids, and build your career",
-                gradient: "from-pink-500 to-rose-500",
-                color: "text-pink-600"
+                title: "Freelance Projects", 
+                desc: "Find opportunities and build your professional career"
               },
               { 
                 icon: Award, 
                 title: "Certifications", 
-                desc: "Earn verified certificates and showcase achievements",
-                gradient: "from-green-500 to-emerald-500",
-                color: "text-green-600"
+                desc: "Earn verified certificates to showcase your achievements"
               },
             ].map((feature, i) => (
-              <Card key={i} className="card-hover relative group overflow-hidden border-2 hover:border-transparent transition-all duration-300 hover:shadow-2xl">
-                <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
-                <div className="relative p-8 space-y-4">
-                  <div className={`h-16 w-16 rounded-2xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center transform group-hover:scale-110 transition-transform shadow-lg`}>
-                    <feature.icon className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className={`text-2xl font-bold group-hover:text-white transition-colors ${feature.color}`}>{feature.title}</h3>
-                  <p className="text-gray-600 group-hover:text-white/90 transition-colors">{feature.desc}</p>
+              <Card key={i} className="p-8 hover:shadow-xl transition-all duration-300 border-violet-100 hover:border-violet-300">
+                <div className="h-14 w-14 rounded-xl bg-violet-100 flex items-center justify-center mb-6">
+                  <feature.icon className="h-7 w-7 text-violet-600" />
                 </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
+                <p className="text-gray-600">{feature.desc}</p>
               </Card>
             ))}
           </div>
@@ -168,57 +107,67 @@ export default function Landing() {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-24 px-6 bg-gradient-to-br from-violet-900 via-purple-900 to-pink-900 text-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent)]"></div>
-        </div>
-
-        <div className="relative max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-responsive-lg font-bold mb-6">Why Choose YEESP?</h2>
-            <p className="text-xl text-white/80 max-w-2xl mx-auto">
-              The most comprehensive platform for your growth journey
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="space-y-6">
-              {[
-                { icon: Shield, title: "Secure Payments", desc: "Escrow-based wallet with Stripe integration" },
-                { icon: Video, title: "Live Sessions", desc: "Dual video support with Zoom & Dyte SDK" },
-                { icon: TrendingUp, title: "Career Growth", desc: "Track progress with detailed analytics" },
-                { icon: Globe, title: "Global Community", desc: "Connect with learners worldwide" }
-              ].map((item, i) => (
-                <div key={i} className="flex gap-4 items-start glass rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all">
-                  <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-yellow-400 to-pink-500 flex items-center justify-center flex-shrink-0">
-                    <item.icon className="h-6 w-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold mb-1">{item.title}</h3>
-                    <p className="text-white/80">{item.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="glass rounded-3xl p-8 border border-white/20">
-              <h3 className="text-3xl font-bold mb-6">All Features Included</h3>
-              <div className="space-y-3">
+      <section className="py-20 px-6 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">
+                Why Choose YEESP?
+              </h2>
+              <p className="text-xl text-gray-600 mb-8">
+                The most trusted platform for youth education and employment
+              </p>
+              
+              <div className="space-y-4">
                 {[
-                  "Unlimited course access",
+                  "Secure escrow-based payment system",
                   "Live video conferencing (Zoom & Dyte)",
-                  "Project bidding & contracts",
-                  "AI-powered recommendations",
-                  "Certificate generation with QR codes",
+                  "AI-powered course recommendations",
+                  "Verifiable certificates with QR codes",
+                  "Real-time notifications & messaging",
                   "24/7 priority support",
-                  "Real-time notifications",
-                  "Escrow payment protection"
+                  "Project bidding & contract management",
+                  "Comprehensive admin controls"
                 ].map((feature, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <Check className="h-5 w-5 text-green-400 flex-shrink-0" />
-                    <span className="text-lg">{feature}</span>
+                  <div key={i} className="flex items-start gap-3">
+                    <div className="h-6 w-6 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Check className="h-4 w-4 text-violet-600" />
+                    </div>
+                    <span className="text-gray-700">{feature}</span>
                   </div>
                 ))}
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-br from-violet-50 to-violet-100 rounded-2xl p-12">
+              <div className="space-y-6">
+                <div className="flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-lg bg-violet-600 flex items-center justify-center">
+                    <Shield className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <div className="font-bold text-gray-900">Secure Platform</div>
+                    <div className="text-sm text-gray-600">Bank-level encryption</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-lg bg-violet-600 flex items-center justify-center">
+                    <Zap className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <div className="font-bold text-gray-900">Fast Payments</div>
+                    <div className="text-sm text-gray-600">Instant withdrawals</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-lg bg-violet-600 flex items-center justify-center">
+                    <Users className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <div className="font-bold text-gray-900">Global Community</div>
+                    <div className="text-sm text-gray-600">Connect worldwide</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -226,23 +175,21 @@ export default function Landing() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 px-6 bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnoiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utb3BhY2l0eT0iLjEiLz48L2c+PC9zdmc+')] opacity-20"></div>
-        
-        <div className="relative max-w-4xl mx-auto text-center space-y-8">
-          <h2 className="text-responsive-lg font-bold text-white mb-6">
+      <section className="py-20 px-6 bg-gradient-to-r from-violet-600 to-violet-800">
+        <div className="max-w-4xl mx-auto text-center space-y-8">
+          <h2 className="text-4xl md:text-5xl font-bold text-white">
             Ready to Start Your Journey?
           </h2>
           <p className="text-xl text-white/90">
             Join thousands of successful students, tutors, and freelancers today
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
-            <Button size="lg" className="bg-white text-violet-600 hover:bg-gray-100 shadow-2xl text-lg px-10 h-16 rounded-full font-bold" asChild>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+            <Button size="lg" className="bg-white text-violet-600 hover:bg-gray-50 text-lg px-10 h-14 rounded-full font-bold shadow-xl" asChild>
               <Link href="/register">
                 Get Started Free <ArrowRight className="ml-2 h-6 w-6" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white/20 backdrop-blur-md text-lg px-10 h-16 rounded-full font-bold" asChild>
+            <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white/10 text-lg px-10 h-14 rounded-full font-bold" asChild>
               <Link href="/about">
                 Learn More
               </Link>
@@ -257,11 +204,11 @@ export default function Landing() {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <h3 className="text-xl font-bold mb-4 brand-gradient-text">YEESP</h3>
-              <p className="text-gray-400">Youth Education and Employment Support Platform</p>
+              <p className="text-gray-400 text-sm">Youth Education and Employment Support Platform</p>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Platform</h4>
-              <ul className="space-y-2 text-gray-400">
+              <ul className="space-y-2 text-sm text-gray-400">
                 <li><Link href="/courses" className="hover:text-white transition">Courses</Link></li>
                 <li><Link href="/tutors" className="hover:text-white transition">Tutors</Link></li>
                 <li><Link href="/projects" className="hover:text-white transition">Projects</Link></li>
@@ -269,51 +216,26 @@ export default function Landing() {
             </div>
             <div>
               <h4 className="font-semibold mb-4">Company</h4>
-              <ul className="space-y-2 text-gray-400">
+              <ul className="space-y-2 text-sm text-gray-400">
                 <li><Link href="/about" className="hover:text-white transition">About</Link></li>
                 <li><Link href="/blog" className="hover:text-white transition">Blog</Link></li>
-                <li><Link href="/careers" className="hover:text-white transition">Careers</Link></li>
+                <li><Link href="/contact" className="hover:text-white transition">Contact</Link></li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Support</h4>
-              <ul className="space-y-2 text-gray-400">
+              <ul className="space-y-2 text-sm text-gray-400">
                 <li><Link href="/help" className="hover:text-white transition">Help Center</Link></li>
-                <li><Link href="/contact" className="hover:text-white transition">Contact</Link></li>
+                <li><Link href="/pricing" className="hover:text-white transition">Pricing</Link></li>
                 <li><Link href="/terms" className="hover:text-white transition">Terms</Link></li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-800 pt-8 text-center text-gray-400">
-            <p>
-              Developed by <span className="font-bold text-white">Fasih ur Rehman</span> | © 2024 YEESP. All rights reserved.
-            </p>
+          <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
+            <p>© 2024 YEESP. All rights reserved. | Developed by <span className="text-violet-400 font-semibold">Fasih ur Rehman</span></p>
           </div>
         </div>
       </footer>
-
-      <style>{`
-        @keyframes blob {
-          0%, 100% {
-            transform: translate(0, 0) scale(1);
-          }
-          33% {
-            transform: translate(30px, -50px) scale(1.1);
-          }
-          66% {
-            transform: translate(-20px, 20px) scale(0.9);
-          }
-        }
-        .animate-blob {
-          animation: blob 7s infinite;
-        }
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-        .animation-delay-4000 {
-          animation-delay: 4s;
-        }
-      `}</style>
     </div>
   );
 }

@@ -127,7 +127,7 @@ export function MainNav() {
                 <Button variant="ghost" size="sm" asChild className="hidden sm:flex hover:text-violet-600">
                   <Link href="/auth/login">Login</Link>
                 </Button>
-                <Button size="sm" asChild className="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white shadow-lg shadow-violet-500/30">
+                <Button size="sm" asChild>
                   <Link href="/auth/signup">Sign Up</Link>
                 </Button>
               </>
