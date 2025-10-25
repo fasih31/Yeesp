@@ -61,6 +61,10 @@ app.use((req, res, next) => {
   const adminRoutes = await import('./routes-admin');
   app.use('/api/admin', adminRoutes.default);
   
+  // Register admin settings routes
+  const adminSettingsRoutes = await import('./routes-admin-settings');
+  app.use('/api/admin', adminSettingsRoutes.default);
+  
   // Register Zoom routes
   const zoomRoutes = await import('./routes-zoom');
   app.use('/api/zoom', zoomRoutes.default);

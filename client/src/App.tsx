@@ -70,6 +70,7 @@ import AdminCourses from "@/pages/admin/courses";
 import AdminProjects from "@/pages/admin/projects";
 import AdminAnalytics from "@/pages/admin/analytics";
 import AdminSettings from "@/pages/admin/settings";
+import PlatformSettings from "@/pages/admin/platform-settings";
 import Blog from "@/pages/blog";
 import Terms from "@/pages/terms";
 import Privacy from "@/pages/privacy";
@@ -149,9 +150,9 @@ function Router() {
       <Route path="/faq" component={FAQ} />
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/maintenance" component={Maintenance} />
-      <Route path="/careers" element={<Careers />} />
-      <Route path="/help" element={<HelpCenter />} />
-      <Route path="/affiliate" element={<Affiliate />} />
+      <Route path="/careers" component={Careers} />
+      <Route path="/help" component={HelpCenter} />
+      <Route path="/affiliate" component={Affiliate} />
       <Route path="/recruiter/my-projects" component={RecruiterMyProjects} />
       <Route path="/recruiter/proposals" component={RecruiterProposals} />
       <Route path="/recruiter/hire-talent" component={RecruiterHireTalent} />
@@ -167,10 +168,11 @@ function Router() {
       <Route path="/admin/projects" component={AdminProjects} />
       <Route path="/admin/analytics" component={AdminAnalytics} />
       <Route path="/admin/settings" component={AdminSettings} />
+      <Route path="/admin/platform-settings" component={PlatformSettings} />
       <Route path="/admin/role-requests" component={AdminRoleRequests} />
       <Route path="/blog" component={Blog} />
-      <Route path="/terms" element={<Terms />} />
-      <Route path="/privacy" element={<Privacy />} />
+      <Route path="/terms" component={Terms} />
+      <Route path="/privacy" component={Privacy} />
       <Route component={NotFound} />
     </Switch>
   );
