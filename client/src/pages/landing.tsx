@@ -8,32 +8,32 @@ export default function Landing() {
   return (
     <div className="min-h-screen">
       {/* Dark Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 overflow-hidden">
+      <section className="relative min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-[#1A2238] via-[#0f1724] to-[#1A2238] overflow-hidden">
         {/* Animated Background Pattern */}
         <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#06b6d4_1px,transparent_1px),linear-gradient(to_bottom,#06b6d4_1px,transparent_1px)] bg-[size:60px_60px]"></div>
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#3A86FF_1px,transparent_1px),linear-gradient(to_bottom,#3A86FF_1px,transparent_1px)] bg-[size:60px_60px]"></div>
         </div>
         
         {/* Gradient Orbs */}
-        <div className="absolute top-20 left-10 w-72 h-72 bg-cyan-500/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-teal-500/20 rounded-full blur-3xl"></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-[#3A86FF]/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#5EF38C]/20 rounded-full blur-3xl"></div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center z-10">
-          <Badge className="mb-8 bg-cyan-500/10 backdrop-blur-sm border border-cyan-500/20 text-cyan-400 px-6 py-2.5 text-sm font-medium">
+          <Badge className="mb-8 bg-[#3A86FF]/10 backdrop-blur-sm border border-[#3A86FF]/20 text-[#3A86FF] px-6 py-2.5 text-sm font-medium">
             <Zap className="w-4 h-4 mr-2 inline" />
             Next-Generation Learning Platform
           </Badge>
 
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-8 leading-tight">
             Learn Skills.<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3A86FF] to-[#5EF38C]">
               Earn Income.
             </span><br />
             Transform Your Future.
           </h1>
 
           <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-12 leading-relaxed">
-            Join <span className="text-cyan-400 font-semibold">10,000+</span> students, tutors, and freelancers building successful careers through education and opportunity
+            Join <span className="text-[#3A86FF] font-semibold">10,000+</span> students, tutors, and freelancers building successful careers through education and opportunity
           </p>
 
           <div className="flex flex-col sm:flex-row gap-5 justify-center mb-20">
@@ -58,7 +58,7 @@ export default function Landing() {
               { icon: Star, value: "4.9/5", label: "Rating" }
             ].map((stat, i) => (
               <div key={i} className="bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10 hover:bg-white/10 transition-all duration-300 group">
-                <stat.icon className="w-10 h-10 text-cyan-400 mx-auto mb-3 group-hover:scale-110 transition-transform" />
+                <stat.icon className="w-10 h-10 text-[#3A86FF] mx-auto mb-3 group-hover:scale-110 transition-transform" />
                 <div className="text-4xl font-bold text-white mb-1">{stat.value}</div>
                 <div className="text-sm text-gray-400">{stat.label}</div>
               </div>
@@ -68,16 +68,16 @@ export default function Landing() {
       </section>
 
       {/* Features Section - Light/Dark Compatible */}
-      <section className="py-24 px-6 bg-gray-50 dark:bg-gray-900">
+      <section className="py-24 px-6 bg-background">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <Badge className="mb-4 bg-cyan-100 dark:bg-cyan-500/10 text-cyan-700 dark:text-cyan-400 border-0">
+            <Badge className="mb-4 bg-secondary/10 text-secondary border-0">
               Platform Features
             </Badge>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-              Everything You Need to <span className="text-cyan-600 dark:text-cyan-400">Succeed</span>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              Everything You Need to <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Succeed</span>
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               A complete ecosystem for learning, teaching, and earning
             </p>
           </div>
@@ -88,34 +88,34 @@ export default function Landing() {
                 icon: GraduationCap, 
                 title: "Premium Courses", 
                 desc: "Access 500+ expert-led courses across all skill levels with lifetime access",
-                gradient: "from-cyan-500 to-blue-500"
+                gradient: "from-[#2B3A67] to-[#00AEEF]"
               },
               { 
                 icon: Video, 
                 title: "Live Tutoring", 
                 desc: "1-on-1 sessions with verified tutors via Zoom and Dyte video conferencing",
-                gradient: "from-blue-500 to-purple-500"
+                gradient: "from-[#00AEEF] to-[#3A86FF]"
               },
               { 
                 icon: Briefcase, 
                 title: "Freelance Hub", 
                 desc: "Find opportunities, submit bids, and build your professional career",
-                gradient: "from-purple-500 to-pink-500"
+                gradient: "from-[#3A86FF] to-[#00C896]"
               },
               { 
                 icon: Award, 
                 title: "Certifications", 
                 desc: "Earn verified certificates with QR codes to showcase your achievements",
-                gradient: "from-pink-500 to-red-500"
+                gradient: "from-[#00C896] to-[#5EF38C]"
               },
             ].map((feature, i) => (
-              <Card key={i} className="group hover:shadow-2xl transition-all duration-500 border-0 bg-white dark:bg-gray-800 overflow-hidden">
+              <Card key={i} className="group hover:shadow-2xl transition-all duration-500 border-border bg-card overflow-hidden">
                 <div className="p-8 space-y-4">
                   <div className={`h-16 w-16 rounded-2xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg`}>
                     <feature.icon className="h-8 w-8 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">{feature.title}</h3>
-                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{feature.desc}</p>
+                  <h3 className="text-2xl font-bold group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-secondary transition-all">{feature.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{feature.desc}</p>
                 </div>
                 <div className={`h-1 bg-gradient-to-r ${feature.gradient} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500`}></div>
               </Card>

@@ -41,24 +41,24 @@ export default function Courses() {
   const paginatedCourses = filteredCourses?.slice(startIndex, endIndex);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="min-h-screen bg-background">
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-12 mt-4">
         {/* Promotional Banner */}
-        <div className="mb-12 relative overflow-hidden rounded-3xl border-2 border-cyan-200 dark:border-cyan-500/20">
-          <div className="bg-gradient-to-br from-cyan-50 to-teal-50 dark:from-cyan-950/50 dark:to-teal-950/50 rounded-3xl p-8 md:p-12 relative overflow-hidden">
+        <div className="mb-12 relative overflow-hidden rounded-3xl border-2 border-secondary/20">
+          <div className="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-3xl p-8 md:p-12 relative overflow-hidden">
             <div className="absolute inset-0 bg-dot-pattern opacity-10" />
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
               <div className="flex-1">
-                <Badge className="mb-4 animate-fade-in bg-gradient-to-r from-cyan-500 to-teal-500 text-white border-0">Limited Time Offer</Badge>
-                <h2 className="text-3xl md:text-4xl font-bold mb-4 animate-slide-up text-gray-900 dark:text-white">
+                <Badge className="mb-4 animate-fade-in bg-gradient-to-r from-secondary to-accent text-white border-0">Limited Time Offer</Badge>
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 animate-slide-up">
                   Get 50% Off All Courses!
                 </h2>
-                <p className="text-lg text-gray-700 dark:text-gray-300 mb-6 animate-fade-in">
+                <p className="text-lg text-muted-foreground mb-6 animate-fade-in">
                   Start learning today with our biggest sale of the year. Offer ends soon!
                 </p>
                 <div className="flex gap-4 animate-bounce-in">
-                  <Button size="lg" className="shadow-xl">
+                  <Button size="lg" className="shadow-xl bg-primary">
                     Browse Deals
                   </Button>
                   <Button size="lg" variant="outline">
@@ -74,10 +74,10 @@ export default function Courses() {
         </div>
 
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2 text-gray-900 dark:text-white" data-testid="text-courses-title">
-            Explore <span className="text-cyan-600 dark:text-cyan-400">Courses</span>
+          <h1 className="text-4xl font-bold mb-2" data-testid="text-courses-title">
+            Explore <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Courses</span>
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300">
+          <p className="text-lg text-muted-foreground">
             Discover thousands of courses across various categories
           </p>
         </div>
@@ -116,9 +116,9 @@ export default function Courses() {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {paginatedCourses.map((course) => (
-              <Card key={course.id} className="hover-elevate flex flex-col bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-all" data-testid={`card-course-${course.id}`}>
-                <div className="aspect-video bg-gradient-to-br from-cyan-500/20 to-teal-500/20 dark:from-cyan-500/10 dark:to-teal-500/10 rounded-t-lg flex items-center justify-center">
-                  <span className="text-6xl opacity-20 dark:opacity-10">{course.category.charAt(0).toUpperCase()}</span>
+              <Card key={course.id} className="hover-elevate flex flex-col bg-card border-border hover:shadow-2xl transition-all" data-testid={`card-course-${course.id}`}>
+                <div className="aspect-video bg-gradient-to-br from-primary/10 to-secondary/10 rounded-t-lg flex items-center justify-center">
+                  <span className="text-6xl opacity-20">{course.category.charAt(0).toUpperCase()}</span>
                 </div>
 
                 <CardHeader className="flex-1">
