@@ -6,15 +6,7 @@ import { Link } from "wouter";
 export default function Blog() {
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <Link href="/">
-            <h1 className="text-2xl font-bold">YEESP Blog</h1>
-          </Link>
-        </div>
-      </header>
-
-      <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="max-w-7xl mx-auto px-6 py-12 mt-4">
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2">Latest from YEESP</h1>
           <p className="text-lg text-muted-foreground">News, updates, and educational content</p>

@@ -44,18 +44,7 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b bg-background sticky top-0 z-50 backdrop-blur">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/">
-            <h1 className="text-2xl font-bold">YEESP</h1>
-          </Link>
-          <Button variant="outline" asChild>
-            <Link href="/login">Sign In</Link>
-          </Button>
-        </div>
-      </header>
-
-      <div className="max-w-7xl mx-auto px-6 py-16">
+      <div className="max-w-7xl mx-auto px-6 py-16 mt-4">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
           <p className="text-xl text-muted-foreground">

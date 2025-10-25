@@ -7,24 +7,8 @@ import { Badge } from "@/components/ui/badge";
 export default function About() {
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b bg-background sticky top-0 z-50 backdrop-blur">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/">
-            <h1 className="text-2xl font-bold" data-testid="text-logo">YEESP</h1>
-          </Link>
-          <div className="flex gap-4">
-            <Button variant="outline" asChild>
-              <Link href="/login">Sign In</Link>
-            </Button>
-            <Button asChild>
-              <Link href="/register">Get Started</Link>
-            </Button>
-          </div>
-        </div>
-      </header>
-
       {/* Hero Section */}
-      <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="max-w-7xl mx-auto px-6 py-12 mt-4">
         <div className="text-center mb-16 relative">
           <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 blur-3xl -z-10" />
           <Badge className="mb-4 animate-fade-in">Our Story</Badge>

@@ -42,18 +42,7 @@ export default function TutorProfile() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b bg-background">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/">
-            <h1 className="text-2xl font-bold">YEESP</h1>
-          </Link>
-          <Button asChild variant="outline">
-            <Link href="/tutors">Back to Tutors</Link>
-          </Button>
-        </div>
-      </header>
-
-      <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="max-w-7xl mx-auto px-6 py-12 mt-4">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <div className="mb-8">

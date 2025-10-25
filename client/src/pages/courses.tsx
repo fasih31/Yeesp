@@ -42,33 +42,8 @@ export default function Courses() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b bg-background sticky top-0 z-50 backdrop-blur">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
-          <Link href="/">
-            <h1 className="text-2xl font-bold" data-testid="text-logo">YEESP</h1>
-          </Link>
-          <div className="flex-1 max-w-xl">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search courses..."
-                className="pl-10"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                data-testid="input-search-courses"
-              />
-            </div>
-          </div>
-          <Button variant="outline" asChild data-testid="button-login">
-            <Link href="/login">Sign In</Link>
-          </Button>
-        </div>
-      </header>
-
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="max-w-7xl mx-auto px-6 py-12 mt-4">
         {/* Promotional Banner */}
         <div className="mb-12 relative overflow-hidden rounded-3xl bg-gradient-to-r from-primary via-accent to-primary animate-gradient p-[2px]">
           <div className="bg-background rounded-3xl p-8 md:p-12 relative overflow-hidden">
