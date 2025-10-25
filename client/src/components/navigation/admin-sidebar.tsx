@@ -6,6 +6,7 @@ import { NotificationDropdown } from "@/components/NotificationDropdown";
 const adminMenuItems = [
   { href: "/admin/dashboard", icon: Home, label: "Dashboard" },
   { href: "/admin/users", icon: Users, label: "Users" },
+  { href: "/admin/role-requests", icon: Shield, label: "Role Requests" },
   { href: "/admin/courses", icon: BookOpen, label: "Courses" },
   { href: "/admin/projects", icon: Briefcase, label: "Projects" },
   { href: "/admin/analytics", icon: BarChart, label: "Analytics" },

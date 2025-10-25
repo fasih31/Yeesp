@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Home, BookOpen, Calendar, Award, Briefcase, DollarSign, MessageSquare, Settings, HelpCircle } from "lucide-react";
+import { Home, BookOpen, Calendar, Award, Briefcase, DollarSign, MessageSquare, Settings, HelpCircle, UserPlus } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
 import { NotificationDropdown } from "@/components/NotificationDropdown";
 
@@ -15,6 +15,7 @@ const studentMenuItems = [
   { href: "/student/payments", icon: DollarSign, label: "Payments" },
   { href: "/student/messages", icon: MessageSquare, label: "Messages" },
   { href: "/student/profile-settings", icon: Settings, label: "Settings" },
+  { href: "/student/role-request", icon: UserPlus, label: "Request Role Access" },
   { href: "/student/support", icon: HelpCircle, label: "Support" },
 ];
 

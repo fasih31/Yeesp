@@ -55,9 +55,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ error: "Invalid credentials" });
       }
 
+      // Get approved additional roles
+      const approvedRoles = await storage.getUserApprovedRoles(user.id);
+
       // Don't send password back
       const { password: _, ...userWithoutPassword } = user;
-      res.json({ user: userWithoutPassword });
+      res.json({ 
+        user: {
+          ...userWithoutPassword,
+          approvedRoles
+        }
+      });
     } catch (error: any) {
       res.status(400).json({ error: error.message });
     }
@@ -434,6 +442,130 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // ===== REVIEW ROUTES =====
   
   app.post("/api/reviews", async (req, res) => {
+
+
+  // ===== ROLE REQUEST ROUTES =====
+  
+  app.post("/api/role-requests", async (req, res) => {
+    try {
+      const userId = (req as any).user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      const { requestedRole, reason } = req.body;
+
+      // Validate requested role
+      const validRoles = ['student', 'tutor', 'freelancer', 'recruiter'];
+      if (!validRoles.includes(requestedRole)) {
+        return res.status(400).json({ error: "Invalid role requested" });
+      }
+
+      // Check if user already has this role
+      const user = await storage.getUser(userId);
+      if (user?.role === requestedRole) {
+        return res.status(400).json({ error: "You already have this role as your primary role" });
+      }
+
+      const approvedRoles = await storage.getUserApprovedRoles(userId);
+      if (approvedRoles.includes(requestedRole)) {
+        return res.status(400).json({ error: "You already have access to this role" });
+      }
+
+      // Check for pending request
+      const userRequests = await storage.getRoleRequestsByUser(userId);
+      const pending = userRequests.find(r => r.requestedRole === requestedRole && r.status === 'pending');
+      if (pending) {
+        return res.status(400).json({ error: "You already have a pending request for this role" });
+      }
+
+      const request = await storage.createRoleRequest({
+        userId,
+        requestedRole,
+        reason,
+      });
+
+      res.json(request);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.get("/api/role-requests/my", async (req, res) => {
+    try {
+      const userId = (req as any).user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      const requests = await storage.getRoleRequestsByUser(userId);
+      res.json(requests);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.get("/api/role-requests/pending", async (req, res) => {
+    try {
+      const userRole = (req as any).user?.role;
+      if (userRole !== 'admin') {
+        return res.status(403).json({ error: "Admin access required" });
+      }
+
+      const requests = await storage.getPendingRoleRequests();
+      res.json(requests);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/role-requests/:id/approve", async (req, res) => {
+    try {
+      const adminId = (req as any).user?.id;
+      const userRole = (req as any).user?.role;
+
+      if (userRole !== 'admin') {
+        return res.status(403).json({ error: "Admin access required" });
+      }
+
+      const { reviewNotes } = req.body;
+
+      await storage.approveRoleRequest(req.params.id, adminId);
+      
+      if (reviewNotes) {
+        await storage.updateRoleRequest(req.params.id, { reviewNotes });
+      }
+
+      res.json({ success: true, message: "Role request approved" });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/role-requests/:id/reject", async (req, res) => {
+    try {
+      const adminId = (req as any).user?.id;
+      const userRole = (req as any).user?.role;
+
+      if (userRole !== 'admin') {
+        return res.status(403).json({ error: "Admin access required" });
+      }
+
+      const { reviewNotes } = req.body;
+
+      await storage.updateRoleRequest(req.params.id, {
+        status: 'rejected',
+        reviewedBy: adminId,
+        reviewedAt: new Date(),
+        reviewNotes: reviewNotes || 'Request rejected',
+      });
+
+      res.json({ success: true, message: "Role request rejected" });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
     try {
       const data = insertReviewSchema.parse(req.body);
       const review = await storage.createReview(data);

@@ -13,6 +13,8 @@ import type {
   Payment, InsertPayment,
   Certificate, InsertCertificate,
   Notification, InsertNotification,
+  RoleRequest, InsertRoleRequest,
+  UserApprovedRole, InsertUserApprovedRole,
 } from "@shared/schema";
 
 export interface IStorage {
@@ -22,6 +24,12 @@ export interface IStorage {
   createUser(user: InsertUser): Promise<User>;
   updateUser(id: string, user: Partial<InsertUser>): Promise<User | undefined>;
   getUsersByRole(role: string): Promise<User[]>;
+  getUserApprovedRoles(userId: string): Promise<string[]>;
+  createRoleRequest(data: InsertRoleRequest): Promise<RoleRequest>;
+  getRoleRequestsByUser(userId: string): Promise<RoleRequest[]>;
+  getPendingRoleRequests(): Promise<RoleRequest[]>;
+  updateRoleRequest(id: string, data: Partial<RoleRequest>): Promise<RoleRequest | undefined>;
+  approveRoleRequest(requestId: string, adminId: string): Promise<void>;
 
   // Courses
   getCourse(id: string): Promise<Course | undefined>;
@@ -126,6 +134,71 @@ export class DatabaseStorage implements IStorage {
   async getUsersByRole(role: string): Promise<User[]> {
     return await db.select().from(schema.users).where(eq(schema.users.role, role));
   }
+
+  async getUserApprovedRoles(userId: string): Promise<string[]> {
+    const approvedRoles = await db
+      .select()
+      .from(schema.userApprovedRoles)
+      .where(eq(schema.userApprovedRoles.userId, userId));
+    return approvedRoles.map(r => r.approvedRole);
+  }
+
+  async createRoleRequest(data: InsertRoleRequest): Promise<RoleRequest> {
+    const [request] = await db.insert(schema.roleRequests).values(data).returning();
+    return request;
+  }
+
+  async getRoleRequestsByUser(userId: string): Promise<RoleRequest[]> {
+    return await db
+      .select()
+      .from(schema.roleRequests)
+      .where(eq(schema.roleRequests.userId, userId))
+      .orderBy(schema.roleRequests.createdAt);
+  }
+
+  async getPendingRoleRequests(): Promise<RoleRequest[]> {
+    return await db
+      .select()
+      .from(schema.roleRequests)
+      .where(eq(schema.roleRequests.status, 'pending'))
+      .orderBy(schema.roleRequests.createdAt);
+  }
+
+  async updateRoleRequest(id: string, data: Partial<RoleRequest>): Promise<RoleRequest | undefined> {
+    const [request] = await db
+      .update(schema.roleRequests)
+      .set(data)
+      .where(eq(schema.roleRequests.id, id))
+      .returning();
+    return request;
+  }
+
+  async approveRoleRequest(requestId: string, adminId: string): Promise<void> {
+    const [request] = await db
+      .select()
+      .from(schema.roleRequests)
+      .where(eq(schema.roleRequests.id, requestId));
+
+    if (!request) throw new Error('Role request not found');
+
+    // Update request status
+    await db
+      .update(schema.roleRequests)
+      .set({
+        status: 'approved',
+        reviewedBy: adminId,
+        reviewedAt: new Date(),
+      })
+      .where(eq(schema.roleRequests.id, requestId));
+
+    // Add approved role
+    await db.insert(schema.userApprovedRoles).values({
+      userId: request.userId,
+      approvedRole: request.requestedRole,
+      approvedBy: adminId,
+    });
+  }
+
 
   // Courses
   async getCourse(id: string): Promise<Course | undefined> {

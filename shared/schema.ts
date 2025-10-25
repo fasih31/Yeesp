@@ -40,40 +40,9 @@ export const lessons = pgTable("lessons", {
   courseId: varchar("course_id").notNull().references(() => courses.id),
   title: text("title").notNull(),
   content: text("content").notNull(),
-  type: text("type").notNull().default('video'), // 'video', 'live_session', 'assignment', 'quiz', 'reading'
   videoUrl: text("video_url"),
   order: integer("order").notNull(),
   duration: integer("duration"), // in minutes
-  attachments: text("attachments").array(), // File URLs for readings/assignments
-  dueDate: timestamp("due_date"), // For assignments
-  maxScore: integer("max_score"), // For assignments and quizzes
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
-
-// Quiz questions (for quiz-type lessons)
-export const quizQuestions = pgTable("quiz_questions", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  lessonId: varchar("lesson_id").notNull().references(() => lessons.id),
-  question: text("question").notNull(),
-  type: text("type").notNull(), // 'multiple_choice', 'true_false', 'short_answer'
-  options: text("options").array(), // For multiple choice
-  correctAnswer: text("correct_answer").notNull(),
-  points: integer("points").notNull().default(1),
-  order: integer("order").notNull(),
-  explanation: text("explanation"), // Optional explanation for the answer
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
-
-// Student quiz attempts
-export const quizAttempts = pgTable("quiz_attempts", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  lessonId: varchar("lesson_id").notNull().references(() => lessons.id),
-  studentId: varchar("student_id").notNull().references(() => users.id),
-  answers: jsonb("answers").notNull(), // {questionId: answer}
-  score: integer("score").notNull(),
-  maxScore: integer("max_score").notNull(),
-  passed: boolean("passed").notNull().default(false),
-  attemptedAt: timestamp("attempted_at").defaultNow().notNull(),
 });
 
 // Course enrollments
@@ -94,26 +63,10 @@ export const sessions = pgTable("sessions", {
   title: text("title").notNull(),
   scheduledAt: timestamp("scheduled_at").notNull(),
   duration: integer("duration").notNull(), // in minutes
-  status: text("status").notNull().default('scheduled'), // 'scheduled', 'in_progress', 'completed', 'cancelled'
+  status: text("status").notNull().default('scheduled'), // 'scheduled', 'completed', 'cancelled'
   meetingUrl: text("meeting_url"),
-  videoRoomId: text("video_room_id"), // Dyte room ID for video conferencing
-  recordingUrl: text("recording_url"), // Video recording URL
   price: decimal("price", { precision: 10, scale: 2 }).notNull(),
-  startedAt: timestamp("started_at"), // Actual start time
-  endedAt: timestamp("ended_at"), // Actual end time
   createdAt: timestamp("created_at").defaultNow().notNull(),
-});
-
-// Session attendance tracking
-export const attendance = pgTable("attendance", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  sessionId: varchar("session_id").notNull().references(() => sessions.id),
-  userId: varchar("user_id").notNull().references(() => users.id),
-  joinedAt: timestamp("joined_at").notNull().defaultNow(),
-  leftAt: timestamp("left_at"),
-  duration: integer("duration"), // Total time in session (minutes)
-  status: text("status").notNull().default('present'), // 'present', 'absent', 'late'
-  notes: text("notes"), // Optional notes from tutor
 });
 
 // Freelance projects
@@ -353,6 +306,30 @@ export const insertSessionSchema = createInsertSchema(sessions).omit({
 export const insertProjectSchema = createInsertSchema(projects).omit({
   id: true,
   createdAt: true,
+
+
+// Role Requests - for users requesting additional roles
+export const roleRequests = pgTable("role_requests", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  requestedRole: text("requested_role").notNull(), // 'student', 'tutor', 'freelancer', 'recruiter'
+  reason: text("reason").notNull(),
+  status: text("status").notNull().default('pending'), // 'pending', 'approved', 'rejected'
+  reviewedBy: varchar("reviewed_by").references(() => users.id),
+  reviewNotes: text("review_notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  reviewedAt: timestamp("reviewed_at"),
+});
+
+// User Approved Roles - tracks additional roles a user has been granted
+export const userApprovedRoles = pgTable("user_approved_roles", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  approvedRole: text("approved_role").notNull(),
+  approvedBy: varchar("approved_by").notNull().references(() => users.id),
+  approvedAt: timestamp("approved_at").defaultNow().notNull(),
+});
+
 });
 
 export const insertBidSchema = createInsertSchema(bids).omit({
@@ -485,3 +462,24 @@ export type InsertKycDocument = z.infer<typeof insertKycDocumentSchema>;
 export type InsertDispute = z.infer<typeof insertDisputeSchema>;
 export type InsertWallet = z.infer<typeof insertWalletSchema>;
 export type InsertWalletTransaction = z.infer<typeof insertWalletTransactionSchema>;
+
+
+export const insertRoleRequestSchema = createInsertSchema(roleRequests).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertUserApprovedRoleSchema = createInsertSchema(userApprovedRoles).omit({
+  id: true,
+  approvedAt: true,
+});
+
+
+
+export type RoleRequest = typeof roleRequests.$inferSelect;
+export type UserApprovedRole = typeof userApprovedRoles.$inferSelect;
+
+
+
+export type InsertRoleRequest = z.infer<typeof insertRoleRequestSchema>;
+export type InsertUserApprovedRole = z.infer<typeof insertUserApprovedRoleSchema>;

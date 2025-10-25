@@ -36,6 +36,8 @@ import StudentPayments from "@/pages/student/payments";
 import StudentMessages from "@/pages/student/messages";
 import StudentProfileSettings from "@/pages/student/profile-settings";
 import StudentSupport from "@/pages/student/support";
+import RoleRequest from "@/pages/student/role-request";
+import AdminRoleRequests from "@/pages/admin/role-requests";
 import TutorMyCourses from "@/pages/tutor/my-courses";
 import TutorCreateCourse from "@/pages/tutor/create-course";
 import TutorSessions from "@/pages/tutor/sessions";
@@ -116,6 +118,7 @@ function Router() {
       <Route path="/student/messages" component={StudentMessages} />
       <Route path="/student/profile-settings" component={StudentProfileSettings} />
       <Route path="/student/support" component={StudentSupport} />
+      <Route path="/student/role-request" component={RoleRequest} />
       <Route path="/student/quiz/:id" component={QuizExam} />
       <Route path="/student/live-session/:id" component={LiveSession} />
       <Route path="/student/discussion-forum" component={DiscussionForum} />
@@ -158,6 +161,7 @@ function Router() {
       <Route path="/admin/projects" component={AdminProjects} />
       <Route path="/admin/analytics" component={AdminAnalytics} />
       <Route path="/admin/settings" component={AdminSettings} />
+      <Route path="/admin/role-requests" component={AdminRoleRequests} />
       <Route path="/blog" component={Blog} />
       <Route path="/terms" component={Terms} />
       <Route path="/privacy" component={Privacy} />
