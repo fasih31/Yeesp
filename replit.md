@@ -5,6 +5,18 @@ YEESP is a multi-role digital learning and freelancing ecosystem empowering yout
 
 ## Recent Changes (October 25, 2025)
 
+### Latest Bug Fixes & Improvements - COMPLETE ✅
+- **Signup Form Fixed**: Changed field name from 'fullName' to 'name' to match backend schema
+- **Course Creation Fixed**: Replaced hardcoded instructorId with authenticated user ID from useAuth hook
+  - Added proper type coercion for duration and price fields (string → number) before API submission
+- **Project Creation Fixed**: Corrected apiRequest call to remove duplicate JSON parsing
+- **Consistent Design**: Added gradient backgrounds across courses, projects, and about pages matching landing page design
+- **Dark Mode Styling**: Fixed dark mode issues in landing page footer and CTA sections
+  - All text colors now properly theme-aware with light/dark variants
+- **SEO Improvements**: Created Google-standard XML sitemap and robots.txt file
+  - Sitemap includes all major pages with proper priority and changefreq values
+  - Robots.txt configured to allow all pages except protected dashboards
+
 ### Critical Security Hardening - COMPLETE ✅
 - **Comprehensive Authentication & Authorization**: All API routes now properly secured
   - requireAuth middleware on all POST/PATCH/DELETE operations

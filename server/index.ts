@@ -1,5 +1,6 @@
 import express, { type Request, Response, NextFunction } from "express";
 import session from "express-session";
+import createMemoryStore from "memorystore";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcryptjs";
@@ -12,6 +13,7 @@ import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
 import { storage } from "./storage";
 
 const app = express();
+const MemoryStore = createMemoryStore(session);
 
 declare module 'http' {
   interface IncomingMessage {
@@ -19,14 +21,18 @@ declare module 'http' {
   }
 }
 
-// Session configuration
+// Session configuration with memorystore
 app.use(session({
   secret: process.env.SESSION_SECRET || 'yeesp-secret-key-change-in-production',
   resave: false,
   saveUninitialized: false,
+  store: new MemoryStore({
+    checkPeriod: 86400000 // prune expired entries every 24h
+  }),
   cookie: {
-    secure: process.env.NODE_ENV === 'production',
+    secure: false, // Set to false for Replit development environment
     httpOnly: true,
+    sameSite: 'lax',
     maxAge: 24 * 60 * 60 * 1000 // 24 hours
   }
 }));

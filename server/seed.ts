@@ -61,6 +61,16 @@ async function seed() {
     bio: "We help businesses transform through technology",
   });
 
+  const admin1 = await storage.createUser({
+    email: "admin@yeesp.com",
+    name: "Admin User",
+    password: hashedPassword,
+    role: "admin",
+    headline: "Platform Administrator",
+    bio: "Managing and moderating the YEESP platform",
+    verified: true,
+  });
+
   // Create courses
   const course1 = await storage.createCourse({
     title: "Complete Web Development Bootcamp",
@@ -214,10 +224,11 @@ async function seed() {
 
   console.log("✅ Database seeded successfully!");
   console.log("\nTest accounts (password for all: password123):");
-  console.log("Student: student@yeesp.com");
-  console.log("Tutor: tutor@yeesp.com");
+  console.log("Admin:      admin@yeesp.com");
+  console.log("Student:    student@yeesp.com");
+  console.log("Tutor:      tutor@yeesp.com");
   console.log("Freelancer: freelancer@yeesp.com");
-  console.log("Recruiter: recruiter@yeesp.com");
+  console.log("Recruiter:  recruiter@yeesp.com");
 }
 
 seed().catch(console.error);
