@@ -61,7 +61,30 @@ The platform is built with a React 18 + TypeScript frontend using Vite, Wouter f
 
 ## Recent Changes (October 25, 2025)
 
-### Admin Reports & Data Export System (October 25, 2025 - Final Session)
+### Critical Fixes - Login/Signup & Missing Pages (October 25, 2025 - Session 3)
+**Database & Authentication Fixed:**
+- Fixed missing `user_approved_roles` and `role_requests` tables causing login failures
+- Updated db:push script to `DRIZZLE_KIT_NO_PROMPT=1 drizzle-kit push --force` for automated syncing
+- Created SQL tables directly to resolve blocking database sync issue
+
+**Auth Pages Created:**
+- Built professional `/auth/login` page with email/password validation
+- Built `/auth/signup` page with role selection (Student, Tutor, Freelancer, Recruiter)
+- Both pages use proper form validation with Zod schemas
+- Integrated with existing auth context using `useAuth()` hook
+- Clean UI with YEESP branding and responsive design
+
+**Navigation Fixed:**
+- Updated main navigation links to point to `/auth/login` and `/auth/signup`
+- Removed broken link references
+- All pages now accessible and properly routed
+
+**Branding Verification:**
+- Confirmed NO "Replit" branding visible in UI
+- All branding shows "YEESP" correctly
+- Logo, navigation, and meta tags all use YEESP identity
+
+### Admin Reports & Data Export System (October 25, 2025 - Session 2)
 **Comprehensive Reporting Dashboard:**
 
 **Admin Reports Page:**
