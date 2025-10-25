@@ -1,4 +1,4 @@
-import { lazy } from "react";
+import { lazy, Suspense } from "react";
 import { Route, Switch } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -270,7 +270,16 @@ function Router() {
         )}
       </Route>
       <Route path="/blog" component={Blog} />
-          <Route path="/blog/:slug" component={lazy(() => import("@/pages/blog-detail"))} />
+      <Route path="/blog/:slug">
+        {(params) => (
+          <Suspense fallback={<div>Loading...</div>}>
+            {(() => {
+              const BlogDetail = lazy(() => import("@/pages/blog-detail"));
+              return <BlogDetail />;
+            })()}
+          </Suspense>
+        )}
+      </Route>
       <Route path="/terms" component={Terms} />
       <Route path="/privacy" component={Privacy} />
       <Route component={NotFound} />
