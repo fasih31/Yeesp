@@ -43,7 +43,10 @@ export default function Login() {
         description: "You have successfully logged in",
       });
 
-      setLocation("/");
+      // Redirect to dashboard - AuthRedirect will route to correct role-based dashboard
+      setTimeout(() => {
+        setLocation("/dashboard");
+      }, 100);
     } catch (error: any) {
       toast({
         variant: "destructive",
