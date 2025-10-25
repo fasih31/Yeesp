@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { insertUserSchema, insertCourseSchema, insertEnrollmentSchema, insertSessionSchema, insertProjectSchema, insertBidSchema, insertReviewSchema } from "@shared/schema";
 import Stripe from "stripe";
 import bcrypt from "bcryptjs";
+import passport from "passport";
 
 const stripe = process.env.STRIPE_SECRET_KEY 
   ? new Stripe(process.env.STRIPE_SECRET_KEY, {
