@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BookOpen, Clock, Award, TrendingUp, Calendar } from "lucide-react";
+import { BookOpen, Clock, Award, TrendingUp, Calendar, Flame } from "lucide-react";
 import type { Enrollment, Course, Session, Certificate } from "@shared/schema";
 
 export default function StudentDashboard() {
@@ -28,7 +28,7 @@ export default function StudentDashboard() {
     certificates: certificates?.length || 0,
   };
 
-  const upcomingSessions = sessions?.filter((s) => 
+  const upcomingSessions = sessions?.filter((s) =>
     s.status === 'scheduled' && new Date(s.scheduledAt) > new Date()
   ).slice(0, 3);
 
@@ -45,6 +45,54 @@ export default function StudentDashboard() {
             Track your learning progress and achievements
           </p>
         </div>
+
+        {/* Quick Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Time Invested</CardTitle>
+              <Clock className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">12.5h</div>
+              <p className="text-xs text-green-600">+2.5h this week</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Courses Active</CardTitle>
+              <BookOpen className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{enrollments?.length || 0}</div>
+              <p className="text-xs text-muted-foreground">in progress</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Current Streak</CardTitle>
+              <Flame className="h-4 w-4 text-orange-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">14</div>
+              <p className="text-xs text-muted-foreground">days</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Next Session</CardTitle>
+              <Calendar className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">Today</div>
+              <p className="text-xs text-muted-foreground">2:00 PM</p>
+            </CardContent>
+          </Card>
+        </div>
+
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

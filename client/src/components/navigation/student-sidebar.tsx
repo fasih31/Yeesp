@@ -58,6 +58,38 @@ export function StudentSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/student/achievements">
+                    <Award className="mr-2 h-4 w-4" />
+                    Achievements
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/student/ai-study-assistant">
+                    <Award className="mr-2 h-4 w-4" />
+                    AI Study Assistant
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/student/project-showcase">
+                    <Award className="mr-2 h-4 w-4" />
+                    Project Showcase
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/student/peer-code-review">
+                    <Award className="mr-2 h-4 w-4" />
+                    Code Review
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
