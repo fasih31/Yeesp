@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { db } from "./db";
-import { users, courses, projects, kycDocuments, disputes, payments, sessions } from "@shared/schema";
+import { users, courses, projects, kycDocuments, disputes, payments, sessions, bids } from "@shared/schema";
 import { eq, count, sql } from "drizzle-orm";
 import { requireAuth, requireRole } from "./middleware/auth";
 import bcrypt from "bcryptjs";

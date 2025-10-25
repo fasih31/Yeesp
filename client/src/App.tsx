@@ -271,14 +271,14 @@ function Router() {
       </Route>
       <Route path="/blog" component={Blog} />
       <Route path="/blog/:slug">
-        {(params) => (
-          <Suspense fallback={<div>Loading...</div>}>
-            {(() => {
-              const BlogDetail = lazy(() => import("@/pages/blog-detail"));
-              return <BlogDetail />;
-            })()}
-          </Suspense>
-        )}
+        {(params) => {
+          const BlogDetail = lazy(() => import("@/pages/blog-detail"));
+          return (
+            <Suspense fallback={<div>Loading...</div>}>
+              <BlogDetail />
+            </Suspense>
+          );
+        }}
       </Route>
       <Route path="/terms" component={Terms} />
       <Route path="/privacy" component={Privacy} />
