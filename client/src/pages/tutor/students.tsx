@@ -7,8 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Search, Mail, MessageSquare, Users } from "lucide-react";
-import LoadingSpinner from "@/components/LoadingSpinner";
-import EmptyState from "@/components/EmptyState";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { EmptyState } from "@/components/EmptyState";
 
 export default function TutorStudents() {
   const [searchQuery, setSearchQuery] = useState("");

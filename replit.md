@@ -37,6 +37,7 @@ The platform is built with a React 18 + TypeScript frontend using Vite, Wouter f
 - **LMS**: Courses with multiple lesson types (video, live_session, assignment, quiz, reading), submissions, certificates, quizzes with attempts tracking.
 - **Enhanced Course Creation**: LessonBuilder component supporting video lessons, live sessions, assignments with due dates, quizzes with questions, and reading materials.
 - **Tutoring Marketplace**: Session scheduling, 1-on-1 video calls, reviews.
+- **Video Conferencing**: Dual provider support (Dyte and Zoom) for flexible video session hosting with automatic meeting creation and management.
 - **Freelancing Platform**: Project bidding, contracts, milestones, escrow payments.
 - **KYC Verification**: Document upload, admin review, and verification status.
 - **Messaging System**: Real-time 1-on-1 chat.
@@ -51,5 +52,15 @@ The platform is built with a React 18 + TypeScript frontend using Vite, Wouter f
 - **Stripe**: Payment processing (blueprint integrated, ready for API keys).
 - **SendGrid**: Email notifications (connection established).
 - **Dyte**: Video conferencing SDK for live video sessions.
+- **Zoom**: Server-to-Server OAuth integration for programmatic meeting creation and management.
 - **PostgreSQL**: Primary database.
 - **Replit**: Hosting platform.
+
+## Recent Changes (October 25, 2025)
+### Zoom Integration
+- Added Zoom Server-to-Server OAuth authentication service
+- Created Zoom meetings API for programmatic meeting creation, retrieval, updates, and deletion
+- Updated sessions schema to support multiple video providers (Dyte/Zoom)
+- Added Zoom-specific fields: zoomMeetingId, zoomPassword, videoProvider
+- Implemented API endpoints: `/api/zoom/create-meeting`, `/api/zoom/meeting/:id`, `/api/zoom/session/:id/zoom-meeting`
+- Sessions can now use either Dyte or Zoom as the video provider
