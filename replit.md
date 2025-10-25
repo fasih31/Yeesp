@@ -56,6 +56,9 @@ The platform is built with a React 18 + TypeScript frontend using Vite, Wouter f
 - **PostgreSQL**: Primary database.
 - **Replit**: Hosting platform.
 
+## Developer Information
+**Developed by:** Fasih ur Rehman
+
 ## Recent Changes (October 25, 2025)
 ### Zoom Integration
 - Added Zoom Server-to-Server OAuth authentication service with automatic token refresh
@@ -95,3 +98,24 @@ The platform is built with a React 18 + TypeScript frontend using Vite, Wouter f
 - Added metadata jsonb field to notifications table for rich notification data
 - Foundation ready for SendGrid integration (requires SENDGRID_API_KEY)
 - Existing email service supports development mode logging
+
+### Branding & UI Updates
+- Removed all proprietary platform references - code is now generic and portable
+- Integrated custom YEESP logo (blue bird icon) throughout application:
+  * Favicon in browser tab
+  * Main navigation header
+  * All role-based sidebars (Student, Tutor, Freelancer, Recruiter, Admin)
+- Added developer credit to Fasih ur Rehman in footer
+- Updated environment variables to use generic APP_URL instead of platform-specific domains
+
+### Certificate Generation System
+- Complete PDF certificate generation service using PDFKit
+- Professional certificate design with YEESP branding
+- QR code integration for certificate verification
+- API endpoints for certificate issuance, download, and verification:
+  * POST /api/certificates/issue - Issue certificate for completed courses
+  * GET /api/certificates/download/:id - Download certificate as PDF
+  * GET /api/certificates/my-certificates - List user's certificates
+  * GET /api/certificates/verify/:id - Public certificate verification
+- Automatic certificate issuance upon course completion
+- Verification URL embedded in QR code
