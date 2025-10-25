@@ -35,13 +35,15 @@ export default function Login() {
     try {
       setIsLoading(true);
       await login(data.email, data.password);
+      
       toast({
         title: "Welcome back!",
         description: "You have successfully signed in.",
       });
-      // Small delay to ensure session is set
+      
+      // Redirect to dashboard - AuthRedirect component will handle role-based routing
       setTimeout(() => {
-        window.location.href = '/dashboard/student';
+        setLocation('/dashboard');
       }, 100);
     } catch (error: any) {
       toast({

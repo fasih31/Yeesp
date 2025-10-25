@@ -94,12 +94,16 @@ import Affiliate from "@/pages/affiliate";
 import AuthLogin from "@/pages/auth/login";
 import AuthSignup from "@/pages/auth/signup";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { AuthRedirect } from "@/components/AuthRedirect";
 
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Landing} />
+      <Route path="/dashboard">
+        {() => <AuthRedirect />}
+      </Route>
       <Route path="/register" component={Register} />
       <Route path="/login" component={Login} />
       <Route path="/auth/login" component={AuthLogin} />
