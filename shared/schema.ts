@@ -445,6 +445,12 @@ export const insertWalletTransactionSchema = createInsertSchema(walletTransactio
   createdAt: true,
 });
 
+export const insertEmailTemplateSchema = createInsertSchema(emailTemplates).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 // Study Groups table
 export const studyGroups = pgTable("study_groups", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -536,9 +542,13 @@ export type InsertKycDocument = z.infer<typeof insertKycDocumentSchema>;
 export type InsertDispute = z.infer<typeof insertDisputeSchema>;
 export type InsertWallet = z.infer<typeof insertWalletSchema>;
 export type InsertWalletTransaction = z.infer<typeof insertWalletTransactionSchema>;
-export type InsertStudyGroup = z.infer<typeof createInsertSchema(studyGroups).omit({ id: true, createdAt: true, updatedAt: true })>;
-export type InsertStudyGroupMember = z.infer<typeof createInsertSchema(studyGroupMembers).omit({ id: true, joinedAt: true })>;
-export type InsertBlogPost = z.infer<typeof createInsertSchema(blogPosts).omit({ id: true, createdAt: true, updatedAt: true })>;
+export const insertStudyGroupSchema = createInsertSchema(studyGroups).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertStudyGroupMemberSchema = createInsertSchema(studyGroupMembers).omit({ id: true, joinedAt: true });
+export const insertBlogPostSchema = createInsertSchema(blogPosts).omit({ id: true, createdAt: true, updatedAt: true });
+
+export type InsertStudyGroup = z.infer<typeof insertStudyGroupSchema>;
+export type InsertStudyGroupMember = z.infer<typeof insertStudyGroupMemberSchema>;
+export type InsertBlogPost = z.infer<typeof insertBlogPostSchema>;
 
 
 export const insertRoleRequestSchema = createInsertSchema(roleRequests).omit({
@@ -560,3 +570,5 @@ export type UserApprovedRole = typeof userApprovedRoles.$inferSelect;
 
 export type InsertRoleRequest = z.infer<typeof insertRoleRequestSchema>;
 export type InsertUserApprovedRole = z.infer<typeof insertUserApprovedRoleSchema>;
+export type InsertEmailTemplate = z.infer<typeof insertEmailTemplateSchema>;
+export type EmailTemplate = typeof emailTemplates.$inferSelect;

@@ -108,8 +108,13 @@ async function setupTestUsers() {
           .update(users)
           .set({ 
             password: hashedPassword,
-            ...testUser,
-            password: hashedPassword
+            name: testUser.name,
+            role: testUser.role,
+            bio: testUser.bio,
+            headline: testUser.headline,
+            skills: testUser.skills,
+            hourlyRate: testUser.hourlyRate,
+            verified: testUser.verified || false
           })
           .where(eq(users.email, testUser.email));
         
@@ -124,8 +129,7 @@ async function setupTestUsers() {
           headline: testUser.headline,
           skills: testUser.skills,
           hourlyRate: testUser.hourlyRate,
-          verified: testUser.verified || false,
-          kycStatus: "approved"
+          verified: testUser.verified || false
         });
         
         console.log(`✅ Created: ${testUser.email} (${testUser.role})`);
