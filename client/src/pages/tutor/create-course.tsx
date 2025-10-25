@@ -1,5 +1,6 @@
-
 import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,10 +8,99 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Trash2, Upload } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/api";
+
+type LessonData = {
+  title: string;
+  content: string;
+  videoUrl: string;
+  duration: number;
+  order: number;
+};
 
 export default function TutorCreateCourse() {
-  const [lessons, setLessons] = useState([{ id: 1, title: "" }]);
+  const [, setLocation] = useLocation();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  const [courseData, setCourseData] = useState({
+    title: "",
+    description: "",
+    category: "",
+    level: "beginner" as "beginner" | "intermediate" | "advanced",
+    price: "",
+    duration: 0,
+  });
+
+  const [lessons, setLessons] = useState<LessonData[]>([
+    { title: "", content: "", videoUrl: "", duration: 30, order: 1 }
+  ]);
+
+  const createCourseMutation = useMutation({
+    mutationFn: async (published: boolean) => {
+      // Create course
+      const course = await apiRequest("/courses", {
+        method: "POST",
+        body: JSON.stringify({
+          ...courseData,
+          instructorId: "tutor-id", // TODO: Get from auth context
+          published,
+        }),
+      });
+
+      // Create lessons
+      for (const lesson of lessons) {
+        if (lesson.title) {
+          await apiRequest("/lessons", {
+            method: "POST",
+            body: JSON.stringify({
+              courseId: course.id,
+              ...lesson,
+            }),
+          });
+        }
+      }
+
+      return course;
+    },
+    onSuccess: (course) => {
+      toast({
+        title: "Course Created!",
+        description: `${course.title} has been created successfully.`,
+      });
+      queryClient.invalidateQueries({ queryKey: ["/api/courses"] });
+      setLocation("/tutor/my-courses");
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to create course",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const addLesson = () => {
+    setLessons([...lessons, {
+      title: "",
+      content: "",
+      videoUrl: "",
+      duration: 30,
+      order: lessons.length + 1,
+    }]);
+  };
+
+  const removeLesson = (index: number) => {
+    setLessons(lessons.filter((_, i) => i !== index));
+  };
+
+  const updateLesson = (index: number, field: keyof LessonData, value: any) => {
+    const updated = [...lessons];
+    updated[index] = { ...updated[index], [field]: value };
+    setLessons(updated);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -38,33 +128,50 @@ export default function TutorCreateCourse() {
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="title">Course Title</Label>
-                  <Input id="title" placeholder="e.g., Web Development Fundamentals" />
+                  <Input
+                    id="title"
+                    value={courseData.title}
+                    onChange={(e) => setCourseData({ ...courseData, title: e.target.value })}
+                    placeholder="e.g., Web Development Fundamentals"
+                  />
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="description">Description</Label>
-                  <Textarea id="description" placeholder="Describe your course..." rows={4} />
+                  <Textarea
+                    id="description"
+                    value={courseData.description}
+                    onChange={(e) => setCourseData({ ...courseData, description: e.target.value })}
+                    placeholder="Describe your course..."
+                    rows={4}
+                  />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="category">Category</Label>
-                    <Select>
+                    <Select
+                      value={courseData.category}
+                      onValueChange={(value) => setCourseData({ ...courseData, category: value })}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Select category" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="web-dev">Web Development</SelectItem>
-                        <SelectItem value="mobile">Mobile Development</SelectItem>
-                        <SelectItem value="data">Data Science</SelectItem>
+                        <SelectItem value="programming">Programming</SelectItem>
                         <SelectItem value="design">Design</SelectItem>
+                        <SelectItem value="business">Business</SelectItem>
+                        <SelectItem value="marketing">Marketing</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="level">Difficulty Level</Label>
-                    <Select>
+                    <Select
+                      value={courseData.level}
+                      onValueChange={(value: any) => setCourseData({ ...courseData, level: value })}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Select level" />
                       </SelectTrigger>
@@ -78,11 +185,14 @@ export default function TutorCreateCourse() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Course Thumbnail</Label>
-                  <div className="border-2 border-dashed rounded-lg p-8 text-center">
-                    <Upload className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                    <p className="text-sm text-muted-foreground">Click to upload or drag and drop</p>
-                  </div>
+                  <Label htmlFor="duration">Estimated Duration (hours)</Label>
+                  <Input
+                    id="duration"
+                    type="number"
+                    value={courseData.duration}
+                    onChange={(e) => setCourseData({ ...courseData, duration: parseInt(e.target.value) || 0 })}
+                    placeholder="e.g., 40"
+                  />
                 </div>
               </CardContent>
             </Card>
@@ -93,7 +203,7 @@ export default function TutorCreateCourse() {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle>Course Lessons</CardTitle>
-                  <Button size="sm" onClick={() => setLessons([...lessons, { id: lessons.length + 1, title: "" }])}>
+                  <Button size="sm" onClick={addLesson}>
                     <Plus className="h-4 w-4 mr-2" />
                     Add Lesson
                   </Button>
@@ -101,24 +211,48 @@ export default function TutorCreateCourse() {
               </CardHeader>
               <CardContent className="space-y-4">
                 {lessons.map((lesson, index) => (
-                  <div key={lesson.id} className="border rounded-lg p-4 space-y-3">
+                  <div key={index} className="border rounded-lg p-4 space-y-3">
                     <div className="flex items-center justify-between">
                       <h3 className="font-semibold">Lesson {index + 1}</h3>
-                      <Button variant="ghost" size="sm" onClick={() => setLessons(lessons.filter(l => l.id !== lesson.id))}>
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      {lessons.length > 1 && (
+                        <Button variant="ghost" size="sm" onClick={() => removeLesson(index)}>
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <Label>Lesson Title</Label>
-                      <Input placeholder="Enter lesson title" />
+                      <Input
+                        value={lesson.title}
+                        onChange={(e) => updateLesson(index, "title", e.target.value)}
+                        placeholder="Enter lesson title"
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label>Video URL</Label>
-                      <Input placeholder="https://..." />
+                      <Input
+                        value={lesson.videoUrl}
+                        onChange={(e) => updateLesson(index, "videoUrl", e.target.value)}
+                        placeholder="https://..."
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Duration (minutes)</Label>
+                      <Input
+                        type="number"
+                        value={lesson.duration}
+                        onChange={(e) => updateLesson(index, "duration", parseInt(e.target.value) || 0)}
+                        placeholder="30"
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label>Content</Label>
-                      <Textarea placeholder="Lesson description and notes..." rows={3} />
+                      <Textarea
+                        value={lesson.content}
+                        onChange={(e) => updateLesson(index, "content", e.target.value)}
+                        placeholder="Lesson description and notes..."
+                        rows={3}
+                      />
                     </div>
                   </div>
                 ))}
@@ -134,10 +268,16 @@ export default function TutorCreateCourse() {
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="price">Course Price (USD)</Label>
-                  <Input id="price" type="number" placeholder="0.00" />
+                  <Input
+                    id="price"
+                    type="number"
+                    value={courseData.price}
+                    onChange={(e) => setCourseData({ ...courseData, price: e.target.value })}
+                    placeholder="0.00"
+                  />
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Leave blank for a free course
+                  Leave blank or set to 0 for a free course
                 </p>
               </CardContent>
             </Card>
@@ -155,15 +295,28 @@ export default function TutorCreateCourse() {
                 <div className="bg-muted p-4 rounded-lg">
                   <h3 className="font-semibold mb-2">Course Summary</h3>
                   <ul className="space-y-1 text-sm">
-                    <li>• Title: Web Development Fundamentals</li>
-                    <li>• Lessons: {lessons.length}</li>
-                    <li>• Category: Web Development</li>
-                    <li>• Price: $99</li>
+                    <li>• Title: {courseData.title || "Not set"}</li>
+                    <li>• Lessons: {lessons.filter(l => l.title).length}</li>
+                    <li>• Category: {courseData.category || "Not set"}</li>
+                    <li>• Level: {courseData.level}</li>
+                    <li>• Price: ${courseData.price || "Free"}</li>
+                    <li>• Duration: {courseData.duration} hours</li>
                   </ul>
                 </div>
                 <div className="flex gap-2">
-                  <Button>Publish Course</Button>
-                  <Button variant="outline">Save as Draft</Button>
+                  <Button
+                    onClick={() => createCourseMutation.mutate(true)}
+                    disabled={!courseData.title || createCourseMutation.isPending}
+                  >
+                    {createCourseMutation.isPending ? "Publishing..." : "Publish Course"}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => createCourseMutation.mutate(false)}
+                    disabled={!courseData.title || createCourseMutation.isPending}
+                  >
+                    Save as Draft
+                  </Button>
                 </div>
               </CardContent>
             </Card>
