@@ -8,7 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
+import { apiRequest } from "@/lib/api";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email"),
@@ -31,7 +31,7 @@ export default function Login() {
 
   const loginMutation = useMutation({
     mutationFn: async (data: LoginForm) => {
-      return await apiRequest("/api/auth/login", {
+      return await apiRequest("/auth/login", {
         method: "POST",
         body: JSON.stringify(data),
       });

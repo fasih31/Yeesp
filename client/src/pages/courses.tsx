@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Search, Star } from "lucide-react";
+import { Search, Star, ChevronLeft, ChevronRight } from "lucide-react";
 import type { Course, User } from "@shared/schema";
 
 type CourseWithInstructor = Course & {
@@ -20,6 +20,8 @@ type CourseWithInstructor = Course & {
 export default function Courses() {
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const coursesPerPage = 9;
 
   const { data: courses, isLoading } = useQuery<CourseWithInstructor[]>({
     queryKey: ["/api/courses", category, searchQuery],
@@ -31,6 +33,12 @@ export default function Courses() {
     const matchesCategory = category === "all" || course.category === category;
     return matchesSearch && matchesCategory && course.published;
   });
+
+  // Pagination logic
+  const totalPages = Math.ceil((filteredCourses?.length || 0) / coursesPerPage);
+  const startIndex = (currentPage - 1) * coursesPerPage;
+  const endIndex = startIndex + coursesPerPage;
+  const paginatedCourses = filteredCourses?.slice(startIndex, endIndex);
 
   return (
     <div className="min-h-screen bg-background">
@@ -100,9 +108,10 @@ export default function Courses() {
               </Card>
             ))}
           </div>
-        ) : filteredCourses && filteredCourses.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredCourses.map((course) => (
+        ) : paginatedCourses && paginatedCourses.length > 0 ? (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {paginatedCourses.map((course) => (
               <Card key={course.id} className="hover-elevate flex flex-col" data-testid={`card-course-${course.id}`}>
                 <div className="aspect-video bg-gradient-to-br from-primary/20 to-accent/20 rounded-t-lg flex items-center justify-center">
                   <span className="text-6xl opacity-20">{course.category.charAt(0).toUpperCase()}</span>
@@ -173,8 +182,46 @@ export default function Courses() {
                   </Button>
                 </CardFooter>
               </Card>
-            ))}
-          </div>
+              ))}
+            </div>
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center gap-2 mt-8">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                >
+                  <ChevronLeft className="h-4 w-4 mr-1" />
+                  Previous
+                </Button>
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <Button
+                      key={page}
+                      variant={currentPage === page ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setCurrentPage(page)}
+                      className="w-10"
+                    >
+                      {page}
+                    </Button>
+                  ))}
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                  <ChevronRight className="h-4 w-4 ml-1" />
+                </Button>
+              </div>
+            )}
+          </>
         ) : (
           <div className="text-center py-12">
             <p className="text-xl text-muted-foreground" data-testid="text-no-courses">

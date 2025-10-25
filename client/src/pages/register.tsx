@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
+import { apiRequest } from "@/lib/api";
 
 const registerSchema = z.object({
   email: z.string().email("Please enter a valid email"),
@@ -37,7 +37,7 @@ export default function Register() {
 
   const registerMutation = useMutation({
     mutationFn: async (data: RegisterForm) => {
-      return await apiRequest("/api/auth/register", {
+      return await apiRequest("/auth/register", {
         method: "POST",
         body: JSON.stringify(data),
       });
