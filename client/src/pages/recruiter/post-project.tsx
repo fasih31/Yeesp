@@ -1,5 +1,6 @@
-
 import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,8 +10,22 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Plus, X } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/api";
 
 export default function RecruiterPostProject() {
+  const [, setLocation] = useLocation();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  const [projectData, setProjectData] = useState({
+    title: "",
+    description: "",
+    category: "",
+    budget: "",
+    deadline: "",
+  });
+
   const [skills, setSkills] = useState<string[]>([]);
   const [skillInput, setSkillInput] = useState("");
 
@@ -20,6 +35,40 @@ export default function RecruiterPostProject() {
       setSkillInput("");
     }
   };
+
+  const removeSkill = (skill: string) => {
+    setSkills(skills.filter(s => s !== skill));
+  };
+
+  const postProjectMutation = useMutation({
+    mutationFn: async () => {
+      return apiRequest("/projects", {
+        method: "POST",
+        body: JSON.stringify({
+          ...projectData,
+          recruiterId: "recruiter-id", // TODO: Get from auth
+          skills,
+          status: "open",
+          deadline: projectData.deadline ? new Date(projectData.deadline) : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+        }),
+      });
+    },
+    onSuccess: () => {
+      toast({
+        title: "Project Posted!",
+        description: "Your project is now live and accepting proposals.",
+      });
+      queryClient.invalidateQueries({ queryKey: ["/api/projects"] });
+      setLocation("/recruiter/my-projects");
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to post project",
+        variant: "destructive",
+      });
+    },
+  });
 
   return (
     <div className="container max-w-4xl py-8">
@@ -43,25 +92,40 @@ export default function RecruiterPostProject() {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="title">Project Title</Label>
-                <Input id="title" placeholder="e.g., Build E-commerce Website" />
+                <Input
+                  id="title"
+                  value={projectData.title}
+                  onChange={(e) => setProjectData({ ...projectData, title: e.target.value })}
+                  placeholder="e.g., Build E-commerce Website"
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="category">Category</Label>
-                <Select>
+                <Select
+                  value={projectData.category}
+                  onValueChange={(value) => setProjectData({ ...projectData, category: value })}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="web">Web Development</SelectItem>
-                    <SelectItem value="mobile">Mobile Development</SelectItem>
-                    <SelectItem value="design">Design</SelectItem>
-                    <SelectItem value="marketing">Marketing</SelectItem>
+                    <SelectItem value="Web Development">Web Development</SelectItem>
+                    <SelectItem value="Mobile Development">Mobile Development</SelectItem>
+                    <SelectItem value="Design">Design</SelectItem>
+                    <SelectItem value="Marketing">Marketing</SelectItem>
+                    <SelectItem value="Writing">Writing</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="description">Description</Label>
-                <Textarea id="description" placeholder="Describe your project..." rows={6} />
+                <Textarea
+                  id="description"
+                  value={projectData.description}
+                  onChange={(e) => setProjectData({ ...projectData, description: e.target.value })}
+                  placeholder="Describe your project in detail..."
+                  rows={6}
+                />
               </div>
             </CardContent>
           </Card>
@@ -71,16 +135,17 @@ export default function RecruiterPostProject() {
           <Card>
             <CardHeader>
               <CardTitle>Required Skills</CardTitle>
+              <CardDescription>Add skills that freelancers should have</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex gap-2">
-                <Input 
+                <Input
                   placeholder="Add skill (e.g., React, Node.js)"
                   value={skillInput}
                   onChange={(e) => setSkillInput(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && addSkill()}
+                  onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addSkill())}
                 />
-                <Button onClick={addSkill} variant="outline">
+                <Button onClick={addSkill} variant="outline" type="button">
                   <Plus className="h-4 w-4" />
                 </Button>
               </div>
@@ -88,7 +153,7 @@ export default function RecruiterPostProject() {
                 {skills.map((skill) => (
                   <Badge key={skill} variant="secondary" className="pl-3 pr-1">
                     {skill}
-                    <button onClick={() => setSkills(skills.filter(s => s !== skill))} className="ml-2">
+                    <button onClick={() => removeSkill(skill)} className="ml-2">
                       <X className="h-3 w-3" />
                     </button>
                   </Badge>
@@ -106,24 +171,30 @@ export default function RecruiterPostProject() {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="budget">Budget ($)</Label>
-                <Input id="budget" type="number" placeholder="5000" />
+                <Input
+                  id="budget"
+                  type="number"
+                  value={projectData.budget}
+                  onChange={(e) => setProjectData({ ...projectData, budget: e.target.value })}
+                  placeholder="5000"
+                />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="duration">Project Duration</Label>
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select duration" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="1week">Less than 1 week</SelectItem>
-                    <SelectItem value="1month">1-4 weeks</SelectItem>
-                    <SelectItem value="3months">1-3 months</SelectItem>
-                    <SelectItem value="6months">3-6 months</SelectItem>
-                    <SelectItem value="ongoing">Ongoing</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Label htmlFor="deadline">Deadline (Optional)</Label>
+                <Input
+                  id="deadline"
+                  type="date"
+                  value={projectData.deadline}
+                  onChange={(e) => setProjectData({ ...projectData, deadline: e.target.value })}
+                />
               </div>
-              <Button className="w-full">Post Project</Button>
+              <Button
+                className="w-full"
+                onClick={() => postProjectMutation.mutate()}
+                disabled={!projectData.title || !projectData.description || !projectData.budget || postProjectMutation.isPending}
+              >
+                {postProjectMutation.isPending ? "Posting..." : "Post Project"}
+              </Button>
             </CardContent>
           </Card>
         </TabsContent>
