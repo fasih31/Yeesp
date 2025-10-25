@@ -8,8 +8,15 @@ import bcrypt from "bcryptjs";
 const router = Router();
 
 // Get admin statistics
-router.get("/stats", requireAuth, requireRole('admin'), async (req, res) => {
+router.get("/stats", requireAuth, async (req, res) => {
   try {
+    const user = (req as any).user;
+    
+    // Check if user is admin
+    if (user.role !== 'admin') {
+      return res.status(403).json({ error: "Admin access required" });
+    }
+
     // Count totals
     const [totalUsers] = await db.select({ count: count() }).from(users);
     const [totalCourses] = await db.select({ count: count() }).from(courses);
@@ -185,11 +192,12 @@ router.delete("/admins/:id", requireAuth, requireRole('admin'), async (req, res)
 });
 
 // Admin Project Management
-router.get("/projects/:id/details", requireAuth, requireRole('admin'), async (req, res) => {
+router.get("/projects/:id/details", requireAuth, async (req, res) => {
   try {
-    const { db } = await import("./db");
-    const { projects, users, bids } = await import("@shared/schema");
-    const { eq } = await import("drizzle-orm");
+    const user = (req as any).user;
+    if (user.role !== 'admin') {
+      return res.status(403).json({ error: "Admin access required" });
+    }
 
     const [project] = await db
       .select()
@@ -203,7 +211,12 @@ router.get("/projects/:id/details", requireAuth, requireRole('admin'), async (re
 
     // Get recruiter details
     const [recruiter] = await db
-      .select()
+      .select({
+        id: users.id,
+        name: users.name,
+        email: users.email,
+        avatar: users.avatar,
+      })
       .from(users)
       .where(eq(users.id, project.recruiterId))
       .limit(1);
@@ -218,7 +231,12 @@ router.get("/projects/:id/details", requireAuth, requireRole('admin'), async (re
     const bidsWithFreelancers = await Promise.all(
       projectBids.map(async (bid) => {
         const [freelancer] = await db
-          .select()
+          .select({
+            id: users.id,
+            name: users.name,
+            email: users.email,
+            avatar: users.avatar,
+          })
           .from(users)
           .where(eq(users.id, bid.freelancerId))
           .limit(1);
@@ -237,11 +255,12 @@ router.get("/projects/:id/details", requireAuth, requireRole('admin'), async (re
   }
 });
 
-router.post("/projects/:id/approve", requireAuth, requireRole('admin'), async (req, res) => {
+router.post("/projects/:id/approve", requireAuth, async (req, res) => {
   try {
-    const { db } = await import("./db");
-    const { projects, users, notifications } = await import("@shared/schema");
-    const { eq } = await import("drizzle-orm");
+    const user = (req as any).user;
+    if (user.role !== 'admin') {
+      return res.status(403).json({ error: "Admin access required" });
+    }
 
     const projectId = req.params.id;
 
@@ -263,15 +282,6 @@ router.post("/projects/:id/approve", requireAuth, requireRole('admin'), async (r
       .where(eq(projects.id, projectId))
       .returning();
 
-    // Create notification for recruiter
-    await db.insert(notifications).values({
-      userId: project.recruiterId,
-      type: 'system',
-      title: 'Project Approved',
-      message: `Your project "${project.title}" has been approved and is now visible to freelancers.`,
-      link: `/project/${project.id}`,
-    });
-
     res.json({ success: true, project: updatedProject });
   } catch (error: any) {
     console.error("Error approving project:", error);
@@ -279,13 +289,14 @@ router.post("/projects/:id/approve", requireAuth, requireRole('admin'), async (r
   }
 });
 
-router.post("/projects/:id/reject", requireAuth, requireRole('admin'), async (req, res) => {
+router.post("/projects/:id/reject", requireAuth, async (req, res) => {
   try {
-    const { reason } = req.body;
-    const { db } = await import("./db");
-    const { projects, notifications } = await import("@shared/schema");
-    const { eq } = await import("drizzle-orm");
+    const user = (req as any).user;
+    if (user.role !== 'admin') {
+      return res.status(403).json({ error: "Admin access required" });
+    }
 
+    const { reason } = req.body;
     const projectId = req.params.id;
 
     if (!reason || reason.trim().length === 0) {
@@ -306,20 +317,11 @@ router.post("/projects/:id/reject", requireAuth, requireRole('admin'), async (re
     // Update project status to rejected
     const [updatedProject] = await db
       .update(projects)
-      .set({ status: 'rejected' })
+      .set({ status: 'closed' })
       .where(eq(projects.id, projectId))
       .returning();
 
-    // Create notification for recruiter
-    await db.insert(notifications).values({
-      userId: project.recruiterId,
-      type: 'system',
-      title: 'Project Rejected',
-      message: `Your project "${project.title}" was rejected. Reason: ${reason}`,
-      link: `/project/${project.id}`,
-    });
-
-    res.json({ success: true, project: updatedProject });
+    res.json({ success: true, project: updatedProject, reason });
   } catch (error: any) {
     console.error("Error rejecting project:", error);
     res.status(500).json({ error: "Failed to reject project" });
