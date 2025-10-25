@@ -90,6 +90,8 @@ import CourseReviews from "@/pages/student/course-reviews";
 import Careers from "@/pages/careers";
 import HelpCenter from "@/pages/help-center";
 import Affiliate from "@/pages/affiliate";
+import AuthLogin from "@/pages/auth/login";
+import AuthSignup from "@/pages/auth/signup";
 
 
 function Router() {
@@ -98,6 +100,8 @@ function Router() {
       <Route path="/" component={Landing} />
       <Route path="/register" component={Register} />
       <Route path="/login" component={Login} />
+      <Route path="/auth/login" component={AuthLogin} />
+      <Route path="/auth/signup" component={AuthSignup} />
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
       <Route path="/pricing" component={Pricing} />
