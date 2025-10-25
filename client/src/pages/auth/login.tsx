@@ -7,12 +7,10 @@ import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "wouter";
-import { Loader2 } from "lucide-react";
+import { Loader2, ArrowRight, Sparkles } from "lucide-react";
 import { useAuth } from "@/lib/auth";
-import { PageContainer } from "@/components/layout/PageContainer";
-import { Section } from "@/components/layout/Section";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -60,22 +58,37 @@ export default function Login() {
   };
 
   return (
-    <Section spacing="lg" background="gradient" className="min-h-screen flex items-center">
-      <PageContainer maxWidth="sm">
-        <Card className="border-2 shadow-lg">
-          <CardHeader className="space-y-3 text-center">
-            <div className="flex justify-center mb-2">
-              <img src="/icon.png" alt="YEESP" className="h-12 w-12" />
+    <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-800">
+      {/* Animated gradient orbs */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-yellow-500 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
+        <div className="absolute top-40 left-40 w-96 h-96 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
+      </div>
+
+      {/* Glassmorphic grid background */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+
+      <div className="relative w-full max-w-md">
+        {/* Main Login Card - Glassmorphism */}
+        <Card className="border-2 border-white/20 bg-white/10 backdrop-blur-2xl shadow-2xl">
+          <CardHeader className="space-y-4 text-center pb-8">
+            <div className="flex justify-center">
+              <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-yellow-400 to-pink-500 flex items-center justify-center shadow-2xl transform hover:scale-110 transition-transform">
+                <Sparkles className="h-8 w-8 text-white" />
+              </div>
             </div>
-            <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
-            <CardDescription className="text-base">
+            <CardTitle className="text-3xl font-bold text-white">
+              Welcome Back
+            </CardTitle>
+            <p className="text-white/80 text-lg">
               Sign in to your YEESP account
-            </CardDescription>
+            </p>
           </CardHeader>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-5">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email" className="text-white font-medium">Email</Label>
                 <Input
                   id="email"
                   type="email"
@@ -83,17 +96,17 @@ export default function Login() {
                   autoComplete="email"
                   {...register("email")}
                   disabled={isLoading}
-                  className="h-11"
+                  className="h-12 bg-white/20 border-white/30 text-white placeholder:text-white/50 backdrop-blur-sm focus:bg-white/30 transition-all"
                 />
                 {errors.email && (
-                  <p className="text-sm text-destructive">{errors.email.message}</p>
+                  <p className="text-sm text-red-300 font-medium">{errors.email.message}</p>
                 )}
               </div>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Password</Label>
-                  <Link href="/forgot-password" className="text-sm text-primary hover:underline">
-                    Forgot password?
+                  <Label htmlFor="password" className="text-white font-medium">Password</Label>
+                  <Link href="/forgot-password" className="text-sm text-yellow-300 hover:text-yellow-200 font-medium hover:underline">
+                    Forgot?
                   </Link>
                 </div>
                 <Input
@@ -103,21 +116,26 @@ export default function Login() {
                   autoComplete="current-password"
                   {...register("password")}
                   disabled={isLoading}
-                  className="h-11"
+                  className="h-12 bg-white/20 border-white/30 text-white placeholder:text-white/50 backdrop-blur-sm focus:bg-white/30 transition-all"
                 />
                 {errors.password && (
-                  <p className="text-sm text-destructive">{errors.password.message}</p>
+                  <p className="text-sm text-red-300 font-medium">{errors.password.message}</p>
                 )}
               </div>
             </CardContent>
-            <CardFooter className="flex flex-col space-y-4">
-              <Button type="submit" className="w-full h-11" disabled={isLoading}>
-                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            <CardFooter className="flex flex-col space-y-4 pt-6">
+              <Button 
+                type="submit" 
+                className="w-full h-12 bg-gradient-to-r from-yellow-400 to-pink-500 hover:from-yellow-500 hover:to-pink-600 text-white font-bold text-lg rounded-xl shadow-2xl transform hover:scale-105 transition-all" 
+                disabled={isLoading}
+              >
+                {isLoading && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
                 Sign In
+                {!isLoading && <ArrowRight className="ml-2 h-5 w-5" />}
               </Button>
-              <p className="text-sm text-center text-muted-foreground">
+              <p className="text-center text-white/80">
                 Don't have an account?{" "}
-                <Link href="/auth/signup" className="text-primary hover:underline font-medium">
+                <Link href="/auth/signup" className="text-yellow-300 hover:text-yellow-200 font-bold hover:underline">
                   Sign up
                 </Link>
               </p>
@@ -125,25 +143,53 @@ export default function Login() {
           </form>
         </Card>
 
-        {/* Test Credentials Note */}
-        <Card className="mt-4 bg-muted/50 border-dashed">
+        {/* Test Credentials Card */}
+        <Card className="mt-6 border-2 border-white/20 bg-white/5 backdrop-blur-xl">
           <CardContent className="pt-6">
-            <p className="text-sm text-muted-foreground text-center mb-3 font-medium">
-              Test Credentials:
+            <p className="text-sm text-white/90 text-center mb-4 font-medium flex items-center justify-center gap-2">
+              <Sparkles className="w-4 h-4 text-yellow-300" />
+              Test Credentials
             </p>
-            <div className="space-y-2 text-xs">
-              <div className="grid grid-cols-2 gap-2">
-                <div className="text-muted-foreground">Student:</div>
-                <div className="font-mono">student@test.com</div>
-                <div className="text-muted-foreground">Tutor:</div>
-                <div className="font-mono">tutor@test.com</div>
-                <div className="text-muted-foreground">Password:</div>
-                <div className="font-mono">password123</div>
+            <div className="grid grid-cols-2 gap-3 text-xs">
+              <div className="bg-white/10 rounded-lg p-3 backdrop-blur-sm border border-white/20">
+                <div className="text-white/70 mb-1">Student</div>
+                <div className="font-mono text-yellow-300 font-bold">student@test.com</div>
+              </div>
+              <div className="bg-white/10 rounded-lg p-3 backdrop-blur-sm border border-white/20">
+                <div className="text-white/70 mb-1">Tutor</div>
+                <div className="font-mono text-pink-300 font-bold">tutor@test.com</div>
+              </div>
+              <div className="col-span-2 bg-white/10 rounded-lg p-3 backdrop-blur-sm border border-white/20 text-center">
+                <div className="text-white/70 mb-1">Password</div>
+                <div className="font-mono text-cyan-300 font-bold">password123</div>
               </div>
             </div>
           </CardContent>
         </Card>
-      </PageContainer>
-    </Section>
+      </div>
+
+      <style>{`
+        @keyframes blob {
+          0%, 100% {
+            transform: translate(0, 0) scale(1);
+          }
+          33% {
+            transform: translate(30px, -50px) scale(1.1);
+          }
+          66% {
+            transform: translate(-20px, 20px) scale(0.9);
+          }
+        }
+        .animate-blob {
+          animation: blob 7s infinite;
+        }
+        .animation-delay-2000 {
+          animation-delay: 2s;
+        }
+        .animation-delay-4000 {
+          animation-delay: 4s;
+        }
+      `}</style>
+    </div>
   );
 }

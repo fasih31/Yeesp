@@ -1,296 +1,266 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { GraduationCap, Users, Briefcase, Award, ArrowRight, Check, Star, BookOpen, Video, MessageSquare, Shield } from "lucide-react";
-import { PageContainer } from "@/components/layout/PageContainer";
-import { Section } from "@/components/layout/Section";
-import { Grid } from "@/components/layout/Grid";
+import { GraduationCap, Users, Briefcase, Award, ArrowRight, Check, Star, Sparkles, Zap, Trophy, TrendingUp, Globe, Shield } from "lucide-react";
 
 export default function Landing() {
   return (
-    <div className="min-h-screen">
-      {/* Hero Section - Clean Split Layout */}
-      <Section spacing="xl" background="gradient" className="min-h-[90vh] flex items-center">
-        <PageContainer>
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left Column - Content */}
-            <div className="space-y-8">
-              <Badge className="text-sm">
-                Your All-in-One Platform for Growth
+    <div className="min-h-screen overflow-hidden">
+      {/* Hero Section - Ultra Modern with Animated Gradient */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-800">
+        {/* Animated gradient orbs */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-96 h-96 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
+          <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-yellow-500 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
+          <div className="absolute top-40 left-40 w-96 h-96 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
+        </div>
+
+        {/* Glassmorphic grid background */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+          <div className="space-y-8">
+            {/* Badge with glow effect */}
+            <div className="flex justify-center">
+              <Badge className="bg-white/20 backdrop-blur-md border border-white/30 text-white px-6 py-2 text-sm font-medium shadow-2xl hover:bg-white/30 transition-all">
+                <Sparkles className="w-4 h-4 mr-2 inline" />
+                Next-Gen Learning Platform
               </Badge>
-
-              <div className="space-y-6">
-                <h1 className="text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
-                  Learn. Earn.{" "}
-                  <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                    Evolve.
-                  </span>
-                </h1>
-
-                <p className="text-xl text-muted-foreground leading-relaxed max-w-xl">
-                  Join thousands of students, tutors, and freelancers building their future with quality education and real opportunities.
-                </p>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="text-base" asChild>
-                  <Link href="/register">
-                    Get Started Free <ArrowRight className="ml-2 h-5 w-5" />
-                  </Link>
-                </Button>
-                <Button size="lg" variant="outline" className="text-base" asChild>
-                  <Link href="/courses">
-                    Browse Courses
-                  </Link>
-                </Button>
-              </div>
-
-              {/* Quick Stats */}
-              <div className="grid grid-cols-3 gap-6 pt-8 border-t">
-                <div>
-                  <div className="text-3xl font-bold text-primary">10K+</div>
-                  <div className="text-sm text-muted-foreground">Active Users</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-primary">500+</div>
-                  <div className="text-sm text-muted-foreground">Courses</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-primary">4.9</div>
-                  <div className="text-sm text-muted-foreground">Rating</div>
-                </div>
-              </div>
             </div>
 
-            {/* Right Column - Visual */}
-            <div className="relative hidden lg:block">
-              <div className="aspect-square rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 p-8 backdrop-blur-sm border border-primary/10">
-                <div className="h-full flex items-center justify-center">
-                  <div className="text-center space-y-4">
-                    <div className="flex justify-center gap-4 mb-8">
-                      <div className="h-16 w-16 rounded-xl bg-white shadow-lg flex items-center justify-center">
-                        <GraduationCap className="h-8 w-8 text-primary" />
-                      </div>
-                      <div className="h-16 w-16 rounded-xl bg-white shadow-lg flex items-center justify-center">
-                        <Briefcase className="h-8 w-8 text-accent" />
-                      </div>
-                      <div className="h-16 w-16 rounded-xl bg-white shadow-lg flex items-center justify-center">
-                        <Award className="h-8 w-8 text-primary" />
-                      </div>
-                    </div>
-                    <p className="text-lg font-semibold">All-in-One Platform</p>
-                    <p className="text-muted-foreground">Learning, Tutoring & Freelancing</p>
+            {/* Main Heading with gradient text */}
+            <h1 className="text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight">
+              <span className="block text-white drop-shadow-2xl">Learn. Earn.</span>
+              <span className="block bg-gradient-to-r from-yellow-200 via-pink-200 to-cyan-200 bg-clip-text text-transparent drop-shadow-2xl">
+                Transform.
+              </span>
+            </h1>
+
+            <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto leading-relaxed font-light">
+              Join <span className="font-bold text-yellow-300">10,000+</span> students, tutors, and freelancers building extraordinary careers
+            </p>
+
+            {/* CTA Buttons with modern styling */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+              <Button size="lg" className="bg-white text-purple-600 hover:bg-gray-100 shadow-2xl text-lg px-8 h-14 rounded-full font-semibold group" asChild>
+                <Link href="/register">
+                  Start Free Today
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline" className="border-2 border-white/50 text-white hover:bg-white/20 backdrop-blur-md shadow-2xl text-lg px-8 h-14 rounded-full font-semibold" asChild>
+                <Link href="/courses">
+                  Explore Courses
+                </Link>
+              </Button>
+            </div>
+
+            {/* Stats with glassmorphism */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-12 max-w-4xl mx-auto">
+              {[
+                { icon: Users, value: "10K+", label: "Active Users" },
+                { icon: GraduationCap, value: "500+", label: "Courses" },
+                { icon: Trophy, value: "95%", label: "Success Rate" },
+                { icon: Star, value: "4.9", label: "Rating" }
+              ].map((stat, i) => (
+                <div key={i} className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 hover:bg-white/20 transition-all transform hover:-translate-y-2 shadow-2xl">
+                  <stat.icon className="w-8 h-8 text-yellow-300 mx-auto mb-2" />
+                  <div className="text-3xl font-bold text-white">{stat.value}</div>
+                  <div className="text-sm text-white/80">{stat.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Floating elements */}
+        <div className="absolute bottom-10 left-10 hidden lg:block">
+          <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-4 shadow-2xl transform hover:scale-110 transition-transform">
+            <Zap className="w-8 h-8 text-yellow-300" />
+          </div>
+        </div>
+        <div className="absolute top-20 right-20 hidden lg:block">
+          <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-4 shadow-2xl transform hover:scale-110 transition-transform">
+            <Globe className="w-8 h-8 text-cyan-300" />
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section with 3D Cards */}
+      <section className="py-24 px-6 bg-gradient-to-b from-gray-50 to-white relative">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <Badge className="mb-4">
+              <Sparkles className="w-3 h-3 mr-1" />
+              Platform Features
+            </Badge>
+            <h2 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-6">
+              Everything You Need
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              A complete ecosystem for learning, teaching, and earning
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { 
+                icon: GraduationCap, 
+                title: "Premium Courses", 
+                desc: "Access 500+ expert-led courses",
+                gradient: "from-purple-500 to-pink-500"
+              },
+              { 
+                icon: Users, 
+                title: "Live Tutoring", 
+                desc: "1-on-1 sessions with top tutors",
+                gradient: "from-blue-500 to-cyan-500"
+              },
+              { 
+                icon: Briefcase, 
+                title: "Freelance Hub", 
+                desc: "Find projects and build your career",
+                gradient: "from-orange-500 to-red-500"
+              },
+              { 
+                icon: Award, 
+                title: "Certifications", 
+                desc: "Earn verified certificates",
+                gradient: "from-green-500 to-emerald-500"
+              },
+            ].map((feature, i) => (
+              <Card key={i} className="relative group overflow-hidden border-2 hover:border-transparent transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
+                <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
+                <div className="relative p-8 space-y-4">
+                  <div className={`h-16 w-16 rounded-2xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center transform group-hover:scale-110 transition-transform shadow-lg`}>
+                    <feature.icon className="h-8 w-8 text-white" />
                   </div>
+                  <h3 className="text-2xl font-bold group-hover:text-white transition-colors">{feature.title}</h3>
+                  <p className="text-gray-600 group-hover:text-white/90 transition-colors">{feature.desc}</p>
                 </div>
-              </div>
-            </div>
+              </Card>
+            ))}
           </div>
-        </PageContainer>
-      </Section>
-
-      {/* Features Section */}
-      <Section spacing="lg" background="white">
-        <PageContainer>
-          <div className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              Everything You Need in One Platform
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Whether you're learning, teaching, or freelancing, YEESP provides all the tools you need to succeed.
-            </p>
-          </div>
-
-          <Grid cols={4} gap="lg">
-            <Card className="border-2 hover:border-primary/50 transition-all">
-              <CardHeader>
-                <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-                  <GraduationCap className="h-6 w-6 text-primary" />
-                </div>
-                <CardTitle>Learn</CardTitle>
-                <CardDescription>
-                  Access thousands of courses across various categories and skill levels
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="border-2 hover:border-primary/50 transition-all">
-              <CardHeader>
-                <div className="h-12 w-12 rounded-lg bg-accent/10 flex items-center justify-center mb-4">
-                  <Users className="h-6 w-6 text-accent" />
-                </div>
-                <CardTitle>Teach</CardTitle>
-                <CardDescription>
-                  Share your expertise and earn by creating courses or tutoring students
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="border-2 hover:border-primary/50 transition-all">
-              <CardHeader>
-                <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-                  <Briefcase className="h-6 w-6 text-primary" />
-                </div>
-                <CardTitle>Freelance</CardTitle>
-                <CardDescription>
-                  Find projects, submit proposals, and build your freelance career
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="border-2 hover:border-primary/50 transition-all">
-              <CardHeader>
-                <div className="h-12 w-12 rounded-lg bg-accent/10 flex items-center justify-center mb-4">
-                  <Award className="h-6 w-6 text-accent" />
-                </div>
-                <CardTitle>Grow</CardTitle>
-                <CardDescription>
-                  Earn certificates, build your portfolio, and advance your career
-                </CardDescription>
-              </CardHeader>
-            </Card>
-          </Grid>
-        </PageContainer>
-      </Section>
-
-      {/* How It Works */}
-      <Section spacing="lg" background="gray">
-        <PageContainer>
-          <div className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              How YEESP Works
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Get started in three simple steps
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center space-y-4">
-              <div className="h-16 w-16 rounded-full bg-primary text-white flex items-center justify-center text-2xl font-bold mx-auto">
-                1
-              </div>
-              <h3 className="text-xl font-semibold">Create Account</h3>
-              <p className="text-muted-foreground">
-                Sign up for free and choose your role: Student, Tutor, Freelancer, or Recruiter
-              </p>
-            </div>
-
-            <div className="text-center space-y-4">
-              <div className="h-16 w-16 rounded-full bg-primary text-white flex items-center justify-center text-2xl font-bold mx-auto">
-                2
-              </div>
-              <h3 className="text-xl font-semibold">Explore & Connect</h3>
-              <p className="text-muted-foreground">
-                Browse courses, find tutors, or discover freelance opportunities that match your goals
-              </p>
-            </div>
-
-            <div className="text-center space-y-4">
-              <div className="h-16 w-16 rounded-full bg-primary text-white flex items-center justify-center text-2xl font-bold mx-auto">
-                3
-              </div>
-              <h3 className="text-xl font-semibold">Achieve Goals</h3>
-              <p className="text-muted-foreground">
-                Learn new skills, earn money, and build your professional portfolio
-              </p>
-            </div>
-          </div>
-        </PageContainer>
-      </Section>
+        </div>
+      </section>
 
       {/* Benefits Section */}
-      <Section spacing="lg" background="white">
-        <PageContainer>
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <h2 className="text-3xl lg:text-4xl font-bold">
-                Why Choose YEESP?
-              </h2>
-              <p className="text-lg text-muted-foreground">
-                We provide everything you need to learn, earn, and grow professionally in one integrated platform.
-              </p>
+      <section className="py-24 px-6 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 text-white relative overflow-hidden">
+        {/* Animated background */}
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent)]"></div>
+        </div>
 
-              <div className="space-y-4">
-                {[
-                  { icon: BookOpen, title: "Quality Content", desc: "Expert-created courses and verified tutors" },
-                  { icon: Video, title: "Live Sessions", desc: "Real-time video conferencing with Zoom & Dyte" },
-                  { icon: Shield, title: "Secure Payments", desc: "Escrow-based wallet system for safe transactions" },
-                  { icon: MessageSquare, title: "24/7 Support", desc: "Dedicated support team ready to help" },
-                ].map((benefit, i) => (
-                  <div key={i} className="flex gap-4 items-start">
-                    <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <benefit.icon className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold mb-1">{benefit.title}</h3>
-                      <p className="text-sm text-muted-foreground">{benefit.desc}</p>
-                    </div>
+        <div className="relative max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-5xl md:text-6xl font-bold mb-6">Why Choose YEESP?</h2>
+            <p className="text-xl text-white/80 max-w-2xl mx-auto">
+              The most comprehensive platform for your growth
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="space-y-6">
+              {[
+                { icon: Shield, title: "Secure Payments", desc: "Escrow-based wallet system" },
+                { icon: Zap, title: "Instant Access", desc: "Start learning immediately" },
+                { icon: TrendingUp, title: "Career Growth", desc: "Track your progress" },
+                { icon: Globe, title: "Global Community", desc: "Connect worldwide" }
+              ].map((item, i) => (
+                <div key={i} className="flex gap-4 items-start bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all">
+                  <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center flex-shrink-0">
+                    <item.icon className="h-6 w-6 text-white" />
                   </div>
-                ))}
-              </div>
+                  <div>
+                    <h3 className="text-xl font-bold mb-1">{item.title}</h3>
+                    <p className="text-white/80">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
             </div>
 
-            <div className="bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl p-8 space-y-6">
-              <h3 className="text-2xl font-bold">Platform Features</h3>
+            <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md rounded-3xl p-8 border border-white/20">
+              <h3 className="text-3xl font-bold mb-6">All Features Included</h3>
               <div className="space-y-3">
                 {[
-                  "Comprehensive Learning Management System",
-                  "1-on-1 Tutoring Marketplace",
-                  "Freelance Project Bidding",
-                  "Real-time Video Conferencing",
-                  "Secure Wallet & Payments",
-                  "Certificate Generation",
-                  "Progress Tracking & Analytics",
-                  "24/7 Support System",
+                  "Unlimited course access",
+                  "Live video conferencing (Zoom & Dyte)",
+                  "Project bidding & contracts",
+                  "AI-powered recommendations",
+                  "Certificate generation",
+                  "24/7 priority support",
+                  "Mobile app access",
+                  "Lifetime updates"
                 ].map((feature, i) => (
                   <div key={i} className="flex items-center gap-3">
-                    <Check className="h-5 w-5 text-primary flex-shrink-0" />
-                    <span>{feature}</span>
+                    <Check className="h-5 w-5 text-green-400 flex-shrink-0" />
+                    <span className="text-lg">{feature}</span>
                   </div>
                 ))}
               </div>
             </div>
           </div>
-        </PageContainer>
-      </Section>
+        </div>
+      </section>
 
       {/* CTA Section */}
-      <Section spacing="lg" background="gradient">
-        <PageContainer maxWidth="md">
-          <div className="text-center space-y-6">
-            <h2 className="text-3xl lg:text-4xl font-bold">
-              Ready to Start Your Journey?
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Join thousands of learners, tutors, and freelancers already building their future on YEESP
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <Button size="lg" className="text-base" asChild>
-                <Link href="/register">
-                  Get Started Free <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" className="text-base" asChild>
-                <Link href="/about">
-                  Learn More
-                </Link>
-              </Button>
-            </div>
+      <section className="py-24 px-6 bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnoiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utb3BhY2l0eT0iLjEiLz48L2c+PC9zdmc+')] opacity-20"></div>
+        
+        <div className="relative max-w-4xl mx-auto text-center space-y-8">
+          <h2 className="text-5xl md:text-6xl font-bold text-white mb-6">
+            Ready to Start Your Journey?
+          </h2>
+          <p className="text-xl text-white/90">
+            Join thousands of successful students, tutors, and freelancers today
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
+            <Button size="lg" className="bg-white text-purple-600 hover:bg-gray-100 shadow-2xl text-lg px-10 h-16 rounded-full font-bold" asChild>
+              <Link href="/register">
+                Get Started Free <ArrowRight className="ml-2 h-6 w-6" />
+              </Link>
+            </Button>
+            <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white/20 backdrop-blur-md text-lg px-10 h-16 rounded-full font-bold" asChild>
+              <Link href="/about">
+                Learn More
+              </Link>
+            </Button>
           </div>
-        </PageContainer>
-      </Section>
+        </div>
+      </section>
 
-      {/* Footer Note */}
-      <Section spacing="sm" background="white" className="border-t">
-        <PageContainer>
-          <div className="text-center text-sm text-muted-foreground">
-            <p>
-              Developed by <span className="font-semibold text-foreground">Fasih ur Rehman</span> | YEESP - Youth Education and Employment Support Platform
-            </p>
-          </div>
-        </PageContainer>
-      </Section>
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-8 px-6">
+        <div className="max-w-7xl mx-auto text-center">
+          <p className="text-gray-400">
+            Developed by <span className="font-bold text-white">Fasih ur Rehman</span> | YEESP - Youth Education and Employment Support Platform
+          </p>
+        </div>
+      </footer>
+
+      <style>{`
+        @keyframes blob {
+          0%, 100% {
+            transform: translate(0, 0) scale(1);
+          }
+          33% {
+            transform: translate(30px, -50px) scale(1.1);
+          }
+          66% {
+            transform: translate(-20px, 20px) scale(0.9);
+          }
+        }
+        .animate-blob {
+          animation: blob 7s infinite;
+        }
+        .animation-delay-2000 {
+          animation-delay: 2s;
+        }
+        .animation-delay-4000 {
+          animation-delay: 4s;
+        }
+      `}</style>
     </div>
   );
 }

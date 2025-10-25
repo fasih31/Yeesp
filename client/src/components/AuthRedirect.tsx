@@ -16,7 +16,7 @@ export function AuthRedirect() {
         tutor: '/dashboard/tutor',
         freelancer: '/dashboard/freelancer',
         recruiter: '/dashboard/recruiter',
-        admin: '/dashboard/admin',
+        admin: '/admin/dashboard',
       };
 
       const dashboard = dashboardMap[user.role] || '/dashboard/student';
