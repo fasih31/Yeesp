@@ -6,6 +6,7 @@ import Stripe from "stripe";
 import bcrypt from "bcryptjs";
 import passport from "passport";
 import { requireAuth, requireRole } from "./middleware/auth";
+import { getWebSocketService } from "./services/websocket";
 
 const stripe = process.env.STRIPE_SECRET_KEY 
   ? new Stripe(process.env.STRIPE_SECRET_KEY, {
@@ -280,6 +281,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const enrollment = await storage.updateEnrollment(req.params.id, req.body);
+
+      if (!enrollment) {
+        return res.status(404).json({ error: "Enrollment not found" });
+      }
 
       // If course completed (100%), generate certificate
       if (enrollment.completed && !req.body.certificateGenerated) {

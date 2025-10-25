@@ -9,7 +9,8 @@
     "start": "NODE_ENV=production node dist/index.js",
     "check": "tsc",
     "db:push": "DRIZZLE_KIT_NO_PROMPT=1 drizzle-kit push --force",
-    "create-admin": "node scripts/create-admin.js"
+    "create-admin": "node scripts/create-admin.js",
+    "setup-test-users": "node scripts/setup-test-users.js"
   },
   "dependencies": {
     "@dytesdk/react-ui-kit": "^3.0.8",
