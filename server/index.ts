@@ -2,6 +2,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { registerExtendedRoutes } from "./routes-extended";
 import { registerUploadRoutes } from "./routes-upload";
+import { registerVideoRoutes } from "./routes-video";
 import { setupVite, serveStatic, log } from "./vite";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
 
@@ -54,6 +55,7 @@ app.use((req, res, next) => {
   const server = await registerRoutes(app);
   registerExtendedRoutes(app);
   registerUploadRoutes(app);
+  registerVideoRoutes(app);
 
   // Initialize WebSocket
   const { initializeWebSocket } = await import('./services/websocket');
