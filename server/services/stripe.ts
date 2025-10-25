@@ -106,8 +106,8 @@ export class StripeService {
         },
       ],
       mode: 'payment',
-      success_url: `${process.env.REPLIT_DOMAINS || 'http://localhost:5000'}/wallet?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.REPLIT_DOMAINS || 'http://localhost:5000'}/wallet?cancelled=true`,
+      success_url: `${process.env.APP_URL || 'http://localhost:5000'}/wallet?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.APP_URL || 'http://localhost:5000'}/wallet?cancelled=true`,
       metadata: {
         userId: params.userId,
         type: 'wallet_deposit',
