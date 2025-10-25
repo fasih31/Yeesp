@@ -1,0 +1,317 @@
+Nice — let’s tear this down into a concrete, developer-ready specification so your development head can start building immediately. I’ll list what each role needs (fields + UI elements + actions), the validations required, interconnections between modules, example DB tables, API endpoints, workflows, and priority (MVP vs. later).
+
+I’ll keep it practical and prioritized so engineers can implement in sprints.
+
+Overall common foundation (applies to all roles)
+
+Auth & security
+	•	JWT access + refresh tokens, session expiry, optional 2FA (email/SMS).
+	•	OAuth login (Google, Apple) for fast signup.
+	•	Role-based access control (RBAC): student, tutor, freelancer, recruiter, admin, superadmin.
+	•	Audit logs for sensitive actions (payment changes, KYC approvals, certificate issuance).
+	•	Rate limiting on critical endpoints and file uploads.
+
+Data/Storage
+	•	Primary DB: PostgreSQL.
+	•	Cache: Redis (session, rate-limit counters).
+	•	File storage: S3-compatible (videos, CVs, certificates, assignments).
+	•	Search: Elastic/Algolia for fast tutor/course/project search.
+
+Common validations
+	•	Strong email validation (verify by sending code).
+	•	Phone number normalized (E.164) + SMS verification.
+	•	File type & size restrictions (videos, images, docs).
+	•	XSS/CSRF protections on forms.
+	•	GDPR/Privacy: explicit consent checkbox on signup + TOS link.
+
+⸻
+
+1) Tutor (Trainer) — Profile & Dashboard
+
+Profile (fields & documents)
+	•	Display name, Full legal name (for payments/certs).
+	•	Headline (e.g., “React dev & UI/UX Trainer”).
+	•	Bio (rich text, max 1000 chars).
+	•	Expertise tags (controlled taxonomy: e.g., frontend, digital-marketing, excel).
+	•	Languages (ISO codes) and timezones.
+	•	Hourly rate / session packages (currency + tax details).
+	•	Availability calendar (integration with Google Calendar optional).
+	•	Qualifications (list with institution, degree, year, document upload PDF).
+	•	Portfolio links & attachments (GitHub, LinkedIn, sample projects).
+	•	KYC docs (ID, selfie verification) — required for payout.
+	•	Background check status (if needed).
+	•	Bank/payout settings (Payoneer/Stripe Connect/Local bank).
+	•	Rating & reviews (aggregated).
+
+Tutor Dashboard (MVP)
+	•	Overview: upcoming sessions, earnings this month, profile completeness meter.
+	•	Sessions: manage scheduled live classes, create recurring slots, start video call via SDK.
+	•	Course Authoring: create/edit courses, modules, lessons, upload videos/docs, set quizzes.
+	•	Student management: view enrolled students, message students, see progress.
+	•	Earnings: payout history, pending, service charges, refunds.
+	•	Notifications: booking requests, cancellations, messages, assignment submissions.
+	•	Reports: student completion rate, average rating, session attendance.
+
+Validations & Business rules
+	•	Tutors cannot set an hourly rate below platform minimum.
+	•	Must complete KYC and add payout method before first paid session/withdrawal.
+	•	Availability must prevent double-booking — enforce UTC-normalized slots; booking conflicts return 409.
+	•	Video upload size + codec restrictions, generate thumbnails and transcripts (background worker).
+	•	Course publish flow: draft → review (optional admin review for verified courses) → published.
+	•	If tutor deletes a published lesson, notify enrolled students and create archived snapshot for audit.
+
+Interconnections
+	•	Tutor profile feeds matching engine (AI) — used by student search & recommendations.
+	•	Completed tutor-led courses automatically create credentials that map to freelancer skills and badges.
+	•	Tutor can post gigs to the freelancing marketplace (optional).
+
+⸻
+
+2) Student — Profile & Dashboard
+
+Profile (fields)
+	•	Name, username, email, phone (optional).
+	•	Bio (short), education, skills (tags), learning goals.
+	•	Preferred mode (Self / Hybrid / Full Tutoring).
+	•	Payment methods (card tokens).
+	•	Saved tutors and watchlist (courses & jobs).
+	•	Certificates (digital, blockchain-anchored optional).
+	•	Portfolio / projects (workspace to store code/projects).
+
+Student Dashboard (MVP)
+	•	Home / Feed: recommended courses, upcoming sessions, pinned tutors.
+	•	My Courses: enrolled courses, progress bars, downloadable resources.
+	•	Bookings: upcoming tutor sessions, history, cancel/reschedule (with policy).
+	•	Assignments & Labs: submit files, automated plagiarism check, grader / peer review.
+	•	Payments: invoices, receipts, scholarships/discounts.
+	•	Freelance Profile: convert to freelancer after course completion, showcase certificates and projects.
+	•	Support: open tickets, live chat.
+
+Validations & Business rules
+	•	Enrollments: prevent duplicate enrollment for same course instance.
+	•	Access control: some content gated until payment or prerequisite completion.
+	•	Cancellation policy: allow reschedule/cancel within set timewindow (e.g., 24 hours) with penalties.
+	•	Certificate issuance: only after passing required quizzes/assignments; certificates have issue date and unique ID.
+	•	Auto-reminders for upcoming live sessions (email/SMS/Push).
+
+Interconnections
+	•	Student progress and skills feed the freelance eligibility engine.
+	•	If student completes a course with grade >= threshold → auto-unlock freelancing profile and recommended gigs.
+	•	Students can request tutor for one-off sessions or subscribe to packages; tutor accepts via their dashboard.
+
+⸻
+
+3) Admin Dashboard
+
+Roles & Permissions
+	•	Content Admin: manage courses, approve tutor content.
+	•	User Admin: manage users, KYC approvals.
+	•	Finance Admin: payouts, refunds, fee configuration.
+	•	Superadmin: platform-wide settings, access logs.
+
+Admin Features (MVP)
+	•	User management: search, suspend, edit roles, view KYC status.
+	•	Course moderation: approve/reject courses, view version history.
+	•	Tutor verification: KYC queue, approve onboarding, set badges (verified/expert).
+	•	Payment & payouts: manual payouts, refunds, dispute handling.
+	•	Analytics & Dashboards: MAU, enrolments, ARPU, revenue by channel, course completion rate.
+	•	Content updates: broadcast updates to cohorts (when course updated).
+	•	Audit logs: view critical events (payment changes, admin edits).
+	•	Notifications center: create broadcast messages, targeted campaigns.
+
+Validations & Business rules
+	•	Admin actions require audit log entries with user id, timestamp, reason.
+	•	Financial changes require 2FA or multi-admin approval above threshold.
+	•	Deletion policy: soft deletes and retention for X days.
+	•	Course takedown policy: courses flagged for infringement go into restricted state and are queued for review.
+
+Interconnections
+	•	Admin triggers content update notifications to students + tutors.
+	•	Finance module talks to payment gateway for payouts and store ledger entries.
+
+⸻
+
+4) Recruiter / Company / Client (Freelancing Dashboard)
+
+Profile (fields)
+	•	Company name, company admin contact details, verified status.
+	•	Industry, location, company size.
+	•	Billing details & preferred payment method.
+	•	Hiring preferences (contract type, budget ranges).
+
+Recruiter Dashboard (MVP)
+	•	Post a Project: title, description, skills required tags, budget type (fixed/hourly), milestones, NDA toggle, interview steps.
+	•	Shortlist & Invite: shortlist candidates, invite to interview, request test assignment.
+	•	Auto-Match: see top recommended freelancers based on course credentials, skill tags, ratings.
+	•	Interview & Hires: schedule interviews, issue offers, manage contracts.
+	•	Payments & Escrow: deposit to escrow, release on milestone completion.
+	•	Reports: spend, hire success rate, average time-to-hire.
+	•	Company Team: invite multiple admins with RBAC.
+
+Validations & Business rules
+	•	Project posting: required fields validation, rate ranges normalized to currency/region.
+	•	Escrow enforcement: funds must be deposited before work begins for fixed-price contracts.
+	•	Freelancer verification: if recruiter requests verified-only, filter accordingly.
+	•	Dispute flow: allow raising disputes within X days of milestone completion; freeze escrow.
+	•	Anti-fraud: require company verification for high-budget projects.
+
+Interconnections
+	•	Recruiter can request on-demand training for shortlisted candidates — ties into education portal (paid upskilling).
+	•	Hiring analytics informs marketing & course curation (which skills are in-demand).
+
+⸻
+
+Core Interconnections & Flows (How modules talk to each other)
+
+1) Matchmaking flow (student ↔ tutor ↔ recruiter)
+	•	Event: Student specifies need (e.g., weekly tutoring in React).
+	•	System:
+	•	Use student.preferences + skill tags + timezone to query tutor index.
+	•	Rank by availability, rating, price, verification status.
+	•	Present top N tutors; offer book now or request a trial.
+	•	Validation: booking conflict detection, payment authorization if required.
+
+2) Learn → Earn (student to freelancer)
+	•	Trigger: Student completes course(s) & meets grade/portfolio requirements.
+	•	System:
+	•	Automatically create freelancer profile draft populated with certificates & sample projects.
+	•	Send onboarding flow: set rates, add payout, accept T&Cs.
+	•	Optionally auto-apply to matching starter gigs or allow recruiter invites.
+	•	Validation: prevent auto-activation for accounts without KYC if gig budget > threshold.
+
+3) Course Update Notification
+	•	Admin or tutor publishes updated content.
+	•	System:
+	•	Create a new course_version, notify enrolled students with diff summary.
+	•	For certified courses, mark if recertification required and schedule update webinar automatically.
+
+4) Payments & Escrow
+	•	Payments for courses, tutoring sessions, and freelancer marketplace all go via unified payments module.
+	•	Rules:
+	•	Course payments: immediate capture, platform fee applied, tutor revenue share scheduled.
+	•	Tutoring sessions: pre-authorization or capture depending on policy; refunds per cancellation policy.
+	•	Freelance projects: escrow deposit required; milestone release on client approval or auto-release if no dispute within N days.
+
+5) Certificates & Credibility
+	•	Certificates contain: cert id, student, course_id, grade, issue_date, issuer.
+	•	Optionally anchor certificate hash on VirtualIEC blockchain for immutability (later enhancement).
+	•	Certificates feed recruiter filters and search ranking.
+
+⸻
+
+Suggested Database Model (core tables)
+	•	users (id, email, role, status, created_at)
+	•	profiles (user_id, full_name, bio, timezone, skills JSONB, languages)
+	•	tutor_profiles (user_id, headline, hourly_rate, kyc_status, verified_at)
+	•	courses (id, tutor_id, title, description, category, price, status, version)
+	•	modules (id, course_id, position, title)
+	•	lessons (id, module_id, type(video/article/quiz), content_ref)
+	•	enrollments (student_id, course_id, progress, grade, status)
+	•	sessions (id, tutor_id, student_id(s), start_time, end_time, meeting_url, status)
+	•	bookings (user_id, session_id, status, payment_id)
+	•	projects (id, recruiter_id, title, budget, status)
+	•	bids (freelancer_id, project_id, bid_amount, proposal)
+	•	payments (id, user_id, amount, currency, type, status, gateway_ref)
+	•	certificates (id, enrollment_id, cert_hash, issued_at)
+	•	notifications (user_id, type, payload, read)
+	•	reviews (from_id, to_id, rating, text)
+	•	audit_logs (actor_id, action, entity, before, after, timestamp)
+
+⸻
+
+API endpoint examples (MVP)
+	•	POST /auth/signup — signup (role param)
+	•	POST /auth/login — returns JWT
+	•	GET /tutors?skill=react&tz=+04:00 — search tutors
+	•	POST /tutors/:id/book — book a session (payload: slot, payment token)
+	•	POST /courses (tutor) — create course draft
+	•	POST /courses/:id/publish (tutor/admin) — publish course
+	•	POST /enroll/:courseId — student enroll (payment if paid)
+	•	GET /student/:id/dashboard — aggregated student data
+	•	GET /tutor/:id/dashboard — aggregated tutor data
+	•	POST /projects — recruiter posts project (with escrow deposit)
+	•	POST /projects/:id/milestone — create milestone and set release conditions
+	•	POST /payments/webhook — payment gateway webhook for status updates
+
+⸻
+
+Validation detail examples (edge cases)
+	•	Booking race conditions: Use DB-level transaction + row-level locking when creating bookings to prevent double-book. Return HTTP 409 if conflict.
+	•	Refund & dispute window: Refund allowed within 24 hours for recorded courses unless consumed > X% of content. For live sessions, cancellations allowed up to 12 hours prior for full refund. For disputes, freeze escrow and allow admin mediation.
+	•	Content plagiarism: Automatic plagiarism scan for assignments; flag for manual review if > 20% similarity.
+	•	Course prerequisites: Enforce prerequisite completion before enrolling in advanced courses.
+	•	Tutor availability timezone normalization: All times stored in UTC; UI shows localized times; confirmation email contains both local & UTC time.
+	•	Payment currency mismatch: Normalize via platform currency; show both estimated conversions at checkout with rate & timestamp.
+	•	Certificate revocation: Admin can revoke certificate; store revoked_at with reason; notify recruiters who viewed it in last X days.
+
+⸻
+
+Priority roadmap for development (epic → sprint grouping)
+
+MVP (1–3 months)
+	•	Core auth, roles, basic student & tutor profiles.
+	•	Course CRUD (draft → publish).
+	•	Basic video upload & streaming (hosted videos).
+	•	Enrollments + progress tracking.
+	•	Tutor availability + basic booking flow (single session).
+	•	Simple payments for courses & session capture.
+	•	Admin panel for user & course moderation.
+	•	Basic freelancing: post project + bids (no escrow).
+
+Phase 2 (3–6 months)
+	•	Advanced bookings (recurring, group sessions).
+	•	Escrow payments, milestones, dispute flow.
+	•	AI-based tutor matching & course recommendations (rule-based initially, ML later).
+	•	Certificates + shareable credentials.
+	•	Student → freelancer onboarding flow.
+	•	Analytics dashboards for admin & tutors.
+
+Phase 3 (6–12 months)
+	•	Video classroom SDK deep integration (interactive whiteboard, breakout rooms).
+	•	Background video processing (transcript, captions, thumbnails).
+	•	Blockchain certification anchoring (VirtualIEC).
+	•	Gamification & community features.
+	•	Mobile apps (Flutter) & PWA.
+
+⸻
+
+KPIs & Acceptance Criteria (for each dashboard)
+
+Student KPIs
+	•	Course completion rate (target 40% in Q1)
+	•	Average session attendance (target > 70%)
+	•	Time to first engagement after signup (< 48 hrs)
+
+Tutor KPIs
+	•	Activation rate (KYC completed within 7 days)
+	•	Average rating ≥ 4.5 for verified tutors
+	•	Average response time for booking requests < 24h
+
+Recruiter KPIs
+	•	Time to hire (days)
+	•	Job fill rate (%)
+	•	Satisfaction score for hires
+
+QA Acceptance examples
+	•	Students can book a tutor slot and receive calendar invite in local timezone.
+	•	Tutor cannot accept two overlapping bookings (DB-level test).
+	•	Certificates cannot be issued until grade & assignments flagged as passed.
+	•	Escrow funds are locked upon project creation and released only on milestone approval.
+
+⸻
+
+UX / Micro-interaction suggestions (practical)
+	•	Show profile completeness for tutors & students with actionable checklist (KYC, payout, portfolio).
+	•	Use smart suggestions: when tutor uploads a new course, offer auto-generated course tags and short description via AI.
+	•	One-click convert button: student -> freelancer (pre-filled with certificates) after passing checks.
+	•	Inbox with threaded messaging + file attachments and session recording link.
+
+⸻
+
+Deliverables I can prepare next (pick one)
+	1.	Detailed PRD with user stories, acceptance criteria, and API contract (OpenAPI skeleton).
+	2.	ERD diagram + sequence diagrams (enrollment, booking, escrow release).
+	3.	High-level sprint backlog for 3-month MVP (epics, stories, estimates).
+	4.	Wireframe screens (PDF) for each dashboard (student, tutor, recruiter, admin).
+
+Tell me which deliverable you want first and I’ll generate it right away.

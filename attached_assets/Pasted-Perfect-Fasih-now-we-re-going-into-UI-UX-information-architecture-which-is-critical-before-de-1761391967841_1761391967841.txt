@@ -1,0 +1,236 @@
+Perfect, Fasih 👏 — now we’re going into UI/UX information architecture, which is critical before development starts.
+
+Below is a complete list of pages, sub-pages, notifications, and pop-ups that your YEESP + LMS + Freelancing ecosystem will require.
+It’s logically divided into:
+1️⃣ Global (common)
+2️⃣ Student
+3️⃣ Tutor
+4️⃣ Recruiter / Company
+5️⃣ Freelancer
+6️⃣ Admin
+7️⃣ System notifications
+8️⃣ Pop-ups / modals (with triggers & validation)
+
+⸻
+
+🧭 1. Global / Common Pages
+
+These appear for all user roles (before & after login).
+
+Page	Description / Components
+Landing Page (Home)	YEESP overview, CTA buttons (“Join as Student / Tutor / Freelancer / Recruiter”), success stories, pricing tiers.
+About / Vision / Mission	Company overview, core values, impact stats.
+Courses Catalog	Search, filters (category, difficulty, mode, price, rating), sorting.
+Tutors Directory	Filter by skill, language, price, rating, availability.
+Freelancing Marketplace	Active gigs / projects list with category filters, search bar.
+Login / Signup	OAuth (Google, Microsoft), traditional login, role selection.
+Forgot / Reset Password	Email or OTP verification.
+Contact / Support / FAQs	Form + chat link + support docs.
+Terms & Privacy Policy	Static legal pages.
+Pricing / Plans	Self, Hybrid, Full Tutoring packages, Freelancing commission info.
+Blog / News	Educational news, tech trends, YEESP updates.
+404 / Maintenance	Error pages.
+
+
+⸻
+
+🎓 2. Student Portal Pages
+
+Page	Description / Key Actions
+Dashboard (Home)	Welcome message, ongoing courses, progress bars, next live session, new announcements, certificates earned.
+My Courses	Enrolled courses, view course details, continue button, progress %.
+Course Player	Video player, resource tabs, transcript, notes, comments, quizzes, next/prev navigation.
+Assignments & Quizzes	List of pending/completed assignments, upload area, due date, marks, feedback.
+Book a Tutor	Search tutors, filter, view profile, book slot, payment confirmation.
+Bookings	Upcoming sessions, calendar view, reschedule/cancel buttons.
+Certificates	Digital certificates (download/share), blockchain verification link.
+Freelance Onboarding	Convert to freelancer, add portfolio, upload projects, preview profile.
+My Freelance Projects	Active bids, applied jobs, earnings summary.
+Payments	Transaction history, invoices, wallet balance (if implemented).
+Notifications	Bell icon feed (class reminders, tutor responses, payments, grades).
+Messages / Chat	1:1 with tutors or support.
+Profile Settings	Personal info, skills, password change, 2FA, notification preferences.
+Support / Tickets	Raise ticket, view status, chat with admin.
+
+
+⸻
+
+👨‍🏫 3. Tutor Portal Pages
+
+Page	Description
+Dashboard	Summary: earnings, sessions today, course progress, student stats.
+My Courses	List of created courses (Draft / Published / Archived).
+Create / Edit Course	Title, description, category, pricing, upload videos/resources, quizzes, publish button.
+Session Management	Calendar view, booked slots, start class (launch live room).
+Students	View list of enrolled students, progress, grades, send feedback.
+Assignments Review	Pending submissions, grade entry, remarks.
+Earnings / Payouts	Monthly income, pending payouts, payment history.
+Messages / Q&A	Chat with students, course forum.
+Profile	Edit profile, KYC upload, portfolio links, availability schedule.
+Reviews	See ratings & feedback from students.
+Notifications	Booking requests, cancellations, payment success, course updates.
+Resources / Help Center	Tutorials on how to use platform.
+
+
+⸻
+
+💼 4. Recruiter / Company Pages
+
+Page	Description
+Dashboard	Overview of active projects, hires, total spend, pending milestones.
+Post a Project	Create new job/project (title, budget, description, skills, duration).
+Manage Projects	List view with tabs: Active / Completed / Drafts.
+Applicants	Review bids, shortlist, view freelancer profile.
+Contracts / Milestones	Track milestones, release funds, approve work.
+Payments / Escrow	Transaction list, add funds, view invoices.
+Talent Pool / Saved Freelancers	Bookmark or invite freelancers.
+On-Demand Training	Request YEESP to train potential hires.
+Company Profile / Settings	Update company info, team members, billing.
+Notifications	New bids, message alerts, milestone approvals, payment confirmations.
+
+
+⸻
+
+🧑‍💻 5. Freelancer Pages
+
+Page	Description
+Dashboard	Active projects, pending payments, rating summary.
+Profile	Skills, certificates (auto-imported from YEESP), hourly rate, portfolio.
+Browse Projects	Search/filter projects, apply with proposal.
+My Bids	Track bid status (pending / accepted / rejected).
+Active Contracts	Milestone view, submit work, request approval.
+Earnings	Wallet balance, withdrawal history, invoices.
+Reviews / Ratings	Feedback from clients.
+Messages	Chat with clients, send attachments.
+Notifications	Milestone updates, job approvals, payment events.
+
+
+⸻
+
+🛠️ 6. Admin Panel Pages
+
+Page	Description
+Dashboard	KPI overview: users, revenue, enrollments, sessions today, disputes.
+User Management	List/search/filter (students, tutors, freelancers, recruiters), suspend/reactivate, view profile.
+KYC Verification	Pending KYC queue, approve/reject, download docs.
+Course Management	Approve/reject courses, view updates, archive.
+Content Updates	Broadcast announcements, manage banners.
+Payments / Finance	Payouts queue, refunds, disputes, commissions.
+Freelance Projects	Monitor postings, disputes, flagged content.
+Analytics & Reports	Revenue, engagement, popular courses, conversion funnels.
+Certificates Manager	Issue/revoke certificates, verify blockchain hash.
+Notifications Manager	Send push/email notifications to specific user groups.
+System Settings	Roles, permissions, pricing tiers, API keys, email templates.
+Support / Tickets	View and assign support tickets.
+Audit Logs	View critical admin actions.
+
+
+⸻
+
+🔔 7. Notifications (System-Generated)
+
+These appear as toast popups, bell-feed items, or emails.
+
+Student Notifications
+	•	Enrollment confirmed
+	•	Course completed (certificate issued)
+	•	Assignment graded / returned
+	•	Quiz result published
+	•	Upcoming live class (24h / 1h reminders)
+	•	Session cancelled / rescheduled
+	•	Tutor message received
+	•	Payment success / refund issued
+	•	Freelancing project invitation received
+	•	New course update available
+
+Tutor Notifications
+	•	New booking request
+	•	Student cancellation / reschedule
+	•	Payment credited for session/course
+	•	New message / question
+	•	Assignment submitted
+	•	Course published (approved by admin)
+	•	KYC verification approved / rejected
+	•	Rating or review received
+
+Recruiter Notifications
+	•	New freelancer applied
+	•	Project milestone completed (approval needed)
+	•	Escrow deposit successful
+	•	Dispute raised / resolved
+	•	Invoice generated
+	•	Candidate training update (if linked to LMS)
+
+Freelancer Notifications
+	•	Bid accepted / rejected
+	•	Milestone payment released
+	•	Client message received
+	•	Review posted
+	•	Project completed / closed
+	•	New recommended job match
+
+Admin Notifications
+	•	New tutor waiting for KYC approval
+	•	Course awaiting moderation
+	•	Dispute raised
+	•	System error / failed payout alert
+	•	Reported user or content flagged
+
+⸻
+
+💬 8. Pop-ups / Modals
+
+Popup / Modal	Trigger	Fields / Actions / Validations
+Login / Signup Modal	From nav bar	Email/Password + role select; validate required; Google login.
+Email Verification Popup	After signup	Enter OTP; retry link disabled for 60s.
+Forgot Password	From login	Email input, send reset link.
+Change Password	Profile settings	Old + new password; strength meter.
+KYC Upload	Tutor/freelancer setup	File upload (PDF/JPG <5 MB), validation + preview.
+Add Course / Edit Course	Tutor dashboard	Multi-step wizard (details → modules → pricing).
+Publish Course Confirmation	Tutor clicking “Publish”	Confirm compliance & refund policy; requires checkboxes.
+Book Session Popup	Student clicks “Book Now”	Date/time picker, price summary, payment option; double-booking validation.
+Reschedule / Cancel Session	Student or tutor	Confirm terms; check policy window (>=12 h).
+Upload Assignment	Student	File picker, description, validation on size/type.
+Grade Assignment	Tutor	Numeric field, comments, save.
+Payment Checkout Modal	Before purchase	Summary + discount code; call payment API.
+Success / Failure Toasts	Post-actions	Standard success/error info.
+Send Message	Anywhere messaging icon	Text + attachment; 2 MB limit; profanity filter.
+Leave Review	After course/project completion	Rating stars, feedback text (min 30 chars).
+Withdraw Earnings	Tutor/Freelancer	Amount, payout method; confirm KYC complete.
+Report Issue / Dispute	From project/session	Select reason, optional description & file.
+Certificate Preview / Download	After course completion	Show certificate preview + copy share link.
+Delete / Archive Confirmation	Any delete action	“Are you sure?” double confirmation for critical actions.
+Admin Broadcast Message	Admin panel	Choose user group, message type (email/push).
+Analytics Filters Modal	Admin dashboard	Date range, role filters.
+
+
+⸻
+
+🧩 9. Cross-Module Interconnections (Triggers for Notifications & Popups)
+
+Event	Notification / Popup Trigger
+Payment success → Student/Tutor	Toast + “View receipt” modal
+Tutor approves session → Student	“Session confirmed” bell notification
+Student cancels booking → Tutor	Alert popup + calendar refresh
+Assignment upload → Tutor	Dashboard banner + email
+Admin updates course → Students	Notification feed + “View updates” popup
+Project milestone released → Freelancer	“Payment released” toast
+KYC rejected → User	Modal with reasons & re-upload link
+Certificate issued → Student	“Download Certificate” popup
+System downtime → All users	Global banner “Scheduled maintenance on…”
+Message received → All	Toast + chat badge update
+
+
+⸻
+
+✅ Optional Future Popups / Enhancements
+	•	AI Tutor Chatbot Popup — contextual assistant within course player.
+	•	Gamification Popup — when user earns badge/level.
+	•	Referral Popup — invite friends, show referral code.
+	•	Survey Popup — after course completion for feedback.
+	•	Live Session Join Reminder — countdown modal 5 min before class.
+
+⸻
+
+Would you like me to map these pages and modals visually into a site map diagram / flowchart (PDF or PNG) next?
+That way your development head can see the entire navigation and event-trigger flow at a glance.
