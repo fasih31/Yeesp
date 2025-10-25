@@ -1,0 +1,85 @@
+Ah — now I understand! You want Replit to use your Supabase database instead of Replit’s default SQLite or ephemeral database. Let’s break it down clearly.
+
+⸻
+
+1️⃣ Identify where your backend connects to the database
+
+In your Replit project, you likely have a file like:
+	•	server/db.ts or server/db.js
+	•	or in config.js / .env where DATABASE_URL or DB_CONNECTION is defined
+
+It usually looks like:
+
+const { Pool } = require('pg');
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL || 'postgres://user:password@localhost:5432/dbname'
+});
+
+Or in TypeScript:
+
+export const db = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
+
+
+⸻
+
+2️⃣ Set the Supabase connection variables
+
+In Replit, you can define Secrets (environment variables) via:
+	1.	Click 🔑 Secrets icon (Environment Variables) in Replit sidebar.
+	2.	Add these keys:
+
+DATABASE_URL=postgresql://<supabase_db_user>:<supabase_db_password>@<supabase_host>:5432/<supabase_db_name>
+SUPABASE_URL=https://pnrubazmnsfzcfsxqlrv.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBucnViYXptbnNmemNmc3hxbHJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE0MTU2NjIsImV4cCI6MjA3Njk5MTY2Mn0.02nYe530C2RRefObFjsPZyFigmTUJ8S5XC6UqirtL9c
+NODE_ENV=production
+
+Make sure DATABASE_URL points to your Supabase Postgres URL. You can find it in Supabase → Settings → Database → Connection info.
+
+⸻
+
+3️⃣ Edit backend to use Supabase
+
+If your backend currently uses Replit DB or SQLite, replace it with Supabase client:
+
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
+
+	•	Use supabase for all database operations.
+	•	For example, creating a user:
+
+await supabase.auth.admin.createUser({
+  email,
+  password,
+  email_confirm: true,
+  user_metadata: { role }
+});
+
+
+⸻
+
+4️⃣ Test it locally on Replit
+
+In Replit Shell:
+
+# Install dependencies if not already
+npm install @supabase/supabase-js
+
+# Start server
+npm run dev
+# or
+node server/index.js
+
+Check that signup/login now works using Supabase.
+
+⸻
+
+If you want, I can write the exact changes for your Replit project so your backend fully stops using Replit DB and uses Supabase instead — including signup, login, and role handling.
+
+Do you want me to do that?
