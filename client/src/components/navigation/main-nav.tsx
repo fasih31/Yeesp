@@ -18,7 +18,8 @@ export function MainNav() {
     <header className="border-b bg-background sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          <Link href="/">
+          <Link href="/" className="flex items-center gap-2">
+            <img src="/icon.png" alt="YEESP" className="h-8 w-8" />
             <h1 className="text-2xl font-bold cursor-pointer">YEESP</h1>
           </Link>
 

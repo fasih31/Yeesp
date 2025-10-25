@@ -249,8 +249,9 @@ export default function Landing() {
             </ul>
           </div>
         </div>
-        <div className="text-center text-muted-foreground mt-16">
-          © {new Date().getFullYear()} YEESP. All rights reserved.
+        <div className="text-center text-muted-foreground mt-16 space-y-2">
+          <p>© {new Date().getFullYear()} YEESP. All rights reserved.</p>
+          <p className="text-sm">Developed by <span className="font-semibold text-foreground">Fasih ur Rehman</span></p>
         </div>
       </footer>
     </div>
