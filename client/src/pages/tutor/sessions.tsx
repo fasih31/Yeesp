@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Calendar, Clock, Video, DollarSign } from "lucide-react";
+import { Calendar, Clock, Video, DollarSign, Copy, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/api";
 import type { Session, User } from "@shared/schema";
@@ -103,6 +103,75 @@ export default function TutorSessions() {
                       <div className="text-sm text-muted-foreground">
                         <p className="font-medium">Notes:</p>
                         <p>{session.notes}</p>
+                      </div>
+                    )}
+                    {session.videoProvider && (
+                      <div className="border-t pt-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Video className="h-4 w-4" />
+                          <span className="font-medium text-sm">
+                            Video Platform: {session.videoProvider === 'zoom' ? 'Zoom' : 'Dyte'}
+                          </span>
+                          <Badge variant="outline" className="text-xs">
+                            {session.videoProvider.toUpperCase()}
+                          </Badge>
+                        </div>
+                        {session.videoProvider === 'zoom' && session.zoomMeetingId && (
+                          <div className="space-y-2 bg-muted/50 p-3 rounded-md">
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm font-medium">Meeting ID:</span>
+                              <div className="flex items-center gap-2">
+                                <code className="text-sm">{session.zoomMeetingId}</code>
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(session.zoomMeetingId!);
+                                    toast({ title: "Copied!", description: "Meeting ID copied to clipboard" });
+                                  }}
+                                >
+                                  <Copy className="h-3 w-3" />
+                                </Button>
+                              </div>
+                            </div>
+                            {session.zoomPassword && (
+                              <div className="flex items-center justify-between">
+                                <span className="text-sm font-medium">Password:</span>
+                                <div className="flex items-center gap-2">
+                                  <code className="text-sm">{session.zoomPassword}</code>
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => {
+                                      navigator.clipboard.writeText(session.zoomPassword!);
+                                      toast({ title: "Copied!", description: "Password copied to clipboard" });
+                                    }}
+                                  >
+                                    <Copy className="h-3 w-3" />
+                                  </Button>
+                                </div>
+                              </div>
+                            )}
+                            {session.meetingUrl && (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="w-full mt-2"
+                                onClick={() => window.open(session.meetingUrl, '_blank')}
+                              >
+                                <ExternalLink className="h-4 w-4 mr-2" />
+                                Join Zoom Meeting
+                              </Button>
+                            )}
+                          </div>
+                        )}
+                        {session.videoProvider === 'dyte' && session.videoRoomId && (
+                          <div className="space-y-2 bg-muted/50 p-3 rounded-md">
+                            <p className="text-sm text-muted-foreground">
+                              Dyte video session will be available when you start the session
+                            </p>
+                          </div>
+                        )}
                       </div>
                     )}
                     <div className="flex gap-2">

@@ -16,6 +16,7 @@ export const users = pgTable("users", {
   skills: text("skills").array(),
   hourlyRate: decimal("hourly_rate", { precision: 10, scale: 2 }),
   verified: boolean("verified").default(false),
+  stripeCustomerId: text("stripe_customer_id"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -156,7 +157,20 @@ export const notifications = pgTable("notifications", {
   message: text("message").notNull(),
   link: text("link"),
   read: boolean("read").default(false).notNull(),
+  metadata: jsonb("metadata"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Email Templates
+export const emailTemplates = pgTable("email_templates", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  type: text("type").notNull().unique(), // 'enrollment', 'session_reminder', 'payment_receipt', etc.
+  subject: text("subject").notNull(),
+  htmlBody: text("html_body").notNull(),
+  textBody: text("text_body").notNull(),
+  variables: text("variables").array(), // Template variables like {{name}}, {{date}}
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 // Assignments
@@ -292,6 +306,7 @@ export const walletTransactions = pgTable("wallet_transactions", {
   amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
   description: text("description").notNull(),
   referenceId: varchar("reference_id"), // Reference to payment, project, etc.
+  stripeIntentId: text("stripe_intent_id"), // Stripe payment intent ID
   status: text("status").notNull().default('completed'), // 'pending', 'completed', 'failed'
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });

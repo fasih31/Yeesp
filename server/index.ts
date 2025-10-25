@@ -64,6 +64,10 @@ app.use((req, res, next) => {
   // Register Zoom routes
   const zoomRoutes = await import('./routes-zoom');
   app.use('/api/zoom', zoomRoutes.default);
+  
+  // Register Stripe routes
+  const stripeRoutes = await import('./routes-stripe');
+  app.use('/api/stripe', stripeRoutes.default);
 
   // Initialize WebSocket
   const { initializeWebSocket } = await import('./services/websocket');

@@ -65,4 +65,33 @@ The platform is built with a React 18 + TypeScript frontend using Vite, Wouter f
 - Implemented authenticated API endpoints: `/api/zoom/create-meeting`, `/api/zoom/meeting/:id`, `/api/zoom/session/:id/zoom-meeting`
 - Backend supports dual provider configuration (Dyte or Zoom) for sessions
 - All Zoom endpoints protected with authentication middleware
-- Note: Frontend UI for provider selection to be implemented in future update
+
+### Frontend Video Provider Selection
+- Created VideoProviderSelector component with visual radio cards for Dyte/Zoom selection
+- Built BookSessionDialog component with complete booking workflow (date, time, duration, provider, notes, pricing)
+- Enhanced session details page to display Zoom meeting credentials (ID, password, join URL)
+- Added copy-to-clipboard functionality for meeting details
+- Fully integrated with existing Zoom backend API
+
+### Stripe Payment Integration
+- Database schema updated: Added stripe_customer_id to users table, stripe_intent_id to wallet_transactions
+- Comprehensive StripeService implementation:
+  * Automatic customer creation and retrieval
+  * Checkout session creation for wallet deposits
+  * Payment intent handling for transactions
+  * Escrow hold and release functionality
+  * Webhook event processing with signature verification
+  * Automatic wallet balance updates on successful payments
+- Secure API routes under `/api/stripe/*`:
+  * POST /create-checkout-session (wallet deposits)
+  * GET /wallet/balance (user wallet info)
+  * POST /webhook (Stripe webhook with raw body handling)
+  * GET /config (publishable key for frontend)
+  * GET /checkout-session/:id (session verification)
+- Ready for production use (requires STRIPE_SECRET_KEY and VITE_STRIPE_PUBLIC_KEY environment variables)
+
+### Email & Notification Infrastructure
+- Created email_templates table for template management with variable substitution
+- Added metadata jsonb field to notifications table for rich notification data
+- Foundation ready for SendGrid integration (requires SENDGRID_API_KEY)
+- Existing email service supports development mode logging

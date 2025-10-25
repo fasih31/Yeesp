@@ -9,10 +9,14 @@ import { Calendar } from "@/components/ui/calendar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { BookSessionDialog } from "@/components/BookSessionDialog";
 import { Star, Search, Filter } from "lucide-react";
+import type { User } from "@shared/schema";
 
 export default function BookTutor() {
   const [date, setDate] = useState<Date | undefined>(new Date());
+  const [selectedTutor, setSelectedTutor] = useState<User | null>(null);
+  const [bookingDialogOpen, setBookingDialogOpen] = useState(false);
   
   const { data: tutors } = useQuery({
     queryKey: ["/api/users/tutors"],
@@ -97,7 +101,15 @@ export default function BookTutor() {
                   </div>
                 </CardHeader>
                 <CardFooter>
-                  <Button className="w-full">Book Session</Button>
+                  <Button 
+                    className="w-full"
+                    onClick={() => {
+                      setSelectedTutor(tutor);
+                      setBookingDialogOpen(true);
+                    }}
+                  >
+                    Book Session
+                  </Button>
                 </CardFooter>
               </Card>
             ))}
@@ -120,6 +132,14 @@ export default function BookTutor() {
           </Card>
         </div>
       </div>
+
+      {selectedTutor && (
+        <BookSessionDialog
+          open={bookingDialogOpen}
+          onOpenChange={setBookingDialogOpen}
+          tutor={selectedTutor}
+        />
+      )}
     </div>
   );
 }
