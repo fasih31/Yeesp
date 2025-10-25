@@ -1,4 +1,7 @@
 
+// Load environment variables from Replit Secrets
+import('../server/env.ts').catch(() => {});
+
 console.log("\n🔍 ENVIRONMENT VARIABLES CHECK\n");
 console.log("=".repeat(60));
 

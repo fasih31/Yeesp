@@ -1,4 +1,7 @@
 
+// Load environment variables from Replit Secrets
+import "../server/env.ts";
+
 import { db } from "../server/db.ts";
 import { users } from "../shared/schema.ts";
 import { eq } from "drizzle-orm";
