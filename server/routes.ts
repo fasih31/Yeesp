@@ -14,6 +14,22 @@ const stripe = process.env.STRIPE_SECRET_KEY
 export async function registerRoutes(app: Express): Promise<Server> {
   // ===== AUTH ROUTES =====
   
+  app.post("/api/auth/logout", (req, res) => {
+    req.logout((err) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.json({ success: true });
+    });
+  });
+
+  app.get("/api/auth/me", (req, res) => {
+    if (req.isAuthenticated && req.isAuthenticated()) {
+      return res.json({ user: req.user });
+    }
+    res.status(401).json({ error: "Not authenticated" });
+  });
+
   app.post("/api/auth/register", async (req, res) => {
     try {
       const data = insertUserSchema.parse(req.body);
@@ -40,35 +56,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/auth/login", async (req, res) => {
-    try {
-      const { email, password } = req.body;
-      
-      const user = await storage.getUserByEmail(email);
+  app.post("/api/auth/login", (req, res, next) => {
+    passport.authenticate('local', (err: any, user: any, info: any) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
       if (!user) {
-        return res.status(401).json({ error: "Invalid credentials" });
+        return res.status(401).json({ error: info?.message || "Invalid credentials" });
       }
-
-      // Verify password
-      const isValid = await bcrypt.compare(password, user.password);
-      if (!isValid) {
-        return res.status(401).json({ error: "Invalid credentials" });
-      }
-
-      // Get approved additional roles
-      const approvedRoles = await storage.getUserApprovedRoles(user.id);
-
-      // Don't send password back
-      const { password: _, ...userWithoutPassword } = user;
-      res.json({ 
-        user: {
-          ...userWithoutPassword,
-          approvedRoles
+      
+      req.logIn(user, (err) => {
+        if (err) {
+          return res.status(500).json({ error: err.message });
         }
+        return res.json({ user });
       });
-    } catch (error: any) {
-      res.status(400).json({ error: error.message });
-    }
+    })(req, res, next);
   });
 
   // ===== USER ROUTES =====

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,8 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { useMutation } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/api";
+import { useAuth } from "@/lib/auth";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email"),
@@ -20,6 +20,8 @@ type LoginForm = z.infer<typeof loginSchema>;
 export default function Login() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const { login } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
@@ -29,33 +31,27 @@ export default function Login() {
     },
   });
 
-  const loginMutation = useMutation({
-    mutationFn: async (data: LoginForm) => {
-      return await apiRequest("/auth/login", {
-        method: "POST",
-        body: JSON.stringify(data),
-      });
-    },
-    onSuccess: (data: any) => {
+  const onSubmit = async (data: LoginForm) => {
+    try {
+      setIsLoading(true);
+      await login(data.email, data.password);
       toast({
         title: "Welcome back!",
         description: "You have successfully signed in.",
       });
-      // Redirect based on role
-      const role = data.user?.role || "student";
-      setLocation(`/dashboard/${role}`);
-    },
-    onError: (error: Error) => {
+      // Small delay to ensure session is set
+      setTimeout(() => {
+        window.location.href = '/dashboard/student';
+      }, 100);
+    } catch (error: any) {
       toast({
         variant: "destructive",
         title: "Login failed",
-        description: error.message,
+        description: error.message || "Invalid credentials",
       });
-    },
-  });
-
-  const onSubmit = (data: LoginForm) => {
-    loginMutation.mutate(data);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -113,10 +109,10 @@ export default function Login() {
               <Button
                 type="submit"
                 className="w-full"
-                disabled={loginMutation.isPending}
+                disabled={isLoading}
                 data-testid="button-submit-login"
               >
-                {loginMutation.isPending ? "Signing in..." : "Sign In"}
+                {isLoading ? "Signing in..." : "Sign In"}
               </Button>
             </form>
           </Form>

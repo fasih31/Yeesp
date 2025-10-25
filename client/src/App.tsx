@@ -2,6 +2,7 @@ import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
+import { AuthProvider } from "@/lib/auth";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { MainNav } from "@/components/navigation/main-nav";
 
@@ -70,7 +71,6 @@ import AdminCourses from "@/pages/admin/courses";
 import AdminProjects from "@/pages/admin/projects";
 import AdminAnalytics from "@/pages/admin/analytics";
 import AdminSettings from "@/pages/admin/settings";
-import PlatformSettings from "@/pages/admin/platform-settings";
 import Blog from "@/pages/blog";
 import Terms from "@/pages/terms";
 import Privacy from "@/pages/privacy";
@@ -150,9 +150,9 @@ function Router() {
       <Route path="/faq" component={FAQ} />
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/maintenance" component={Maintenance} />
-      <Route path="/careers" component={Careers} />
-      <Route path="/help" component={HelpCenter} />
-      <Route path="/affiliate" component={Affiliate} />
+      <Route path="/careers" element={<Careers />} />
+      <Route path="/help" element={<HelpCenter />} />
+      <Route path="/affiliate" element={<Affiliate />} />
       <Route path="/recruiter/my-projects" component={RecruiterMyProjects} />
       <Route path="/recruiter/proposals" component={RecruiterProposals} />
       <Route path="/recruiter/hire-talent" component={RecruiterHireTalent} />
@@ -168,11 +168,10 @@ function Router() {
       <Route path="/admin/projects" component={AdminProjects} />
       <Route path="/admin/analytics" component={AdminAnalytics} />
       <Route path="/admin/settings" component={AdminSettings} />
-      <Route path="/admin/platform-settings" component={PlatformSettings} />
       <Route path="/admin/role-requests" component={AdminRoleRequests} />
       <Route path="/blog" component={Blog} />
-      <Route path="/terms" component={Terms} />
-      <Route path="/privacy" component={Privacy} />
+      <Route path="/terms" element={<Terms />} />
+      <Route path="/privacy" element={<Privacy />} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -181,13 +180,15 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider delayDuration={0}>
-        <div className="min-h-screen">
-          <MainNav />
-          <Router />
-          <Toaster />
-        </div>
-      </TooltipProvider>
+      <AuthProvider>
+        <TooltipProvider delayDuration={0}>
+          <div className="min-h-screen">
+            <MainNav />
+            <Router />
+            <Toaster />
+          </div>
+        </TooltipProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

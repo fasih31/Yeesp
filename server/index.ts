@@ -1,10 +1,15 @@
 import express, { type Request, Response, NextFunction } from "express";
+import session from "express-session";
+import passport from "passport";
+import { Strategy as LocalStrategy } from "passport-local";
+import bcrypt from "bcryptjs";
 import { registerRoutes } from "./routes";
 import { registerExtendedRoutes } from "./routes-extended";
 import { registerUploadRoutes } from "./routes-upload";
 import { registerVideoRoutes } from "./routes-video";
 import { setupVite, serveStatic, log } from "./vite";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
+import { storage } from "./storage";
 
 const app = express();
 
@@ -13,6 +18,66 @@ declare module 'http' {
     rawBody: unknown
   }
 }
+
+// Session configuration
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'yeesp-secret-key-change-in-production',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }
+}));
+
+// Passport configuration
+passport.use(new LocalStrategy(
+  { usernameField: 'email' },
+  async (email, password, done) => {
+    try {
+      const user = await storage.getUserByEmail(email);
+      if (!user) {
+        return done(null, false, { message: 'Invalid credentials' });
+      }
+
+      const isValid = await bcrypt.compare(password, user.password);
+      if (!isValid) {
+        return done(null, false, { message: 'Invalid credentials' });
+      }
+
+      // Get approved roles
+      const approvedRoles = await storage.getUserApprovedRoles(user.id);
+      const { password: _, ...userWithoutPassword } = user;
+      
+      return done(null, { ...userWithoutPassword, approvedRoles });
+    } catch (error) {
+      return done(error);
+    }
+  }
+));
+
+passport.serializeUser((user: any, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id: string, done) => {
+  try {
+    const user = await storage.getUser(id);
+    if (!user) {
+      return done(null, false);
+    }
+    const approvedRoles = await storage.getUserApprovedRoles(user.id);
+    const { password: _, ...userWithoutPassword } = user;
+    done(null, { ...userWithoutPassword, approvedRoles });
+  } catch (error) {
+    done(error);
+  }
+});
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(express.json({
   verify: (req, _res, buf) => {
     req.rawBody = buf;
@@ -61,10 +126,6 @@ app.use((req, res, next) => {
   const adminRoutes = await import('./routes-admin');
   app.use('/api/admin', adminRoutes.default);
   
-  // Register admin settings routes
-  const adminSettingsRoutes = await import('./routes-admin-settings');
-  app.use('/api/admin', adminSettingsRoutes.default);
-  
   // Register Zoom routes
   const zoomRoutes = await import('./routes-zoom');
   app.use('/api/zoom', zoomRoutes.default);
@@ -76,14 +137,6 @@ app.use((req, res, next) => {
   // Register Community routes
   const communityRoutes = await import('./routes-community');
   app.use('/api/community', communityRoutes.default);
-  
-  // Register Certificate routes
-  const certificateRoutes = await import('./routes-certificates');
-  app.use('/api/certificates', certificateRoutes.default);
-  
-  // Register Reviews routes
-  const reviewRoutes = await import('./routes-reviews');
-  app.use('/api/reviews', reviewRoutes.default);
 
   // Initialize WebSocket
   const { initializeWebSocket } = await import('./services/websocket');
