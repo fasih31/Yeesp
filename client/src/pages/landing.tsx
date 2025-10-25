@@ -7,42 +7,42 @@ import { GraduationCap, Users, Briefcase, Award, ArrowRight, Check, Star, BookOp
 export default function Landing() {
   return (
     <div className="min-h-screen">
-      {/* Dark Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-[#1A2238] via-[#0f1724] to-[#1A2238] overflow-hidden">
+      {/* Hero Section - Theme Aware */}
+      <section className="relative min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-[#E8F0FF] via-[#F0F7FF] to-[#E8F0FF] dark:from-[#1A2238] dark:via-[#0f1724] dark:to-[#1A2238] overflow-hidden">
         {/* Animated Background Pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#3A86FF_1px,transparent_1px),linear-gradient(to_bottom,#3A86FF_1px,transparent_1px)] bg-[size:60px_60px]"></div>
+        <div className="absolute inset-0 opacity-5 dark:opacity-5">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#2B3A67_1px,transparent_1px),linear-gradient(to_bottom,#2B3A67_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#3A86FF_1px,transparent_1px),linear-gradient(to_bottom,#3A86FF_1px,transparent_1px)] bg-[size:60px_60px]"></div>
         </div>
         
         {/* Gradient Orbs */}
-        <div className="absolute top-20 left-10 w-72 h-72 bg-[#3A86FF]/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#5EF38C]/20 rounded-full blur-3xl"></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-[#00AEEF]/20 dark:bg-[#3A86FF]/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#00C896]/20 dark:bg-[#5EF38C]/20 rounded-full blur-3xl"></div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center z-10">
-          <Badge className="mb-8 bg-[#3A86FF]/10 backdrop-blur-sm border border-[#3A86FF]/20 text-[#3A86FF] px-6 py-2.5 text-sm font-medium">
+          <Badge className="mb-8 bg-[#00AEEF]/10 dark:bg-[#3A86FF]/10 backdrop-blur-sm border border-[#00AEEF]/20 dark:border-[#3A86FF]/20 text-[#00AEEF] dark:text-[#3A86FF] px-6 py-2.5 text-sm font-medium">
             <Zap className="w-4 h-4 mr-2 inline" />
             Next-Generation Learning Platform
           </Badge>
 
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-8 leading-tight">
+          <h1 className="text-5xl md:text-7xl font-bold text-[#1A2238] dark:text-white mb-8 leading-tight">
             Learn Skills.<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3A86FF] to-[#5EF38C]">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00AEEF] to-[#00C896] dark:from-[#3A86FF] dark:to-[#5EF38C]">
               Earn Income.
             </span><br />
             Transform Your Future.
           </h1>
 
-          <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-12 leading-relaxed">
-            Join <span className="text-[#3A86FF] font-semibold">10,000+</span> students, tutors, and freelancers building successful careers through education and opportunity
+          <p className="text-xl md:text-2xl text-[#1A2238]/70 dark:text-gray-300 max-w-3xl mx-auto mb-12 leading-relaxed">
+            Join <span className="text-[#00AEEF] dark:text-[#3A86FF] font-semibold">10,000+</span> students, tutors, and freelancers building successful careers through education and opportunity
           </p>
 
           <div className="flex flex-col sm:flex-row gap-5 justify-center mb-20">
-            <Button size="lg" className="text-lg px-10 h-16 rounded-full font-semibold" asChild>
+            <Button size="lg" className="text-lg px-10 h-16 rounded-full font-semibold bg-[#00AEEF] hover:bg-[#00AEEF]/90 dark:bg-[#3A86FF] dark:hover:bg-[#3A86FF]/90 text-white" asChild>
               <Link href="/auth/signup">
                 Get Started Free <ArrowRight className="ml-2 h-6 w-6" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" className="border-2 border-gray-600 bg-transparent text-white hover:bg-white/10 text-lg px-10 h-16 rounded-full font-semibold" asChild>
+            <Button size="lg" variant="outline" className="border-2 border-[#2B3A67]/30 dark:border-gray-600 bg-transparent text-[#1A2238] dark:text-white hover:bg-[#2B3A67]/10 dark:hover:bg-white/10 text-lg px-10 h-16 rounded-full font-semibold" asChild>
               <Link href="/courses">
                 Explore Courses
               </Link>
@@ -57,10 +57,10 @@ export default function Landing() {
               { icon: Briefcase, value: "1,200+", label: "Projects" },
               { icon: Star, value: "4.9/5", label: "Rating" }
             ].map((stat, i) => (
-              <div key={i} className="bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10 hover:bg-white/10 transition-all duration-300 group">
-                <stat.icon className="w-10 h-10 text-[#3A86FF] mx-auto mb-3 group-hover:scale-110 transition-transform" />
-                <div className="text-4xl font-bold text-white mb-1">{stat.value}</div>
-                <div className="text-sm text-gray-400">{stat.label}</div>
+              <div key={i} className="bg-white/60 dark:bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-[#2B3A67]/20 dark:border-white/10 hover:bg-white/80 dark:hover:bg-white/10 transition-all duration-300 group">
+                <stat.icon className="w-10 h-10 text-[#00AEEF] dark:text-[#3A86FF] mx-auto mb-3 group-hover:scale-110 transition-transform" />
+                <div className="text-4xl font-bold text-[#1A2238] dark:text-white mb-1">{stat.value}</div>
+                <div className="text-sm text-[#1A2238]/60 dark:text-gray-400">{stat.label}</div>
               </div>
             ))}
           </div>
