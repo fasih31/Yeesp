@@ -73,6 +73,7 @@ import AdminAnalytics from "@/pages/admin/analytics";
 import AdminSettings from "@/pages/admin/settings";
 import PlatformSettings from "@/pages/admin/platform-settings";
 import AdminReports from "@/pages/admin/reports";
+import ManageAdmins from "@/pages/admin/manage-admins";
 import Blog from "@/pages/blog";
 import Terms from "@/pages/terms";
 import Privacy from "@/pages/privacy";
@@ -177,6 +178,7 @@ function Router() {
       <Route path="/admin/platform-settings" component={PlatformSettings} />
       <Route path="/admin/reports" component={AdminReports} />
       <Route path="/admin/role-requests" component={AdminRoleRequests} />
+      <Route path="/admin/manage-admins" component={ManageAdmins} />
       <Route path="/blog" component={Blog} />
       <Route path="/terms" component={Terms} />
       <Route path="/privacy" component={Privacy} />

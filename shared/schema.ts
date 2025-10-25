@@ -150,7 +150,7 @@ export const certificates = pgTable("certificates", {
 
 // Notifications
 export const notifications = pgTable("notifications", {
-  id: serial("id").primaryKey(),
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: text("user_id").notNull(),
   type: text("type").notNull(), // 'course', 'assignment', 'message', 'payment', 'system'
   title: text("title").notNull(),
