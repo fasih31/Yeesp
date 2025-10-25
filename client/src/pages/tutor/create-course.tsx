@@ -85,6 +85,8 @@ export default function TutorCreateCourse() {
         method: "POST",
         body: JSON.stringify({
           ...courseData,
+          duration: courseData.duration ? parseInt(courseData.duration) : 0,
+          price: courseData.price ? parseFloat(courseData.price) : 0,
           instructorId: user.id,
           published,
         }),

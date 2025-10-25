@@ -43,8 +43,8 @@ export default function CreateProject() {
         ...data,
         skills: data.skills.split(',').map(s => s.trim()),
       };
-      const response = await apiRequest("POST", "/api/projects", projectData);
-      return await response.json();
+      await apiRequest("POST", "/api/projects", projectData);
+      return projectData;
     },
     onSuccess: () => {
       toast({
