@@ -160,10 +160,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   app.get("/api/enrollments/my", async (req, res) => {
     try {
-      // In production, get userId from session
-      const userId = req.query.userId as string;
+      // Get userId from session or query (for testing)
+      const userId = (req.user as any)?.id || req.query.userId as string;
       if (!userId) {
-        return res.status(400).json({ error: "User ID required" });
+        return res.status(401).json({ error: "Not authenticated" });
       }
 
       const enrollments = await storage.getEnrollmentsByStudent(userId);
@@ -253,11 +253,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   app.get("/api/sessions/my", async (req, res) => {
     try {
-      const userId = req.query.userId as string;
-      const role = req.query.role as string;
+      const userId = (req.user as any)?.id || req.query.userId as string;
+      const role = (req.user as any)?.role || req.query.role as string;
       
       if (!userId) {
-        return res.status(400).json({ error: "User ID required" });
+        return res.status(401).json({ error: "Not authenticated" });
       }
 
       const sessions = role === "tutor"
@@ -391,9 +391,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   app.get("/api/certificates/my", async (req, res) => {
     try {
-      const userId = req.query.userId as string;
+      const userId = (req.user as any)?.id || req.query.userId as string;
       if (!userId) {
-        return res.status(400).json({ error: "User ID required" });
+        return res.status(401).json({ error: "Not authenticated" });
       }
 
       const certificates = await storage.getCertificatesByStudent(userId);
