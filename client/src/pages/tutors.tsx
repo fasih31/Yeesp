@@ -44,27 +44,28 @@ export default function Tutors() {
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#00C896]/20 dark:bg-[#5EF38C]/20 rounded-full blur-3xl"></div>
 
         <div className="relative max-w-7xl mx-auto text-center z-10">
-        <div className="mb-8">
-          <h2 className="text-4xl font-bold mb-4" data-testid="text-tutors-heading">
-            Find Expert Tutors
-          </h2>
-          <p className="text-xl text-muted-foreground">
-            Book one-on-one sessions with verified tutors
-          </p>
-        </div>
+          <div className="mb-8">
+            <h2 className="text-4xl font-bold mb-4" data-testid="text-tutors-heading">
+              Find Expert Tutors
+            </h2>
+            <p className="text-xl text-muted-foreground">
+              Book one-on-one sessions with verified tutors
+            </p>
+          </div>
 
-        {/* Search Input */}
-        <div className="max-w-2xl mx-auto mb-12">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-            <Input
-              type="text"
-              placeholder="Search tutors by name, skills, or expertise..."
-              className="pl-10 pr-4 py-3 h-14 text-lg rounded-full focus-visible:ring-primary/50"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              data-testid="input-search-tutors"
-            />
+          {/* Search Input */}
+          <div className="max-w-2xl mx-auto mb-12">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Input
+                type="text"
+                placeholder="Search tutors by name, skills, or expertise..."
+                className="pl-10 pr-4 py-3 h-14 text-lg rounded-full focus-visible:ring-primary/50"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                data-testid="input-search-tutors"
+              />
+            </div>
           </div>
         </div>
       </section>
