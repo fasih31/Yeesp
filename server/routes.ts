@@ -160,8 +160,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   app.get("/api/enrollments/my", async (req, res) => {
     try {
-      // Get userId from session or query (for testing)
-      const userId = (req.user as any)?.id || req.query.userId as string;
+      // MUST be authenticated - no query param fallback for security
+      const userId = (req.user as any)?.id;
       if (!userId) {
         return res.status(401).json({ error: "Not authenticated" });
       }
@@ -253,8 +253,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   app.get("/api/sessions/my", async (req, res) => {
     try {
-      const userId = (req.user as any)?.id || req.query.userId as string;
-      const role = (req.user as any)?.role || req.query.role as string;
+      const userId = (req.user as any)?.id;
+      const role = (req.user as any)?.role;
       
       if (!userId) {
         return res.status(401).json({ error: "Not authenticated" });
@@ -313,6 +313,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get("/api/projects/my", async (req, res) => {
+    try {
+      const userId = (req.user as any)?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      const projects = await storage.getProjectsByRecruiter(userId);
+      
+      // Fetch bids for each project
+      const projectsWithBids = await Promise.all(
+        projects.map(async (project) => {
+          const bids = await storage.getBidsByProject(project.id);
+          const bidsWithFreelancers = await Promise.all(
+            bids.map(async (bid) => {
+              const freelancer = await storage.getUser(bid.freelancerId);
+              return { ...bid, freelancer };
+            })
+          );
+          return { ...project, bids: bidsWithFreelancers };
+        })
+      );
+      
+      res.json(projectsWithBids);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   app.get("/api/projects/:id", async (req, res) => {
     try {
       const project = await storage.getProject(req.params.id);
@@ -353,6 +382,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // ===== BID ROUTES =====
   
+  app.get("/api/bids/my", async (req, res) => {
+    try {
+      const userId = (req.user as any)?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      const bids = await storage.getBidsByFreelancer(userId);
+      
+      // Fetch project details for each bid
+      const bidsWithProjects = await Promise.all(
+        bids.map(async (bid) => {
+          const project = await storage.getProject(bid.projectId);
+          if (project) {
+            const recruiter = await storage.getUser(project.recruiterId);
+            return { ...bid, project: { ...project, recruiter } };
+          }
+          return bid;
+        })
+      );
+      
+      res.json(bidsWithProjects);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   app.post("/api/bids", async (req, res) => {
     try {
       const data = insertBidSchema.parse(req.body);
@@ -391,7 +447,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   app.get("/api/certificates/my", async (req, res) => {
     try {
-      const userId = (req.user as any)?.id || req.query.userId as string;
+      const userId = (req.user as any)?.id;
       if (!userId) {
         return res.status(401).json({ error: "Not authenticated" });
       }
@@ -404,6 +460,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ===== PAYMENT ROUTES (STRIPE) =====
+  
+  app.get("/api/payments/my", async (req, res) => {
+    try {
+      const userId = (req.user as any)?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      const payments = await storage.getPaymentsByUser(userId);
+      res.json(payments);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
   
   app.post("/api/payments/create-payment-intent", async (req, res) => {
     try {

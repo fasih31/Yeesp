@@ -18,18 +18,38 @@ export class WebSocketService {
   private setupWebSocket() {
     this.wss.on('connection', (ws: WebSocket, req) => {
       console.log('New WebSocket connection');
+      
+      // TODO: SECURITY - Validate session from cookies/headers before accepting connection
+      // For now, require auth message with session validation
+      let authenticated = false;
+      let userId: string | null = null;
 
       ws.on('message', (data: RawData) => {
         try {
           const message = JSON.parse(data.toString());
-          this.handleMessage(ws, message);
+          
+          // All messages except auth require authentication
+          if (message.type !== 'auth' && !authenticated) {
+            ws.send(JSON.stringify({ 
+              type: 'error', 
+              message: 'Not authenticated. Send auth message first.' 
+            }));
+            return;
+          }
+          
+          this.handleMessage(ws, message, (authUserId) => {
+            authenticated = true;
+            userId = authUserId;
+          });
         } catch (error) {
           console.error('WebSocket message error:', error);
         }
       });
 
       ws.on('close', () => {
-        this.removeClient(ws);
+        if (userId) {
+          this.removeClientByUserId(userId);
+        }
       });
 
       ws.on('error', (error) => {
@@ -38,10 +58,12 @@ export class WebSocketService {
     });
   }
 
-  private handleMessage(ws: WebSocket, message: any) {
+  private handleMessage(ws: WebSocket, message: any, onAuth?: (userId: string) => void) {
     switch (message.type) {
       case 'auth':
-        this.handleAuth(ws, message.userId);
+        // TODO: CRITICAL - Validate userId against session/JWT token
+        // For now, this is a placeholder that MUST be secured before production
+        this.handleAuth(ws, message.userId, onAuth);
         break;
       case 'message':
         this.handleChatMessage(message);
@@ -55,9 +77,18 @@ export class WebSocketService {
     }
   }
 
-  private handleAuth(ws: WebSocket, userId: string) {
+  private handleAuth(ws: WebSocket, userId: string, onAuth?: (userId: string) => void) {
+    // TODO: SECURITY - This needs proper session validation!
+    // Currently accepts any userId - INSECURE!
+    // Should verify against session cookie or JWT token
     this.clients.set(userId, { ws, userId });
     ws.send(JSON.stringify({ type: 'auth', success: true }));
+    if (onAuth) onAuth(userId);
+  }
+
+  private removeClientByUserId(userId: string) {
+    this.clients.delete(userId);
+    console.log(`Client ${userId} disconnected`);
   }
 
   private handleChatMessage(message: any) {
