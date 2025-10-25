@@ -163,6 +163,12 @@ export default function AdminDashboard() {
                     <span>Support Tickets</span>
                   </Link>
                 </Button>
+                <Button variant="outline" className="h-auto py-4 flex-col gap-2" asChild>
+                  <Link href="/admin/reports">
+                    <TrendingUp className="h-6 w-6" />
+                    <span>Reports & Analytics</span>
+                  </Link>
+                </Button>
               </CardContent>
             </Card>
 
