@@ -7,12 +7,14 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { Menu, User, LogOut, Settings } from "lucide-react";
+import { Menu, User, LogOut, Settings, Sun, Moon } from "lucide-react";
 import { useAuth } from "@/lib/auth";
+import { useTheme } from "@/components/theme-provider";
 
 export function MainNav() {
   const [location] = useLocation();
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   const handleLogout = async () => {
     await logout();
@@ -51,6 +53,20 @@ export function MainNav() {
                 <Link href={link.href}>{link.label}</Link>
               </Button>
             ))}
+            
+            {/* Theme Toggle */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={toggleTheme}
+              className="ml-2 text-gray-300 hover:text-cyan-400 hover:bg-white/5"
+            >
+              {theme === "light" ? (
+                <Moon className="h-5 w-5" />
+              ) : (
+                <Sun className="h-5 w-5" />
+              )}
+            </Button>
           </nav>
 
           {/* Auth Buttons */}

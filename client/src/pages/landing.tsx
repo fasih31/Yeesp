@@ -6,9 +6,9 @@ import { GraduationCap, Users, Briefcase, Award, ArrowRight, Check, Star, BookOp
 
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen">
       {/* Dark Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden">
+      <section className="relative min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 overflow-hidden">
         {/* Animated Background Pattern */}
         <div className="absolute inset-0 opacity-5">
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#06b6d4_1px,transparent_1px),linear-gradient(to_bottom,#06b6d4_1px,transparent_1px)] bg-[size:60px_60px]"></div>
@@ -37,8 +37,8 @@ export default function Landing() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-5 justify-center mb-20">
-            <Button size="lg" className="bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white text-lg px-10 h-16 rounded-full font-semibold shadow-2xl shadow-cyan-500/30 border-0" asChild>
-              <Link href="/register">
+            <Button size="lg" className="text-lg px-10 h-16 rounded-full font-semibold" asChild>
+              <Link href="/auth/signup">
                 Get Started Free <ArrowRight className="ml-2 h-6 w-6" />
               </Link>
             </Button>
@@ -67,17 +67,17 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Features Section - Light Background */}
-      <section className="py-24 px-6 bg-gray-50">
+      {/* Features Section - Light/Dark Compatible */}
+      <section className="py-24 px-6 bg-gray-50 dark:bg-gray-900">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <Badge className="mb-4 bg-cyan-100 text-cyan-700 border-0">
+            <Badge className="mb-4 bg-cyan-100 dark:bg-cyan-500/10 text-cyan-700 dark:text-cyan-400 border-0">
               Platform Features
             </Badge>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              Everything You Need to <span className="text-cyan-600">Succeed</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+              Everything You Need to <span className="text-cyan-600 dark:text-cyan-400">Succeed</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               A complete ecosystem for learning, teaching, and earning
             </p>
           </div>
@@ -109,13 +109,13 @@ export default function Landing() {
                 gradient: "from-pink-500 to-red-500"
               },
             ].map((feature, i) => (
-              <Card key={i} className="group hover:shadow-2xl transition-all duration-500 border-0 bg-white overflow-hidden">
+              <Card key={i} className="group hover:shadow-2xl transition-all duration-500 border-0 bg-white dark:bg-gray-800 overflow-hidden">
                 <div className="p-8 space-y-4">
                   <div className={`h-16 w-16 rounded-2xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg`}>
                     <feature.icon className="h-8 w-8 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 group-hover:text-cyan-600 transition-colors">{feature.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{feature.desc}</p>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">{feature.title}</h3>
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{feature.desc}</p>
                 </div>
                 <div className={`h-1 bg-gradient-to-r ${feature.gradient} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500`}></div>
               </Card>
@@ -124,18 +124,18 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Benefits Section - Dark Card on Light Background */}
-      <section className="py-24 px-6 bg-white">
+      {/* Benefits Section */}
+      <section className="py-24 px-6 bg-white dark:bg-gray-950">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
-              <Badge className="mb-6 bg-cyan-100 text-cyan-700 border-0">
+              <Badge className="mb-6 bg-cyan-100 dark:bg-cyan-500/10 text-cyan-700 dark:text-cyan-400 border-0">
                 Why Choose YEESP?
               </Badge>
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-                The Most Trusted Platform for <span className="text-cyan-600">Youth Empowerment</span>
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
+                The Most Trusted Platform for <span className="text-cyan-600 dark:text-cyan-400">Youth Empowerment</span>
               </h2>
-              <p className="text-xl text-gray-600 mb-10">
+              <p className="text-xl text-gray-600 dark:text-gray-300 mb-10">
                 Join thousands who are transforming their careers through our comprehensive platform
               </p>
               
@@ -153,15 +153,15 @@ export default function Landing() {
                       <item.icon className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-gray-900 mb-1">{item.title}</h3>
-                      <p className="text-gray-600">{item.desc}</p>
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">{item.title}</h3>
+                      <p className="text-gray-600 dark:text-gray-400">{item.desc}</p>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-12 text-white shadow-2xl">
+            <Card className="bg-gradient-to-br from-gray-900 to-gray-800 dark:from-gray-800 dark:to-gray-900 rounded-3xl p-12 text-white shadow-2xl border-0">
               <h3 className="text-3xl font-bold mb-8">All Features Included</h3>
               <div className="space-y-4">
                 {[
@@ -182,13 +182,13 @@ export default function Landing() {
                   </div>
                 ))}
               </div>
-            </div>
+            </Card>
           </div>
         </div>
       </section>
 
       {/* CTA Section - Dark */}
-      <section className="py-24 px-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 relative overflow-hidden">
+      <section className="py-24 px-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl"></div>
         
@@ -200,8 +200,8 @@ export default function Landing() {
             Join thousands of successful students, tutors, and freelancers who are already building their dream careers
           </p>
           <div className="flex flex-col sm:flex-row gap-5 justify-center pt-6">
-            <Button size="lg" className="bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white text-lg px-12 h-16 rounded-full font-bold shadow-2xl shadow-cyan-500/30" asChild>
-              <Link href="/register">
+            <Button size="lg" className="text-lg px-12 h-16 rounded-full font-bold" asChild>
+              <Link href="/auth/signup">
                 Get Started Free <ArrowRight className="ml-2 h-6 w-6" />
               </Link>
             </Button>
@@ -215,7 +215,7 @@ export default function Landing() {
       </section>
 
       {/* Footer - Dark */}
-      <footer className="bg-gray-950 text-white py-16 px-6 border-t border-gray-800">
+      <footer className="bg-gray-950 dark:bg-black text-white py-16 px-6 border-t border-gray-800 dark:border-gray-900">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div>
@@ -247,7 +247,7 @@ export default function Landing() {
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-800 pt-8 text-center">
+          <div className="border-t border-gray-800 dark:border-gray-900 pt-8 text-center">
             <p className="text-gray-500 text-sm">
               © 2024 YEESP. All rights reserved. | Developed with ❤️ by <span className="text-cyan-400 font-semibold">Fasih ur Rehman</span>
             </p>
