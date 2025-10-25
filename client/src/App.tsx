@@ -93,6 +93,7 @@ import HelpCenter from "@/pages/help-center";
 import Affiliate from "@/pages/affiliate";
 import AuthLogin from "@/pages/auth/login";
 import AuthSignup from "@/pages/auth/signup";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 
 function Router() {
@@ -113,10 +114,34 @@ function Router() {
       <Route path="/projects" component={Projects} />
       <Route path="/project/:id" component={ProjectDetail} />
       <Route path="/recruiter/project/create" component={CreateProject} />
-      <Route path="/dashboard/student" component={StudentDashboard} />
-      <Route path="/dashboard/tutor" component={TutorDashboard} />
-      <Route path="/dashboard/freelancer" component={FreelancerDashboard} />
-      <Route path="/dashboard/recruiter" component={RecruiterDashboard} />
+      <Route path="/dashboard/student">
+        {() => (
+          <ProtectedRoute allowedRoles={['student']}>
+            <StudentDashboard />
+          </ProtectedRoute>
+        )}
+      </Route>
+      <Route path="/dashboard/tutor">
+        {() => (
+          <ProtectedRoute allowedRoles={['tutor']}>
+            <TutorDashboard />
+          </ProtectedRoute>
+        )}
+      </Route>
+      <Route path="/dashboard/freelancer">
+        {() => (
+          <ProtectedRoute allowedRoles={['freelancer']}>
+            <FreelancerDashboard />
+          </ProtectedRoute>
+        )}
+      </Route>
+      <Route path="/dashboard/recruiter">
+        {() => (
+          <ProtectedRoute allowedRoles={['recruiter']}>
+            <RecruiterDashboard />
+          </ProtectedRoute>
+        )}
+      </Route>
       <Route path="/student/my-courses" component={MyCourses} />
       <Route path="/student/course/:id" component={CoursePlayer} />
       <Route path="/student/assignments" component={Assignments} />
@@ -169,16 +194,76 @@ function Router() {
       <Route path="/freelancer/active-projects" component={FreelancerActiveProjects} />
       <Route path="/freelancer/earnings" component={FreelancerEarnings} />
       <Route path="/freelancer/portfolio" component={FreelancerPortfolio} />
-      <Route path="/admin/dashboard" component={AdminDashboard} />
-      <Route path="/admin/users" component={AdminUsers} />
-      <Route path="/admin/courses" component={AdminCourses} />
-      <Route path="/admin/projects" component={AdminProjects} />
-      <Route path="/admin/analytics" component={AdminAnalytics} />
-      <Route path="/admin/settings" component={AdminSettings} />
-      <Route path="/admin/platform-settings" component={PlatformSettings} />
-      <Route path="/admin/reports" component={AdminReports} />
-      <Route path="/admin/role-requests" component={AdminRoleRequests} />
-      <Route path="/admin/manage-admins" component={ManageAdmins} />
+      <Route path="/admin/dashboard">
+        {() => (
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AdminDashboard />
+          </ProtectedRoute>
+        )}
+      </Route>
+      <Route path="/admin/users">
+        {() => (
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AdminUsers />
+          </ProtectedRoute>
+        )}
+      </Route>
+      <Route path="/admin/courses">
+        {() => (
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AdminCourses />
+          </ProtectedRoute>
+        )}
+      </Route>
+      <Route path="/admin/projects">
+        {() => (
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AdminProjects />
+          </ProtectedRoute>
+        )}
+      </Route>
+      <Route path="/admin/analytics">
+        {() => (
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AdminAnalytics />
+          </ProtectedRoute>
+        )}
+      </Route>
+      <Route path="/admin/settings">
+        {() => (
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AdminSettings />
+          </ProtectedRoute>
+        )}
+      </Route>
+      <Route path="/admin/platform-settings">
+        {() => (
+          <ProtectedRoute allowedRoles={['admin']}>
+            <PlatformSettings />
+          </ProtectedRoute>
+        )}
+      </Route>
+      <Route path="/admin/reports">
+        {() => (
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AdminReports />
+          </ProtectedRoute>
+        )}
+      </Route>
+      <Route path="/admin/role-requests">
+        {() => (
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AdminRoleRequests />
+          </ProtectedRoute>
+        )}
+      </Route>
+      <Route path="/admin/manage-admins">
+        {() => (
+          <ProtectedRoute allowedRoles={['admin']}>
+            <ManageAdmins />
+          </ProtectedRoute>
+        )}
+      </Route>
       <Route path="/blog" component={Blog} />
       <Route path="/terms" component={Terms} />
       <Route path="/privacy" component={Privacy} />
