@@ -8,9 +8,10 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/api";
+import { courseSchema } from "@/lib/validation";
 
 type LessonData = {
   title: string;
@@ -37,6 +38,40 @@ export default function TutorCreateCourse() {
   const [lessons, setLessons] = useState<LessonData[]>([
     { title: "", content: "", videoUrl: "", duration: 30, order: 1 }
   ]);
+
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validateForm = () => {
+    try {
+      courseSchema.parse({
+        ...courseData,
+        duration: Number(courseData.duration),
+      });
+      setErrors({});
+      return true;
+    } catch (error: any) {
+      const fieldErrors: Record<string, string> = {};
+      error.errors?.forEach((err: any) => {
+        if (err.path) {
+          fieldErrors[err.path[0]] = err.message;
+        }
+      });
+      setErrors(fieldErrors);
+      return false;
+    }
+  };
+
+  const handlePublish = (published: boolean) => {
+    if (validateForm()) {
+      createCourseMutation.mutate(published);
+    } else {
+      toast({
+        title: "Validation Error",
+        description: "Please fix the errors before publishing",
+        variant: "destructive",
+      });
+    }
+  };
 
   const createCourseMutation = useMutation({
     mutationFn: async (published: boolean) => {
@@ -127,24 +162,38 @@ export default function TutorCreateCourse() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="title">Course Title</Label>
+                  <Label htmlFor="title">Course Title <span className="text-destructive">*</span></Label>
                   <Input
                     id="title"
                     value={courseData.title}
                     onChange={(e) => setCourseData({ ...courseData, title: e.target.value })}
                     placeholder="e.g., Web Development Fundamentals"
+                    className={errors.title ? "border-destructive" : ""}
                   />
+                  {errors.title && (
+                    <p className="text-sm text-destructive flex items-center gap-1">
+                      <AlertCircle className="h-3 w-3" />
+                      {errors.title}
+                    </p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="description">Description</Label>
+                  <Label htmlFor="description">Description <span className="text-destructive">*</span></Label>
                   <Textarea
                     id="description"
                     value={courseData.description}
                     onChange={(e) => setCourseData({ ...courseData, description: e.target.value })}
                     placeholder="Describe your course..."
                     rows={4}
+                    className={errors.description ? "border-destructive" : ""}
                   />
+                  {errors.description && (
+                    <p className="text-sm text-destructive flex items-center gap-1">
+                      <AlertCircle className="h-3 w-3" />
+                      {errors.description}
+                    </p>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -305,15 +354,15 @@ export default function TutorCreateCourse() {
                 </div>
                 <div className="flex gap-2">
                   <Button
-                    onClick={() => createCourseMutation.mutate(true)}
-                    disabled={!courseData.title || createCourseMutation.isPending}
+                    onClick={() => handlePublish(true)}
+                    disabled={createCourseMutation.isPending}
                   >
                     {createCourseMutation.isPending ? "Publishing..." : "Publish Course"}
                   </Button>
                   <Button
                     variant="outline"
-                    onClick={() => createCourseMutation.mutate(false)}
-                    disabled={!courseData.title || createCourseMutation.isPending}
+                    onClick={() => handlePublish(false)}
+                    disabled={createCourseMutation.isPending}
                   >
                     Save as Draft
                   </Button>

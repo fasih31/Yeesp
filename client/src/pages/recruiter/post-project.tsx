@@ -9,9 +9,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Plus, X } from "lucide-react";
+import { Plus, X, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/api";
+import { projectSchema } from "@/lib/validation";
 
 export default function RecruiterPostProject() {
   const [, setLocation] = useLocation();
@@ -28,6 +29,27 @@ export default function RecruiterPostProject() {
 
   const [skills, setSkills] = useState<string[]>([]);
   const [skillInput, setSkillInput] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validateForm = () => {
+    try {
+      projectSchema.parse({
+        ...projectData,
+        skills,
+      });
+      setErrors({});
+      return true;
+    } catch (error: any) {
+      const fieldErrors: Record<string, string> = {};
+      error.errors?.forEach((err: any) => {
+        if (err.path) {
+          fieldErrors[err.path[0]] = err.message;
+        }
+      });
+      setErrors(fieldErrors);
+      return false;
+    }
+  };
 
   const addSkill = () => {
     if (skillInput.trim() && !skills.includes(skillInput.trim())) {
@@ -38,6 +60,18 @@ export default function RecruiterPostProject() {
 
   const removeSkill = (skill: string) => {
     setSkills(skills.filter(s => s !== skill));
+  };
+
+  const handleSubmit = () => {
+    if (validateForm()) {
+      postProjectMutation.mutate();
+    } else {
+      toast({
+        title: "Validation Error",
+        description: "Please fix the errors before submitting",
+        variant: "destructive",
+      });
+    }
   };
 
   const postProjectMutation = useMutation({
@@ -190,8 +224,8 @@ export default function RecruiterPostProject() {
               </div>
               <Button
                 className="w-full"
-                onClick={() => postProjectMutation.mutate()}
-                disabled={!projectData.title || !projectData.description || !projectData.budget || postProjectMutation.isPending}
+                onClick={handleSubmit}
+                disabled={postProjectMutation.isPending}
               >
                 {postProjectMutation.isPending ? "Posting..." : "Post Project"}
               </Button>
