@@ -168,6 +168,10 @@ app.use((req, res, next) => {
   const gamificationRoutes = await import('./routes-gamification');
   app.use('/api/gamification', gamificationRoutes.default);
 
+  // Register learning routes (notes, bookmarks, etc.)
+  const learningRoutes = await import('./routes-learning');
+  app.use('/api', learningRoutes.default);
+
   // Error handling middleware (must be last)
   app.use(notFoundHandler);
   app.use(errorHandler);
