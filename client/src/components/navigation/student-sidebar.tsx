@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Home, BookOpen, Calendar, Award, Briefcase, DollarSign, MessageSquare, Settings, HelpCircle, UserPlus } from "lucide-react";
+import { Home, BookOpen, Calendar, Award, Briefcase, DollarSign, MessageSquare, Settings, HelpCircle, UserPlus, LayoutDashboard } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
 import { NotificationDropdown } from "@/components/NotificationDropdown";
 
@@ -111,6 +111,22 @@ export function StudentSidebar() {
                   <Link href="/student/analytics-reports">
                     <Award className="mr-2 h-4 w-4" />
                     Analytics & Reports
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/student/portfolio">
+                    <Award className="mr-2 h-4 w-4" />
+                    Portfolio
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/student/accessibility">
+                    <Settings className="mr-2 h-4 w-4" />
+                    Accessibility
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

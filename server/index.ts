@@ -172,6 +172,10 @@ app.use((req, res, next) => {
   const learningRoutes = await import('./routes-learning');
   app.use('/api', learningRoutes.default);
 
+  // Register portfolio routes
+  const portfolioRoutes = await import('./routes-portfolio');
+  app.use('/api', portfolioRoutes.default);
+
   // Error handling middleware (must be last)
   app.use(notFoundHandler);
   app.use(errorHandler);
