@@ -54,6 +54,8 @@ export const enrollments = pgTable("enrollments", {
   progress: integer("progress").default(0), // 0-100
   completed: boolean("completed").default(false),
   enrolledAt: timestamp("enrolled_at").defaultNow().notNull(),
+  completedAt: timestamp("completed_at"),
+  lastAccessedAt: timestamp("last_accessed_at"),
 });
 
 // Tutoring sessions

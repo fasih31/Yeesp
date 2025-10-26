@@ -290,7 +290,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(403).json({ error: "You can only update your own enrollments" });
       }
 
-      const enrollment = await storage.updateEnrollment(req.params.id, req.body);
+      const updateData = { ...req.body };
+
+      // Only track lastAccessedAt when the STUDENT themselves is updating their progress
+      // Don't update for admin/tutor modifications
+      const isStudentUpdatingTheirOwn = existingEnrollment.studentId === userId && userRole === 'student';
+      if (isStudentUpdatingTheirOwn && req.body.progress !== undefined) {
+        updateData.lastAccessedAt = new Date();
+      }
+
+      // If marking as completed, set completedAt timestamp
+      if (req.body.completed === true && !existingEnrollment.completed) {
+        updateData.completedAt = new Date();
+      }
+
+      const enrollment = await storage.updateEnrollment(req.params.id, updateData);
 
       if (!enrollment) {
         return res.status(404).json({ error: "Enrollment not found" });
@@ -306,6 +320,117 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       res.json(enrollment);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // ===== STUDENT STATS ROUTE =====
+
+  app.get("/api/students/stats", requireAuth, async (req, res) => {
+    try {
+      const userId = (req.user as any)?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      // Get all enrollments for the student
+      const enrollments = await storage.getEnrollmentsByStudent(userId);
+      
+      // Fetch course details for time calculation
+      const enrollmentsWithCourses = await Promise.all(
+        enrollments.map(async (enrollment) => {
+          const course = await storage.getCourse(enrollment.courseId);
+          return { ...enrollment, course };
+        })
+      );
+
+      // Calculate time invested (in hours)
+      const totalTimeInvested = enrollmentsWithCourses.reduce((acc, e) => {
+        if (e.course && e.course.duration) {
+          // course.duration is in hours, progress is 0-100
+          return acc + (e.course.duration * (e.progress || 0) / 100);
+        }
+        return acc;
+      }, 0);
+
+      // Calculate this week's activity (courses accessed in last 7 days)
+      const oneWeekAgo = new Date();
+      oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+      
+      // Count actual activity: number of unique courses accessed this week
+      const coursesAccessedThisWeek = enrollmentsWithCourses.filter(e => 
+        e.lastAccessedAt && new Date(e.lastAccessedAt) > oneWeekAgo
+      ).length;
+      
+      // Estimate weekly hours based on active courses (rough metric until we have progress history)
+      const thisWeekProgress = coursesAccessedThisWeek > 0 ? coursesAccessedThisWeek * 1.5 : 0;
+
+      // Calculate current streak (consecutive days)
+      let currentStreak = 0;
+      if (enrollments.length > 0) {
+        const accessDates = enrollments
+          .filter(e => e.lastAccessedAt)
+          .map(e => new Date(e.lastAccessedAt!))
+          .sort((a, b) => b.getTime() - a.getTime()); // Sort by most recent first
+
+        if (accessDates.length > 0) {
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          
+          let checkDate = new Date(today);
+          let hasActivity = false;
+
+          // Check if there was activity today or yesterday
+          for (const accessDate of accessDates) {
+            const accessDay = new Date(accessDate);
+            accessDay.setHours(0, 0, 0, 0);
+            
+            const daysDiff = Math.floor((today.getTime() - accessDay.getTime()) / (1000 * 60 * 60 * 24));
+            
+            if (daysDiff <= 1) { // Activity today or yesterday
+              hasActivity = true;
+              break;
+            }
+          }
+
+          if (hasActivity) {
+            // Count consecutive days backwards
+            for (let i = 0; i < 365; i++) {
+              const dayHasActivity = accessDates.some(accessDate => {
+                const accessDay = new Date(accessDate);
+                accessDay.setHours(0, 0, 0, 0);
+                return accessDay.getTime() === checkDate.getTime();
+              });
+
+              if (dayHasActivity) {
+                currentStreak++;
+                checkDate.setDate(checkDate.getDate() - 1);
+              } else {
+                break;
+              }
+            }
+          }
+        }
+      }
+
+      // Get next upcoming session
+      const sessions = await storage.getSessionsByStudent(userId);
+      const upcomingSessions = sessions
+        .filter(s => s.status === 'scheduled' && new Date(s.scheduledAt) > new Date())
+        .sort((a, b) => new Date(a.scheduledAt).getTime() - new Date(b.scheduledAt).getTime());
+
+      const nextSession = upcomingSessions[0];
+
+      res.json({
+        timeInvested: Math.round(totalTimeInvested * 10) / 10, // Round to 1 decimal
+        weeklyProgress: Math.round(thisWeekProgress * 10) / 10,
+        currentStreak,
+        nextSession: nextSession ? {
+          date: nextSession.scheduledAt,
+          title: nextSession.title,
+        } : null,
+      });
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }

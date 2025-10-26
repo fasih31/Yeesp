@@ -18,8 +18,8 @@ export default function MyCourses() {
     queryKey: ["/api/enrollments/my"],
   });
 
-  const inProgress = enrollments?.filter(e => !e.completed && e.progress > 0);
-  const notStarted = enrollments?.filter(e => e.progress === 0);
+  const inProgress = enrollments?.filter(e => !e.completed && (e.progress ?? 0) > 0);
+  const notStarted = enrollments?.filter(e => (e.progress ?? 0) === 0);
   const completed = enrollments?.filter(e => e.completed);
 
   return (

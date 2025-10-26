@@ -8,6 +8,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BookOpen, Clock, Award, TrendingUp, Calendar, Flame } from "lucide-react";
 import type { Enrollment, Course, Session, Certificate } from "@shared/schema";
 
+type StudentStats = {
+  timeInvested: number;
+  weeklyProgress: number;
+  currentStreak: number;
+  nextSession: { date: string; title: string } | null;
+};
+
 export default function StudentDashboard() {
   const { data: enrollments } = useQuery<(Enrollment & { course: Course })[]>({
     queryKey: ["/api/enrollments/my"],
@@ -21,7 +28,11 @@ export default function StudentDashboard() {
     queryKey: ["/api/certificates/my"],
   });
 
-  const stats = {
+  const { data: stats } = useQuery<StudentStats>({
+    queryKey: ["/api/students/stats"],
+  });
+
+  const courseStats = {
     enrolled: enrollments?.length || 0,
     completed: enrollments?.filter((e) => e.completed).length || 0,
     hoursLearned: Math.floor((enrollments?.reduce((acc, e) => acc + (e.progress || 0), 0) || 0) / 10),
@@ -32,7 +43,7 @@ export default function StudentDashboard() {
     s.status === 'scheduled' && new Date(s.scheduledAt) > new Date()
   ).slice(0, 3);
 
-  const inProgressCourses = enrollments?.filter((e) => !e.completed && e.progress > 0);
+  const inProgressCourses = enrollments?.filter((e) => !e.completed && (e.progress ?? 0) > 0);
 
   return (
     <div className="min-h-screen bg-background">
@@ -54,8 +65,12 @@ export default function StudentDashboard() {
               <Clock className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">12.5h</div>
-              <p className="text-xs text-green-600">+2.5h this week</p>
+              <div className="text-2xl font-bold" data-testid="text-time-invested">
+                {stats ? `${stats.timeInvested.toFixed(1)}h` : '0h'}
+              </div>
+              <p className="text-xs text-green-600">
+                {stats?.weeklyProgress ? `+${stats.weeklyProgress.toFixed(1)}h this week` : 'No activity this week'}
+              </p>
             </CardContent>
           </Card>
 
@@ -76,8 +91,12 @@ export default function StudentDashboard() {
               <Flame className="h-4 w-4 text-orange-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">14</div>
-              <p className="text-xs text-muted-foreground">days</p>
+              <div className="text-2xl font-bold" data-testid="text-streak">
+                {stats?.currentStreak || 0}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {stats?.currentStreak ? 'days' : 'Start learning today!'}
+              </p>
             </CardContent>
           </Card>
 
@@ -87,8 +106,12 @@ export default function StudentDashboard() {
               <Calendar className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">Today</div>
-              <p className="text-xs text-muted-foreground">2:00 PM</p>
+              <div className="text-2xl font-bold" data-testid="text-next-session">
+                {stats?.nextSession ? new Date(stats.nextSession.date).toLocaleDateString('en-US', { weekday: 'short' }) : 'None'}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {stats?.nextSession ? new Date(stats.nextSession.date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) : 'Schedule a session'}
+              </p>
             </CardContent>
           </Card>
         </div>
@@ -102,7 +125,7 @@ export default function StudentDashboard() {
               <BookOpen className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold" data-testid="text-stat-enrolled">{stats.enrolled}</div>
+              <div className="text-3xl font-bold" data-testid="text-stat-enrolled">{courseStats.enrolled}</div>
             </CardContent>
           </Card>
 
@@ -112,7 +135,7 @@ export default function StudentDashboard() {
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold" data-testid="text-stat-completed">{stats.completed}</div>
+              <div className="text-3xl font-bold" data-testid="text-stat-completed">{courseStats.completed}</div>
             </CardContent>
           </Card>
 
@@ -122,7 +145,7 @@ export default function StudentDashboard() {
               <Clock className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold" data-testid="text-stat-hours">{stats.hoursLearned}</div>
+              <div className="text-3xl font-bold" data-testid="text-stat-hours">{stats ? stats.timeInvested.toFixed(0) : '0'}</div>
             </CardContent>
           </Card>
 
@@ -132,7 +155,7 @@ export default function StudentDashboard() {
               <Award className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold" data-testid="text-stat-certificates">{stats.certificates}</div>
+              <div className="text-3xl font-bold" data-testid="text-stat-certificates">{courseStats.certificates}</div>
             </CardContent>
           </Card>
         </div>
