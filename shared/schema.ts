@@ -17,6 +17,7 @@ export const users = pgTable("users", {
   hourlyRate: decimal("hourly_rate", { precision: 10, scale: 2 }),
   verified: boolean("verified").default(false),
   stripeCustomerId: text("stripe_customer_id"),
+  points: integer("points").default(0),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -488,6 +489,77 @@ export const blogPosts = pgTable("blog_posts", {
   featuredImage: text("featured_image"),
   published: boolean("published").default(false),
   publishedAt: timestamp("published_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// Gamification Tables
+export const studyStreaks = pgTable("study_streaks", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  currentStreak: integer("current_streak").default(0).notNull(),
+  longestStreak: integer("longest_streak").default(0).notNull(),
+  lastActivityDate: timestamp("last_activity_date").notNull(),
+  isActive: boolean("is_active").default(true).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const learningGoals = pgTable("learning_goals", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  title: text("title").notNull(),
+  description: text("description"),
+  targetValue: integer("target_value").notNull(),
+  currentValue: integer("current_value").default(0).notNull(),
+  type: text("type").notNull(), // 'course_completion', 'study_hours', 'assignments', etc.
+  deadline: timestamp("deadline"),
+  isCompleted: boolean("is_completed").default(false).notNull(),
+  completedAt: timestamp("completed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const achievements = pgTable("achievements", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  icon: text("icon"),
+  category: text("category").notNull(), // 'learning', 'social', 'streak', etc.
+  pointsValue: integer("points_value").default(0).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const userAchievements = pgTable("user_achievements", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  achievementId: varchar("achievement_id").notNull().references(() => achievements.id),
+  earnedAt: timestamp("earned_at").defaultNow().notNull(),
+});
+
+export const rewards = pgTable("rewards", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  pointsCost: integer("points_cost").notNull(),
+  category: text("category").notNull(), // 'badge', 'discount', 'feature', etc.
+  isActive: boolean("is_active").default(true).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const userRewards = pgTable("user_rewards", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  rewardId: varchar("reward_id").notNull().references(() => rewards.id),
+  claimedAt: timestamp("claimed_at").defaultNow().notNull(),
+});
+
+export const lessonProgress = pgTable("lesson_progress", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  studentId: varchar("student_id").notNull().references(() => users.id),
+  lessonId: varchar("lesson_id").notNull().references(() => lessons.id),
+  completed: boolean("completed").default(false).notNull(),
+  progress: integer("progress").default(0).notNull(), // 0-100
+  lastPosition: integer("last_position").default(0), // Video position in seconds
+  completedAt: timestamp("completed_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

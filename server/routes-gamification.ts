@@ -14,7 +14,7 @@ import {
   learningGoals,
   rewards,
   userRewards,
-} from "@db/schema";
+} from "@shared/schema";
 import { eq, and, desc, sql, gte } from "drizzle-orm";
 
 export function registerGamificationRoutes(app: Express) {
