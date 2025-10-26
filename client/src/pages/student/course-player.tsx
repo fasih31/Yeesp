@@ -1,6 +1,5 @@
-
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "wouter";
+import { useParams, useLocation } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -32,10 +31,10 @@ interface Bookmark {
 
 export default function CoursePlayer() {
   const { id } = useParams();
-  const navigate = useNavigate();
+  const [location, setLocation] = useLocation();
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  
+
   const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
   const [noteContent, setNoteContent] = useState("");
   const [noteTimestamp, setNoteTimestamp] = useState(0);
@@ -146,7 +145,7 @@ export default function CoursePlayer() {
           <h1 className="text-3xl font-bold mb-2">{course.title}</h1>
           <p className="text-muted-foreground">{currentLesson?.title}</p>
         </div>
-        <Button variant="outline" onClick={() => navigate("/student/my-courses")}>
+        <Button variant="outline" onClick={() => setLocation("/student/my-courses")}>
           <ChevronLeft className="h-4 w-4 mr-2" />
           Back to Courses
         </Button>
@@ -274,7 +273,7 @@ export default function CoursePlayer() {
                       Save Note at {formatTime(currentTime)}
                     </Button>
                   </div>
-                  
+
                   <div className="space-y-2">
                     {notes.map((note) => (
                       <Card key={note.id}>
