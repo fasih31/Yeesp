@@ -32,6 +32,10 @@ export default function StudentDashboard() {
     queryKey: ["/api/students/stats"],
   });
 
+  const { data: recommendations } = useQuery<Course[]>({
+    queryKey: ["/api/students/recommendations"],
+  });
+
   const courseStats = {
     enrolled: enrollments?.length || 0,
     completed: enrollments?.filter((e) => e.completed).length || 0,
@@ -163,6 +167,7 @@ export default function StudentDashboard() {
         <Tabs defaultValue="courses" className="space-y-6">
           <TabsList data-testid="tabs-dashboard">
             <TabsTrigger value="courses" data-testid="tab-courses">My Courses</TabsTrigger>
+            <TabsTrigger value="recommended" data-testid="tab-recommended">Recommended</TabsTrigger>
             <TabsTrigger value="sessions" data-testid="tab-sessions">Upcoming Sessions</TabsTrigger>
             <TabsTrigger value="certificates" data-testid="tab-certificates">Certificates</TabsTrigger>
           </TabsList>
@@ -213,6 +218,73 @@ export default function StudentDashboard() {
                   </p>
                   <Button asChild data-testid="button-explore-courses">
                     <Link href="/courses">Explore Courses</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
+
+          <TabsContent value="recommended" className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-semibold">Recommended For You</h2>
+                <p className="text-muted-foreground mt-1">
+                  Courses tailored to your interests and learning path
+                </p>
+              </div>
+              <Button asChild data-testid="button-browse-all">
+                <Link href="/courses">Browse All</Link>
+              </Button>
+            </div>
+
+            {recommendations && recommendations.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {recommendations.map((course) => (
+                  <Card key={course.id} className="hover-elevate flex flex-col" data-testid={`card-recommended-${course.id}`}>
+                    <CardHeader>
+                      <div className="flex items-start justify-between gap-2">
+                        <Badge variant="secondary" data-testid={`badge-level-${course.id}`}>
+                          {course.level}
+                        </Badge>
+                        <Badge variant="outline" data-testid={`badge-category-${course.id}`}>
+                          {course.category}
+                        </Badge>
+                      </div>
+                      <CardTitle className="mt-4" data-testid={`text-course-title-${course.id}`}>
+                        {course.title}
+                      </CardTitle>
+                      <CardDescription className="line-clamp-3">
+                        {course.description}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="mt-auto space-y-4">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="flex items-center gap-1">
+                          <Clock className="h-4 w-4" />
+                          {course.duration}h
+                        </span>
+                        <span className="font-semibold text-lg" data-testid={`text-price-${course.id}`}>
+                          ${course.price}
+                        </span>
+                      </div>
+                      <Button className="w-full" asChild data-testid={`button-view-${course.id}`}>
+                        <Link href={`/course/${course.id}`}>
+                          View Course
+                        </Link>
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <Card>
+                <CardContent className="py-12 text-center">
+                  <BookOpen className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-muted-foreground mb-4" data-testid="text-no-recommendations">
+                    Complete your profile and enroll in courses to get personalized recommendations
+                  </p>
+                  <Button asChild data-testid="button-browse-courses-empty">
+                    <Link href="/courses">Browse Courses</Link>
                   </Button>
                 </CardContent>
               </Card>

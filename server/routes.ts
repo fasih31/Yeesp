@@ -436,6 +436,87 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ===== STUDENT RECOMMENDATIONS ROUTE =====
+
+  app.get("/api/students/recommendations", requireAuth, async (req, res) => {
+    try {
+      const userId = (req.user as any)?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      // Get user profile to understand their interests
+      const student = await storage.getUser(userId);
+      if (!student) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      // Get student's enrollments to find patterns
+      const enrollments = await storage.getEnrollmentsByStudent(userId);
+      const enrolledCourseIds = enrollments.map(e => e.courseId);
+
+      // Get all published courses
+      const allCourses = await storage.getCourses();
+      const publishedCourses = allCourses.filter(c => c.published);
+
+      // Filter out already enrolled courses
+      const unenrolledCourses = publishedCourses.filter(c => !enrolledCourseIds.includes(c.id));
+
+      // Score courses based on relevance
+      const scoredCourses = unenrolledCourses.map(course => {
+        let score = 0;
+
+        // Match based on student's skills/interests
+        if (student.skills && course.category) {
+          const studentSkills = student.skills.map(s => s.toLowerCase());
+          const courseCategory = course.category.toLowerCase();
+          
+          // Exact skill match
+          if (studentSkills.some(skill => courseCategory.includes(skill) || skill.includes(courseCategory))) {
+            score += 10;
+          }
+        }
+
+        // Match based on categories of enrolled courses
+        const enrolledCategories = enrollments
+          .map(e => allCourses.find(c => c.id === e.courseId)?.category)
+          .filter(Boolean)
+          .map(cat => cat!.toLowerCase());
+
+        if (enrolledCategories.includes(course.category.toLowerCase())) {
+          score += 5;
+        }
+
+        // Boost beginner courses for new students
+        if (enrollments.length < 2 && course.level === 'beginner') {
+          score += 3;
+        }
+
+        // Boost appropriate difficulty level
+        const completedCount = enrollments.filter(e => e.completed).length;
+        if (completedCount === 0 && course.level === 'beginner') score += 2;
+        if (completedCount >= 1 && completedCount < 3 && course.level === 'intermediate') score += 2;
+        if (completedCount >= 3 && course.level === 'advanced') score += 2;
+
+        // Slight boost for lower-priced courses for accessibility
+        const price = parseFloat(course.price.toString());
+        if (price < 50) score += 1;
+
+        return { course, score };
+      });
+
+      // Sort by score and return top 6 recommendations
+      const recommendations = scoredCourses
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 6)
+        .map(item => item.course);
+
+      res.json(recommendations);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   // ===== TUTOR ROUTES =====
 
   app.get("/api/tutors", async (req, res) => {
