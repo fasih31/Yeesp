@@ -11,6 +11,7 @@ import { registerVideoRoutes } from "./routes-video";
 import { setupVite, serveStatic, log } from "./vite";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
 import { storage } from "./storage";
+import { registerGamificationRoutes } from "./routes-gamification";
 
 const app = express();
 const MemoryStore = createMemoryStore(session);
@@ -57,7 +58,7 @@ passport.use(new LocalStrategy(
       // Get approved roles
       const approvedRoles = await storage.getUserApprovedRoles(user.id);
       const { password: _, ...userWithoutPassword } = user;
-      
+
       return done(null, { ...userWithoutPassword, approvedRoles });
     } catch (error) {
       return done(error);
@@ -129,23 +130,23 @@ app.use((req, res, next) => {
   registerExtendedRoutes(app);
   registerUploadRoutes(app);
   registerVideoRoutes(app);
-  
+
   // Register admin routes
   const adminRoutes = await import('./routes-admin');
   app.use('/api/admin', adminRoutes.default);
-  
+
   // Register admin reports routes
   const adminReportsRoutes = await import('./routes-admin-reports');
   app.use('/api/admin/reports', adminReportsRoutes.default);
-  
+
   // Register Zoom routes
   const zoomRoutes = await import('./routes-zoom');
   app.use('/api/zoom', zoomRoutes.default);
-  
+
   // Register Stripe routes
   const stripeRoutes = await import('./routes-stripe');
   app.use('/api/stripe', stripeRoutes.default);
-  
+
   // Register Community routes
   const communityRoutes = await import('./routes-community');
   app.use('/api/community', communityRoutes.default);
@@ -162,6 +163,10 @@ app.use((req, res, next) => {
   } else {
     serveStatic(app);
   }
+
+  // Register gamification route
+  const gamificationRoutes = await import('./routes-gamification');
+  app.use('/api/gamification', gamificationRoutes.default);
 
   // Error handling middleware (must be last)
   app.use(notFoundHandler);

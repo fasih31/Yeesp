@@ -18,7 +18,7 @@ export class WebSocketService {
   private setupWebSocket() {
     this.wss.on('connection', (ws: WebSocket, req) => {
       console.log('New WebSocket connection');
-      
+
       // TODO: SECURITY - Validate session from cookies/headers before accepting connection
       // For now, require auth message with session validation
       let authenticated = false;
@@ -27,16 +27,16 @@ export class WebSocketService {
       ws.on('message', (data: RawData) => {
         try {
           const message = JSON.parse(data.toString());
-          
+
           // All messages except auth require authentication
           if (message.type !== 'auth' && !authenticated) {
-            ws.send(JSON.stringify({ 
-              type: 'error', 
-              message: 'Not authenticated. Send auth message first.' 
+            ws.send(JSON.stringify({
+              type: 'error',
+              message: 'Not authenticated. Send auth message first.'
             }));
             return;
           }
-          
+
           this.handleMessage(ws, message, (authUserId) => {
             authenticated = true;
             userId = authUserId;
@@ -94,7 +94,7 @@ export class WebSocketService {
   private handleChatMessage(message: any) {
     const { senderId, receiverId, content } = message;
     const receiver = this.clients.get(receiverId);
-    
+
     if (receiver && receiver.ws.readyState === WebSocket.OPEN) {
       receiver.ws.send(JSON.stringify({
         type: 'message',
@@ -108,7 +108,7 @@ export class WebSocketService {
   private handleTyping(message: any) {
     const { senderId, receiverId, isTyping } = message;
     const receiver = this.clients.get(receiverId);
-    
+
     if (receiver && receiver.ws.readyState === WebSocket.OPEN) {
       receiver.ws.send(JSON.stringify({
         type: 'typing',
@@ -121,7 +121,7 @@ export class WebSocketService {
   private handleRead(message: any) {
     const { senderId, receiverId, messageId } = message;
     const sender = this.clients.get(senderId);
-    
+
     if (sender && sender.ws.readyState === WebSocket.OPEN) {
       sender.ws.send(JSON.stringify({
         type: 'read',

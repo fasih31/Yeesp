@@ -1,62 +1,93 @@
-
 // AI-powered recommendation service
 // In production, integrate with OpenAI/similar API
 
-interface UserLearningProfile {
-  userId: string;
-  completedCourses: string[];
-  enrolledCourses: string[];
-  skills: string[];
-  learningGoals?: string[];
-  weakAreas?: string[];
+import OpenAI from "openai";
+import { db } from "../db";
+import { courses, enrollments, lessonProgress, assignments, submissions, quizResults } from "@db/schema";
+import { eq, desc, and } from "drizzle-orm";
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY || "",
+});
+
+export async function generateRecommendations(userId: string) {
+  try {
+    // Get user's enrolled courses and progress
+    const userEnrollments = await db.query.enrollments.findMany({
+      where: eq(enrollments.userId, userId),
+      with: {
+        course: true,
+      },
+    });
+
+    const completedCourses = userEnrollments
+      .filter((e) => e.completionPercentage === 100)
+      .map((e) => e.course.title);
+
+    const inProgressCourses = userEnrollments
+      .filter((e) => e.completionPercentage > 0 && e.completionPercentage < 100)
+      .map((e) => e.course.title);
+
+    // Get quiz performance
+    const quizzes = await db.query.quizResults.findMany({
+      where: eq(quizResults.userId, userId),
+      orderBy: [desc(quizResults.createdAt)],
+      limit: 10,
+    });
+
+    const avgQuizScore = quizzes.length > 0
+      ? quizzes.reduce((sum, q) => sum + (q.score / q.totalScore * 100), 0) / quizzes.length
+      : 0;
+
+    const prompt = `Based on a student who has:
+- Completed courses: ${completedCourses.join(", ") || "None"}
+- In-progress courses: ${inProgressCourses.join(", ") || "None"}
+- Average quiz performance: ${avgQuizScore.toFixed(1)}%
+
+Recommend 5 courses they should take next to advance their learning. Focus on logical progression and skill building.
+Format as JSON array: [{ "title": "Course Name", "reason": "Why this course", "difficulty": "beginner|intermediate|advanced" }]`;
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompt }],
+      max_tokens: 500,
+    });
+
+    return response.choices[0].message.content;
+  } catch (error) {
+    console.error("AI Recommendation Error:", error);
+    return null;
+  }
 }
 
-interface CourseRecommendation {
-  courseId: string;
-  score: number;
-  reason: string;
-}
+export async function generatePersonalizedLearningPath(userId: string, goal: string) {
+  try {
+    const userEnrollments = await db.query.enrollments.findMany({
+      where: eq(enrollments.userId, userId),
+      with: {
+        course: true,
+      },
+    });
 
-export class AIRecommendationService {
-  // Simple recommendation algorithm (can be replaced with ML model)
-  async getPersonalizedRecommendations(
-    userId: string,
-    limit: number = 5
-  ): Promise<CourseRecommendation[]> {
-    // TODO: Integrate with actual AI/ML service
-    // For now, use collaborative filtering approach
-    
-    // This is a placeholder that should be replaced with:
-    // - OpenAI API for semantic recommendations
-    // - TensorFlow.js for client-side ML
-    // - Custom trained model
-    
-    return [];
-  }
+    const completedCourses = userEnrollments
+      .filter((e) => e.completionPercentage === 100)
+      .map((e) => ({ title: e.course.title, category: e.course.category }));
 
-  async generateLearningPath(
-    userId: string,
-    targetSkill: string
-  ): Promise<string[]> {
-    // TODO: Use AI to generate optimal learning sequence
-    return [];
-  }
+    const prompt = `Create a personalized learning path for a student with goal: "${goal}"
+Current knowledge: ${JSON.stringify(completedCourses)}
 
-  async analyzeWeakAreas(
-    userId: string
-  ): Promise<{ topic: string; confidence: number }[]> {
-    // TODO: Analyze quiz performance, assignment grades
-    return [];
-  }
+Generate a step-by-step learning path with 6-8 courses/topics.
+Format as JSON: [{ "step": 1, "title": "Course Title", "description": "What they'll learn", "estimatedWeeks": 4 }]`;
 
-  async generateQuizQuestions(
-    courseContent: string,
-    difficulty: 'easy' | 'medium' | 'hard',
-    count: number = 10
-  ): Promise<any[]> {
-    // TODO: Use GPT to generate contextual quiz questions
-    return [];
+    const response = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompt }],
+      max_tokens: 800,
+    });
+
+    return response.choices[0].message.content;
+  } catch (error) {
+    console.error("Learning Path Error:", error);
+    return null;
   }
 }
-
-export const aiRecommendations = new AIRecommendationService();
